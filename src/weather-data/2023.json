@@ -1,0 +1,2557 @@
+[
+  {
+    "date": "Jan 01",
+    "sunset": 17.47,
+    "sunrise": 7.6,
+    "sunshine_duration_hrs": 8.49,
+    "daylight_duration_hrs": 9.86
+  },
+  {
+    "date": "Jan 02",
+    "sunset": 17.48,
+    "sunrise": 7.62,
+    "sunshine_duration_hrs": 8.23,
+    "daylight_duration_hrs": 9.87
+  },
+  {
+    "date": "Jan 03",
+    "sunset": 17.5,
+    "sunrise": 7.62,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 9.89
+  },
+  {
+    "date": "Jan 04",
+    "sunset": 17.52,
+    "sunrise": 7.62,
+    "sunshine_duration_hrs": 2,
+    "daylight_duration_hrs": 9.9
+  },
+  {
+    "date": "Jan 05",
+    "sunset": 17.53,
+    "sunrise": 7.62,
+    "sunshine_duration_hrs": 8.92,
+    "daylight_duration_hrs": 9.91
+  },
+  {
+    "date": "Jan 06",
+    "sunset": 17.53,
+    "sunrise": 7.62,
+    "sunshine_duration_hrs": 8.92,
+    "daylight_duration_hrs": 9.92
+  },
+  {
+    "date": "Jan 07",
+    "sunset": 17.55,
+    "sunrise": 7.62,
+    "sunshine_duration_hrs": 6.59,
+    "daylight_duration_hrs": 9.94
+  },
+  {
+    "date": "Jan 08",
+    "sunset": 17.57,
+    "sunrise": 7.62,
+    "sunshine_duration_hrs": 1.32,
+    "daylight_duration_hrs": 9.95
+  },
+  {
+    "date": "Jan 09",
+    "sunset": 17.58,
+    "sunrise": 7.62,
+    "sunshine_duration_hrs": 8.95,
+    "daylight_duration_hrs": 9.97
+  },
+  {
+    "date": "Jan 10",
+    "sunset": 17.6,
+    "sunrise": 7.62,
+    "sunshine_duration_hrs": 8.97,
+    "daylight_duration_hrs": 9.98
+  },
+  {
+    "date": "Jan 11",
+    "sunset": 17.62,
+    "sunrise": 7.62,
+    "sunshine_duration_hrs": 5.78,
+    "daylight_duration_hrs": 10
+  },
+  {
+    "date": "Jan 12",
+    "sunset": 17.63,
+    "sunrise": 7.62,
+    "sunshine_duration_hrs": 1.15,
+    "daylight_duration_hrs": 10.02
+  },
+  {
+    "date": "Jan 13",
+    "sunset": 17.65,
+    "sunrise": 7.6,
+    "sunshine_duration_hrs": 8.93,
+    "daylight_duration_hrs": 10.04
+  },
+  {
+    "date": "Jan 14",
+    "sunset": 17.67,
+    "sunrise": 7.6,
+    "sunshine_duration_hrs": 9.07,
+    "daylight_duration_hrs": 10.06
+  },
+  {
+    "date": "Jan 15",
+    "sunset": 17.68,
+    "sunrise": 7.6,
+    "sunshine_duration_hrs": 9.08,
+    "daylight_duration_hrs": 10.08
+  },
+  {
+    "date": "Jan 16",
+    "sunset": 17.7,
+    "sunrise": 7.6,
+    "sunshine_duration_hrs": 5.67,
+    "daylight_duration_hrs": 10.1
+  },
+  {
+    "date": "Jan 17",
+    "sunset": 17.72,
+    "sunrise": 7.58,
+    "sunshine_duration_hrs": 1.4,
+    "daylight_duration_hrs": 10.12
+  },
+  {
+    "date": "Jan 18",
+    "sunset": 17.72,
+    "sunrise": 7.58,
+    "sunshine_duration_hrs": 8.04,
+    "daylight_duration_hrs": 10.14
+  },
+  {
+    "date": "Jan 19",
+    "sunset": 17.73,
+    "sunrise": 7.58,
+    "sunshine_duration_hrs": 4.21,
+    "daylight_duration_hrs": 10.16
+  },
+  {
+    "date": "Jan 20",
+    "sunset": 17.75,
+    "sunrise": 7.57,
+    "sunshine_duration_hrs": 9.27,
+    "daylight_duration_hrs": 10.18
+  },
+  {
+    "date": "Jan 21",
+    "sunset": 17.77,
+    "sunrise": 7.57,
+    "sunshine_duration_hrs": 8.97,
+    "daylight_duration_hrs": 10.21
+  },
+  {
+    "date": "Jan 22",
+    "sunset": 17.78,
+    "sunrise": 7.55,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 10.23
+  },
+  {
+    "date": "Jan 23",
+    "sunset": 17.8,
+    "sunrise": 7.55,
+    "sunshine_duration_hrs": 9.36,
+    "daylight_duration_hrs": 10.26
+  },
+  {
+    "date": "Jan 24",
+    "sunset": 17.82,
+    "sunrise": 7.53,
+    "sunshine_duration_hrs": 9.31,
+    "daylight_duration_hrs": 10.28
+  },
+  {
+    "date": "Jan 25",
+    "sunset": 17.83,
+    "sunrise": 7.53,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 10.31
+  },
+  {
+    "date": "Jan 26",
+    "sunset": 17.85,
+    "sunrise": 7.52,
+    "sunshine_duration_hrs": 9.42,
+    "daylight_duration_hrs": 10.33
+  },
+  {
+    "date": "Jan 27",
+    "sunset": 17.87,
+    "sunrise": 7.52,
+    "sunshine_duration_hrs": 9.44,
+    "daylight_duration_hrs": 10.36
+  },
+  {
+    "date": "Jan 28",
+    "sunset": 17.88,
+    "sunrise": 7.5,
+    "sunshine_duration_hrs": 9.46,
+    "daylight_duration_hrs": 10.39
+  },
+  {
+    "date": "Jan 29",
+    "sunset": 17.9,
+    "sunrise": 7.48,
+    "sunshine_duration_hrs": 4.97,
+    "daylight_duration_hrs": 10.42
+  },
+  {
+    "date": "Jan 30",
+    "sunset": 17.93,
+    "sunrise": 7.48,
+    "sunshine_duration_hrs": 7.57,
+    "daylight_duration_hrs": 10.45
+  },
+  {
+    "date": "Jan 31",
+    "sunset": 17.95,
+    "sunrise": 7.47,
+    "sunshine_duration_hrs": 0.98,
+    "daylight_duration_hrs": 10.48
+  },
+  {
+    "date": "Feb 01",
+    "sunset": 17.97,
+    "sunrise": 7.45,
+    "sunshine_duration_hrs": 1.38,
+    "daylight_duration_hrs": 10.5
+  },
+  {
+    "date": "Feb 02",
+    "sunset": 17.98,
+    "sunrise": 7.45,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 10.53
+  },
+  {
+    "date": "Feb 03",
+    "sunset": 18,
+    "sunrise": 7.43,
+    "sunshine_duration_hrs": 9.57,
+    "daylight_duration_hrs": 10.56
+  },
+  {
+    "date": "Feb 04",
+    "sunset": 18.02,
+    "sunrise": 7.42,
+    "sunshine_duration_hrs": 9.05,
+    "daylight_duration_hrs": 10.59
+  },
+  {
+    "date": "Feb 05",
+    "sunset": 18.03,
+    "sunrise": 7.4,
+    "sunshine_duration_hrs": 9.12,
+    "daylight_duration_hrs": 10.62
+  },
+  {
+    "date": "Feb 06",
+    "sunset": 18.05,
+    "sunrise": 7.38,
+    "sunshine_duration_hrs": 9.68,
+    "daylight_duration_hrs": 10.65
+  },
+  {
+    "date": "Feb 07",
+    "sunset": 18.07,
+    "sunrise": 7.37,
+    "sunshine_duration_hrs": 9.64,
+    "daylight_duration_hrs": 10.69
+  },
+  {
+    "date": "Feb 08",
+    "sunset": 18.08,
+    "sunrise": 7.37,
+    "sunshine_duration_hrs": 5.21,
+    "daylight_duration_hrs": 10.72
+  },
+  {
+    "date": "Feb 09",
+    "sunset": 18.1,
+    "sunrise": 7.35,
+    "sunshine_duration_hrs": 4.39,
+    "daylight_duration_hrs": 10.75
+  },
+  {
+    "date": "Feb 10",
+    "sunset": 18.12,
+    "sunrise": 7.33,
+    "sunshine_duration_hrs": 6.77,
+    "daylight_duration_hrs": 10.78
+  },
+  {
+    "date": "Feb 11",
+    "sunset": 18.13,
+    "sunrise": 7.32,
+    "sunshine_duration_hrs": 2.96,
+    "daylight_duration_hrs": 10.81
+  },
+  {
+    "date": "Feb 12",
+    "sunset": 18.13,
+    "sunrise": 7.3,
+    "sunshine_duration_hrs": 0.52,
+    "daylight_duration_hrs": 10.85
+  },
+  {
+    "date": "Feb 13",
+    "sunset": 18.15,
+    "sunrise": 7.28,
+    "sunshine_duration_hrs": 9.98,
+    "daylight_duration_hrs": 10.88
+  },
+  {
+    "date": "Feb 14",
+    "sunset": 18.17,
+    "sunrise": 7.27,
+    "sunshine_duration_hrs": 10,
+    "daylight_duration_hrs": 10.91
+  },
+  {
+    "date": "Feb 15",
+    "sunset": 18.18,
+    "sunrise": 7.25,
+    "sunshine_duration_hrs": 0.06,
+    "daylight_duration_hrs": 10.95
+  },
+  {
+    "date": "Feb 16",
+    "sunset": 18.2,
+    "sunrise": 7.22,
+    "sunshine_duration_hrs": 7.51,
+    "daylight_duration_hrs": 10.98
+  },
+  {
+    "date": "Feb 17",
+    "sunset": 18.22,
+    "sunrise": 7.2,
+    "sunshine_duration_hrs": 6.81,
+    "daylight_duration_hrs": 11.02
+  },
+  {
+    "date": "Feb 18",
+    "sunset": 18.23,
+    "sunrise": 7.18,
+    "sunshine_duration_hrs": 10.21,
+    "daylight_duration_hrs": 11.05
+  },
+  {
+    "date": "Feb 19",
+    "sunset": 18.25,
+    "sunrise": 7.17,
+    "sunshine_duration_hrs": 5,
+    "daylight_duration_hrs": 11.08
+  },
+  {
+    "date": "Feb 20",
+    "sunset": 18.27,
+    "sunrise": 7.15,
+    "sunshine_duration_hrs": 8.29,
+    "daylight_duration_hrs": 11.12
+  },
+  {
+    "date": "Feb 21",
+    "sunset": 18.28,
+    "sunrise": 7.13,
+    "sunshine_duration_hrs": 10.03,
+    "daylight_duration_hrs": 11.15
+  },
+  {
+    "date": "Feb 22",
+    "sunset": 18.3,
+    "sunrise": 7.12,
+    "sunshine_duration_hrs": 6.8,
+    "daylight_duration_hrs": 11.19
+  },
+  {
+    "date": "Feb 23",
+    "sunset": 18.32,
+    "sunrise": 7.08,
+    "sunshine_duration_hrs": 9.3,
+    "daylight_duration_hrs": 11.22
+  },
+  {
+    "date": "Feb 24",
+    "sunset": 18.33,
+    "sunrise": 7.07,
+    "sunshine_duration_hrs": 8,
+    "daylight_duration_hrs": 11.26
+  },
+  {
+    "date": "Feb 25",
+    "sunset": 18.35,
+    "sunrise": 7.05,
+    "sunshine_duration_hrs": 0.73,
+    "daylight_duration_hrs": 11.29
+  },
+  {
+    "date": "Feb 26",
+    "sunset": 18.37,
+    "sunrise": 7.03,
+    "sunshine_duration_hrs": 5.27,
+    "daylight_duration_hrs": 11.33
+  },
+  {
+    "date": "Feb 27",
+    "sunset": 18.38,
+    "sunrise": 7.02,
+    "sunshine_duration_hrs": 5.52,
+    "daylight_duration_hrs": 11.36
+  },
+  {
+    "date": "Feb 28",
+    "sunset": 18.38,
+    "sunrise": 6.98,
+    "sunshine_duration_hrs": 10.54,
+    "daylight_duration_hrs": 11.4
+  },
+  {
+    "date": "Mar 01",
+    "sunset": 18.4,
+    "sunrise": 6.97,
+    "sunshine_duration_hrs": 9.32,
+    "daylight_duration_hrs": 11.43
+  },
+  {
+    "date": "Mar 02",
+    "sunset": 18.42,
+    "sunrise": 6.95,
+    "sunshine_duration_hrs": 0.17,
+    "daylight_duration_hrs": 11.47
+  },
+  {
+    "date": "Mar 03",
+    "sunset": 18.43,
+    "sunrise": 6.93,
+    "sunshine_duration_hrs": 1,
+    "daylight_duration_hrs": 11.51
+  },
+  {
+    "date": "Mar 04",
+    "sunset": 18.45,
+    "sunrise": 6.9,
+    "sunshine_duration_hrs": 10.67,
+    "daylight_duration_hrs": 11.54
+  },
+  {
+    "date": "Mar 05",
+    "sunset": 18.47,
+    "sunrise": 6.88,
+    "sunshine_duration_hrs": 10.69,
+    "daylight_duration_hrs": 11.58
+  },
+  {
+    "date": "Mar 06",
+    "sunset": 18.48,
+    "sunrise": 6.87,
+    "sunshine_duration_hrs": 10.72,
+    "daylight_duration_hrs": 11.62
+  },
+  {
+    "date": "Mar 07",
+    "sunset": 18.5,
+    "sunrise": 6.83,
+    "sunshine_duration_hrs": 10.74,
+    "daylight_duration_hrs": 11.65
+  },
+  {
+    "date": "Mar 08",
+    "sunset": 18.5,
+    "sunrise": 6.82,
+    "sunshine_duration_hrs": 10.13,
+    "daylight_duration_hrs": 11.69
+  },
+  {
+    "date": "Mar 09",
+    "sunset": 18.52,
+    "sunrise": 6.8,
+    "sunshine_duration_hrs": 7.78,
+    "daylight_duration_hrs": 11.73
+  },
+  {
+    "date": "Mar 10",
+    "sunset": 18.53,
+    "sunrise": 6.77,
+    "sunshine_duration_hrs": 5.2,
+    "daylight_duration_hrs": 11.76
+  },
+  {
+    "date": "Mar 11",
+    "sunset": 18.55,
+    "sunrise": 6.75,
+    "sunshine_duration_hrs": 9.27,
+    "daylight_duration_hrs": 11.8
+  },
+  {
+    "date": "Mar 12",
+    "sunset": 18.57,
+    "sunrise": 6.72,
+    "sunshine_duration_hrs": 0.26,
+    "daylight_duration_hrs": 11.84
+  },
+  {
+    "date": "Mar 13",
+    "sunset": 18.58,
+    "sunrise": 6.7,
+    "sunshine_duration_hrs": 10.92,
+    "daylight_duration_hrs": 11.87
+  },
+  {
+    "date": "Mar 14",
+    "sunset": 18.58,
+    "sunrise": 6.68,
+    "sunshine_duration_hrs": 10.96,
+    "daylight_duration_hrs": 11.91
+  },
+  {
+    "date": "Mar 15",
+    "sunset": 18.6,
+    "sunrise": 6.65,
+    "sunshine_duration_hrs": 10.98,
+    "daylight_duration_hrs": 11.95
+  },
+  {
+    "date": "Mar 16",
+    "sunset": 18.62,
+    "sunrise": 6.63,
+    "sunshine_duration_hrs": 10.22,
+    "daylight_duration_hrs": 11.98
+  },
+  {
+    "date": "Mar 17",
+    "sunset": 18.63,
+    "sunrise": 6.62,
+    "sunshine_duration_hrs": 0.13,
+    "daylight_duration_hrs": 12.02
+  },
+  {
+    "date": "Mar 18",
+    "sunset": 18.65,
+    "sunrise": 6.58,
+    "sunshine_duration_hrs": 10.89,
+    "daylight_duration_hrs": 12.06
+  },
+  {
+    "date": "Mar 19",
+    "sunset": 18.65,
+    "sunrise": 6.57,
+    "sunshine_duration_hrs": 11,
+    "daylight_duration_hrs": 12.09
+  },
+  {
+    "date": "Mar 20",
+    "sunset": 18.67,
+    "sunrise": 6.55,
+    "sunshine_duration_hrs": 11.15,
+    "daylight_duration_hrs": 12.13
+  },
+  {
+    "date": "Mar 21",
+    "sunset": 18.68,
+    "sunrise": 6.52,
+    "sunshine_duration_hrs": 11.04,
+    "daylight_duration_hrs": 12.16
+  },
+  {
+    "date": "Mar 22",
+    "sunset": 18.7,
+    "sunrise": 6.5,
+    "sunshine_duration_hrs": 0.16,
+    "daylight_duration_hrs": 12.2
+  },
+  {
+    "date": "Mar 23",
+    "sunset": 18.72,
+    "sunrise": 6.47,
+    "sunshine_duration_hrs": 11.16,
+    "daylight_duration_hrs": 12.24
+  },
+  {
+    "date": "Mar 24",
+    "sunset": 18.72,
+    "sunrise": 6.45,
+    "sunshine_duration_hrs": 11.19,
+    "daylight_duration_hrs": 12.27
+  },
+  {
+    "date": "Mar 25",
+    "sunset": 18.73,
+    "sunrise": 6.43,
+    "sunshine_duration_hrs": 9.14,
+    "daylight_duration_hrs": 12.31
+  },
+  {
+    "date": "Mar 26",
+    "sunset": 18.75,
+    "sunrise": 6.4,
+    "sunshine_duration_hrs": 8.14,
+    "daylight_duration_hrs": 12.35
+  },
+  {
+    "date": "Mar 27",
+    "sunset": 18.77,
+    "sunrise": 6.38,
+    "sunshine_duration_hrs": 7.84,
+    "daylight_duration_hrs": 12.38
+  },
+  {
+    "date": "Mar 28",
+    "sunset": 18.78,
+    "sunrise": 6.35,
+    "sunshine_duration_hrs": 9.18,
+    "daylight_duration_hrs": 12.42
+  },
+  {
+    "date": "Mar 29",
+    "sunset": 18.78,
+    "sunrise": 6.33,
+    "sunshine_duration_hrs": 11.45,
+    "daylight_duration_hrs": 12.46
+  },
+  {
+    "date": "Mar 30",
+    "sunset": 18.8,
+    "sunrise": 6.32,
+    "sunshine_duration_hrs": 11.51,
+    "daylight_duration_hrs": 12.49
+  },
+  {
+    "date": "Mar 31",
+    "sunset": 18.82,
+    "sunrise": 6.28,
+    "sunshine_duration_hrs": 6.6,
+    "daylight_duration_hrs": 12.53
+  },
+  {
+    "date": "Apr 01",
+    "sunset": 18.83,
+    "sunrise": 6.27,
+    "sunshine_duration_hrs": 8.43,
+    "daylight_duration_hrs": 12.57
+  },
+  {
+    "date": "Apr 02",
+    "sunset": 18.85,
+    "sunrise": 6.23,
+    "sunshine_duration_hrs": 11.72,
+    "daylight_duration_hrs": 12.6
+  },
+  {
+    "date": "Apr 03",
+    "sunset": 18.85,
+    "sunrise": 6.22,
+    "sunshine_duration_hrs": 0.2,
+    "daylight_duration_hrs": 12.64
+  },
+  {
+    "date": "Apr 04",
+    "sunset": 18.87,
+    "sunrise": 6.2,
+    "sunshine_duration_hrs": 11.37,
+    "daylight_duration_hrs": 12.68
+  },
+  {
+    "date": "Apr 05",
+    "sunset": 18.88,
+    "sunrise": 6.17,
+    "sunshine_duration_hrs": 10,
+    "daylight_duration_hrs": 12.71
+  },
+  {
+    "date": "Apr 06",
+    "sunset": 18.9,
+    "sunrise": 6.15,
+    "sunshine_duration_hrs": 7.43,
+    "daylight_duration_hrs": 12.75
+  },
+  {
+    "date": "Apr 07",
+    "sunset": 18.92,
+    "sunrise": 6.13,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 12.78
+  },
+  {
+    "date": "Apr 08",
+    "sunset": 18.92,
+    "sunrise": 6.1,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 12.82
+  },
+  {
+    "date": "Apr 09",
+    "sunset": 18.93,
+    "sunrise": 6.08,
+    "sunshine_duration_hrs": 11.98,
+    "daylight_duration_hrs": 12.85
+  },
+  {
+    "date": "Apr 10",
+    "sunset": 18.95,
+    "sunrise": 6.07,
+    "sunshine_duration_hrs": 12.07,
+    "daylight_duration_hrs": 12.89
+  },
+  {
+    "date": "Apr 11",
+    "sunset": 18.97,
+    "sunrise": 6.03,
+    "sunshine_duration_hrs": 12.1,
+    "daylight_duration_hrs": 12.92
+  },
+  {
+    "date": "Apr 12",
+    "sunset": 18.98,
+    "sunrise": 6.02,
+    "sunshine_duration_hrs": 12.13,
+    "daylight_duration_hrs": 12.96
+  },
+  {
+    "date": "Apr 13",
+    "sunset": 18.98,
+    "sunrise": 6,
+    "sunshine_duration_hrs": 10.43,
+    "daylight_duration_hrs": 12.99
+  },
+  {
+    "date": "Apr 14",
+    "sunset": 19,
+    "sunrise": 5.97,
+    "sunshine_duration_hrs": 5.41,
+    "daylight_duration_hrs": 13.03
+  },
+  {
+    "date": "Apr 15",
+    "sunset": 19.02,
+    "sunrise": 5.95,
+    "sunshine_duration_hrs": 12.24,
+    "daylight_duration_hrs": 13.06
+  },
+  {
+    "date": "Apr 16",
+    "sunset": 19.03,
+    "sunrise": 5.93,
+    "sunshine_duration_hrs": 10.9,
+    "daylight_duration_hrs": 13.1
+  },
+  {
+    "date": "Apr 17",
+    "sunset": 19.05,
+    "sunrise": 5.92,
+    "sunshine_duration_hrs": 12.3,
+    "daylight_duration_hrs": 13.13
+  },
+  {
+    "date": "Apr 18",
+    "sunset": 19.05,
+    "sunrise": 5.88,
+    "sunshine_duration_hrs": 12.34,
+    "daylight_duration_hrs": 13.17
+  },
+  {
+    "date": "Apr 19",
+    "sunset": 19.07,
+    "sunrise": 5.87,
+    "sunshine_duration_hrs": 12.37,
+    "daylight_duration_hrs": 13.2
+  },
+  {
+    "date": "Apr 20",
+    "sunset": 19.08,
+    "sunrise": 5.85,
+    "sunshine_duration_hrs": 12.4,
+    "daylight_duration_hrs": 13.24
+  },
+  {
+    "date": "Apr 21",
+    "sunset": 19.1,
+    "sunrise": 5.83,
+    "sunshine_duration_hrs": 11.91,
+    "daylight_duration_hrs": 13.27
+  },
+  {
+    "date": "Apr 22",
+    "sunset": 19.12,
+    "sunrise": 5.8,
+    "sunshine_duration_hrs": 9.62,
+    "daylight_duration_hrs": 13.3
+  },
+  {
+    "date": "Apr 23",
+    "sunset": 19.12,
+    "sunrise": 5.78,
+    "sunshine_duration_hrs": 11.78,
+    "daylight_duration_hrs": 13.34
+  },
+  {
+    "date": "Apr 24",
+    "sunset": 19.13,
+    "sunrise": 5.77,
+    "sunshine_duration_hrs": 10.1,
+    "daylight_duration_hrs": 13.37
+  },
+  {
+    "date": "Apr 25",
+    "sunset": 19.15,
+    "sunrise": 5.75,
+    "sunshine_duration_hrs": 7.38,
+    "daylight_duration_hrs": 13.4
+  },
+  {
+    "date": "Apr 26",
+    "sunset": 19.17,
+    "sunrise": 5.73,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 13.43
+  },
+  {
+    "date": "Apr 27",
+    "sunset": 19.18,
+    "sunrise": 5.72,
+    "sunshine_duration_hrs": 0.94,
+    "daylight_duration_hrs": 13.47
+  },
+  {
+    "date": "Apr 28",
+    "sunset": 19.18,
+    "sunrise": 5.7,
+    "sunshine_duration_hrs": 10.98,
+    "daylight_duration_hrs": 13.5
+  },
+  {
+    "date": "Apr 29",
+    "sunset": 19.2,
+    "sunrise": 5.67,
+    "sunshine_duration_hrs": 9.07,
+    "daylight_duration_hrs": 13.53
+  },
+  {
+    "date": "Apr 30",
+    "sunset": 19.22,
+    "sunrise": 5.65,
+    "sunshine_duration_hrs": 6.8,
+    "daylight_duration_hrs": 13.56
+  },
+  {
+    "date": "May 01",
+    "sunset": 19.23,
+    "sunrise": 5.63,
+    "sunshine_duration_hrs": 12.39,
+    "daylight_duration_hrs": 13.59
+  },
+  {
+    "date": "May 02",
+    "sunset": 19.25,
+    "sunrise": 5.62,
+    "sunshine_duration_hrs": 12.77,
+    "daylight_duration_hrs": 13.62
+  },
+  {
+    "date": "May 03",
+    "sunset": 19.25,
+    "sunrise": 5.6,
+    "sunshine_duration_hrs": 12.8,
+    "daylight_duration_hrs": 13.65
+  },
+  {
+    "date": "May 04",
+    "sunset": 19.27,
+    "sunrise": 5.58,
+    "sunshine_duration_hrs": 12.78,
+    "daylight_duration_hrs": 13.68
+  },
+  {
+    "date": "May 05",
+    "sunset": 19.28,
+    "sunrise": 5.57,
+    "sunshine_duration_hrs": 7.49,
+    "daylight_duration_hrs": 13.71
+  },
+  {
+    "date": "May 06",
+    "sunset": 19.3,
+    "sunrise": 5.55,
+    "sunshine_duration_hrs": 8.11,
+    "daylight_duration_hrs": 13.74
+  },
+  {
+    "date": "May 07",
+    "sunset": 19.32,
+    "sunrise": 5.53,
+    "sunshine_duration_hrs": 12.89,
+    "daylight_duration_hrs": 13.77
+  },
+  {
+    "date": "May 08",
+    "sunset": 19.32,
+    "sunrise": 5.52,
+    "sunshine_duration_hrs": 8.9,
+    "daylight_duration_hrs": 13.8
+  },
+  {
+    "date": "May 09",
+    "sunset": 19.33,
+    "sunrise": 5.52,
+    "sunshine_duration_hrs": 11.91,
+    "daylight_duration_hrs": 13.83
+  },
+  {
+    "date": "May 10",
+    "sunset": 19.35,
+    "sunrise": 5.5,
+    "sunshine_duration_hrs": 12.93,
+    "daylight_duration_hrs": 13.86
+  },
+  {
+    "date": "May 11",
+    "sunset": 19.37,
+    "sunrise": 5.48,
+    "sunshine_duration_hrs": 12.94,
+    "daylight_duration_hrs": 13.88
+  },
+  {
+    "date": "May 12",
+    "sunset": 19.38,
+    "sunrise": 5.47,
+    "sunshine_duration_hrs": 6.32,
+    "daylight_duration_hrs": 13.91
+  },
+  {
+    "date": "May 13",
+    "sunset": 19.38,
+    "sunrise": 5.45,
+    "sunshine_duration_hrs": 11.84,
+    "daylight_duration_hrs": 13.94
+  },
+  {
+    "date": "May 14",
+    "sunset": 19.4,
+    "sunrise": 5.43,
+    "sunshine_duration_hrs": 11.97,
+    "daylight_duration_hrs": 13.96
+  },
+  {
+    "date": "May 15",
+    "sunset": 19.42,
+    "sunrise": 5.43,
+    "sunshine_duration_hrs": 10.08,
+    "daylight_duration_hrs": 13.99
+  },
+  {
+    "date": "May 16",
+    "sunset": 19.43,
+    "sunrise": 5.42,
+    "sunshine_duration_hrs": 5.49,
+    "daylight_duration_hrs": 14.01
+  },
+  {
+    "date": "May 17",
+    "sunset": 19.43,
+    "sunrise": 5.4,
+    "sunshine_duration_hrs": 9.42,
+    "daylight_duration_hrs": 14.04
+  },
+  {
+    "date": "May 18",
+    "sunset": 19.45,
+    "sunrise": 5.4,
+    "sunshine_duration_hrs": 0.6,
+    "daylight_duration_hrs": 14.06
+  },
+  {
+    "date": "May 19",
+    "sunset": 19.47,
+    "sunrise": 5.38,
+    "sunshine_duration_hrs": 6.56,
+    "daylight_duration_hrs": 14.08
+  },
+  {
+    "date": "May 20",
+    "sunset": 19.48,
+    "sunrise": 5.37,
+    "sunshine_duration_hrs": 7.03,
+    "daylight_duration_hrs": 14.11
+  },
+  {
+    "date": "May 21",
+    "sunset": 19.48,
+    "sunrise": 5.37,
+    "sunshine_duration_hrs": 12.13,
+    "daylight_duration_hrs": 14.13
+  },
+  {
+    "date": "May 22",
+    "sunset": 19.5,
+    "sunrise": 5.35,
+    "sunshine_duration_hrs": 11.75,
+    "daylight_duration_hrs": 14.15
+  },
+  {
+    "date": "May 23",
+    "sunset": 19.52,
+    "sunrise": 5.33,
+    "sunshine_duration_hrs": 10.59,
+    "daylight_duration_hrs": 14.17
+  },
+  {
+    "date": "May 24",
+    "sunset": 19.53,
+    "sunrise": 5.33,
+    "sunshine_duration_hrs": 13,
+    "daylight_duration_hrs": 14.19
+  },
+  {
+    "date": "May 25",
+    "sunset": 19.53,
+    "sunrise": 5.32,
+    "sunshine_duration_hrs": 12.37,
+    "daylight_duration_hrs": 14.21
+  },
+  {
+    "date": "May 26",
+    "sunset": 19.55,
+    "sunrise": 5.32,
+    "sunshine_duration_hrs": 12.42,
+    "daylight_duration_hrs": 14.23
+  },
+  {
+    "date": "May 27",
+    "sunset": 19.57,
+    "sunrise": 5.32,
+    "sunshine_duration_hrs": 1.27,
+    "daylight_duration_hrs": 14.25
+  },
+  {
+    "date": "May 28",
+    "sunset": 19.57,
+    "sunrise": 5.3,
+    "sunshine_duration_hrs": 0.53,
+    "daylight_duration_hrs": 14.27
+  },
+  {
+    "date": "May 29",
+    "sunset": 19.58,
+    "sunrise": 5.3,
+    "sunshine_duration_hrs": 13,
+    "daylight_duration_hrs": 14.29
+  },
+  {
+    "date": "May 30",
+    "sunset": 19.6,
+    "sunrise": 5.28,
+    "sunshine_duration_hrs": 9,
+    "daylight_duration_hrs": 14.31
+  },
+  {
+    "date": "May 31",
+    "sunset": 19.6,
+    "sunrise": 5.28,
+    "sunshine_duration_hrs": 6.62,
+    "daylight_duration_hrs": 14.32
+  },
+  {
+    "date": "Jun 01",
+    "sunset": 19.62,
+    "sunrise": 5.28,
+    "sunshine_duration_hrs": 13,
+    "daylight_duration_hrs": 14.34
+  },
+  {
+    "date": "Jun 02",
+    "sunset": 19.63,
+    "sunrise": 5.27,
+    "sunshine_duration_hrs": 13.01,
+    "daylight_duration_hrs": 14.35
+  },
+  {
+    "date": "Jun 03",
+    "sunset": 19.63,
+    "sunrise": 5.27,
+    "sunshine_duration_hrs": 13.07,
+    "daylight_duration_hrs": 14.37
+  },
+  {
+    "date": "Jun 04",
+    "sunset": 19.65,
+    "sunrise": 5.27,
+    "sunshine_duration_hrs": 13,
+    "daylight_duration_hrs": 14.38
+  },
+  {
+    "date": "Jun 05",
+    "sunset": 19.65,
+    "sunrise": 5.27,
+    "sunshine_duration_hrs": 9.02,
+    "daylight_duration_hrs": 14.4
+  },
+  {
+    "date": "Jun 06",
+    "sunset": 19.67,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 13.01,
+    "daylight_duration_hrs": 14.41
+  },
+  {
+    "date": "Jun 07",
+    "sunset": 19.67,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 9.32,
+    "daylight_duration_hrs": 14.42
+  },
+  {
+    "date": "Jun 08",
+    "sunset": 19.68,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 12,
+    "daylight_duration_hrs": 14.43
+  },
+  {
+    "date": "Jun 09",
+    "sunset": 19.68,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 13.12,
+    "daylight_duration_hrs": 14.44
+  },
+  {
+    "date": "Jun 10",
+    "sunset": 19.7,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 13.14,
+    "daylight_duration_hrs": 14.45
+  },
+  {
+    "date": "Jun 11",
+    "sunset": 19.7,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 7.37,
+    "daylight_duration_hrs": 14.46
+  },
+  {
+    "date": "Jun 12",
+    "sunset": 19.72,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 12,
+    "daylight_duration_hrs": 14.46
+  },
+  {
+    "date": "Jun 13",
+    "sunset": 19.72,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 13.09,
+    "daylight_duration_hrs": 14.47
+  },
+  {
+    "date": "Jun 14",
+    "sunset": 19.72,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 8.95,
+    "daylight_duration_hrs": 14.48
+  },
+  {
+    "date": "Jun 15",
+    "sunset": 19.73,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 10.1,
+    "daylight_duration_hrs": 14.48
+  },
+  {
+    "date": "Jun 16",
+    "sunset": 19.73,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 13.02,
+    "daylight_duration_hrs": 14.49
+  },
+  {
+    "date": "Jun 17",
+    "sunset": 19.75,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 13.12,
+    "daylight_duration_hrs": 14.49
+  },
+  {
+    "date": "Jun 18",
+    "sunset": 19.75,
+    "sunrise": 5.25,
+    "sunshine_duration_hrs": 13.05,
+    "daylight_duration_hrs": 14.49
+  },
+  {
+    "date": "Jun 19",
+    "sunset": 19.75,
+    "sunrise": 5.27,
+    "sunshine_duration_hrs": 1.5,
+    "daylight_duration_hrs": 14.49
+  },
+  {
+    "date": "Jun 20",
+    "sunset": 19.75,
+    "sunrise": 5.27,
+    "sunshine_duration_hrs": 4.28,
+    "daylight_duration_hrs": 14.5
+  },
+  {
+    "date": "Jun 21",
+    "sunset": 19.77,
+    "sunrise": 5.27,
+    "sunshine_duration_hrs": 1.78,
+    "daylight_duration_hrs": 14.5
+  },
+  {
+    "date": "Jun 22",
+    "sunset": 19.77,
+    "sunrise": 5.27,
+    "sunshine_duration_hrs": 2.64,
+    "daylight_duration_hrs": 14.5
+  },
+  {
+    "date": "Jun 23",
+    "sunset": 19.77,
+    "sunrise": 5.27,
+    "sunshine_duration_hrs": 12.5,
+    "daylight_duration_hrs": 14.49
+  },
+  {
+    "date": "Jun 24",
+    "sunset": 19.77,
+    "sunrise": 5.28,
+    "sunshine_duration_hrs": 13.02,
+    "daylight_duration_hrs": 14.49
+  },
+  {
+    "date": "Jun 25",
+    "sunset": 19.77,
+    "sunrise": 5.28,
+    "sunshine_duration_hrs": 12.93,
+    "daylight_duration_hrs": 14.49
+  },
+  {
+    "date": "Jun 26",
+    "sunset": 19.77,
+    "sunrise": 5.28,
+    "sunshine_duration_hrs": 12.07,
+    "daylight_duration_hrs": 14.49
+  },
+  {
+    "date": "Jun 27",
+    "sunset": 19.77,
+    "sunrise": 5.3,
+    "sunshine_duration_hrs": 13.08,
+    "daylight_duration_hrs": 14.48
+  },
+  {
+    "date": "Jun 28",
+    "sunset": 19.77,
+    "sunrise": 5.3,
+    "sunshine_duration_hrs": 13.08,
+    "daylight_duration_hrs": 14.48
+  },
+  {
+    "date": "Jun 29",
+    "sunset": 19.77,
+    "sunrise": 5.3,
+    "sunshine_duration_hrs": 13.03,
+    "daylight_duration_hrs": 14.47
+  },
+  {
+    "date": "Jun 30",
+    "sunset": 19.77,
+    "sunrise": 5.32,
+    "sunshine_duration_hrs": 9.15,
+    "daylight_duration_hrs": 14.46
+  },
+  {
+    "date": "Jul 01",
+    "sunset": 19.77,
+    "sunrise": 5.32,
+    "sunshine_duration_hrs": 12.25,
+    "daylight_duration_hrs": 14.46
+  },
+  {
+    "date": "Jul 02",
+    "sunset": 19.77,
+    "sunrise": 5.33,
+    "sunshine_duration_hrs": 12.01,
+    "daylight_duration_hrs": 14.45
+  },
+  {
+    "date": "Jul 03",
+    "sunset": 19.77,
+    "sunrise": 5.33,
+    "sunshine_duration_hrs": 10.52,
+    "daylight_duration_hrs": 14.44
+  },
+  {
+    "date": "Jul 04",
+    "sunset": 19.77,
+    "sunrise": 5.35,
+    "sunshine_duration_hrs": 10.39,
+    "daylight_duration_hrs": 14.43
+  },
+  {
+    "date": "Jul 05",
+    "sunset": 19.77,
+    "sunrise": 5.35,
+    "sunshine_duration_hrs": 8.23,
+    "daylight_duration_hrs": 14.42
+  },
+  {
+    "date": "Jul 06",
+    "sunset": 19.77,
+    "sunrise": 5.37,
+    "sunshine_duration_hrs": 13.02,
+    "daylight_duration_hrs": 14.4
+  },
+  {
+    "date": "Jul 07",
+    "sunset": 19.77,
+    "sunrise": 5.37,
+    "sunshine_duration_hrs": 11,
+    "daylight_duration_hrs": 14.39
+  },
+  {
+    "date": "Jul 08",
+    "sunset": 19.75,
+    "sunrise": 5.38,
+    "sunshine_duration_hrs": 13,
+    "daylight_duration_hrs": 14.38
+  },
+  {
+    "date": "Jul 09",
+    "sunset": 19.75,
+    "sunrise": 5.38,
+    "sunshine_duration_hrs": 11.72,
+    "daylight_duration_hrs": 14.37
+  },
+  {
+    "date": "Jul 10",
+    "sunset": 19.75,
+    "sunrise": 5.4,
+    "sunshine_duration_hrs": 10.02,
+    "daylight_duration_hrs": 14.35
+  },
+  {
+    "date": "Jul 11",
+    "sunset": 19.75,
+    "sunrise": 5.4,
+    "sunshine_duration_hrs": 13.05,
+    "daylight_duration_hrs": 14.34
+  },
+  {
+    "date": "Jul 12",
+    "sunset": 19.73,
+    "sunrise": 5.42,
+    "sunshine_duration_hrs": 13.05,
+    "daylight_duration_hrs": 14.32
+  },
+  {
+    "date": "Jul 13",
+    "sunset": 19.73,
+    "sunrise": 5.43,
+    "sunshine_duration_hrs": 12.1,
+    "daylight_duration_hrs": 14.3
+  },
+  {
+    "date": "Jul 14",
+    "sunset": 19.72,
+    "sunrise": 5.43,
+    "sunshine_duration_hrs": 13,
+    "daylight_duration_hrs": 14.29
+  },
+  {
+    "date": "Jul 15",
+    "sunset": 19.72,
+    "sunrise": 5.45,
+    "sunshine_duration_hrs": 11.44,
+    "daylight_duration_hrs": 14.27
+  },
+  {
+    "date": "Jul 16",
+    "sunset": 19.72,
+    "sunrise": 5.45,
+    "sunshine_duration_hrs": 13,
+    "daylight_duration_hrs": 14.25
+  },
+  {
+    "date": "Jul 17",
+    "sunset": 19.7,
+    "sunrise": 5.47,
+    "sunshine_duration_hrs": 13.02,
+    "daylight_duration_hrs": 14.23
+  },
+  {
+    "date": "Jul 18",
+    "sunset": 19.7,
+    "sunrise": 5.48,
+    "sunshine_duration_hrs": 13,
+    "daylight_duration_hrs": 14.21
+  },
+  {
+    "date": "Jul 19",
+    "sunset": 19.68,
+    "sunrise": 5.48,
+    "sunshine_duration_hrs": 11.05,
+    "daylight_duration_hrs": 14.19
+  },
+  {
+    "date": "Jul 20",
+    "sunset": 19.68,
+    "sunrise": 5.5,
+    "sunshine_duration_hrs": 9.39,
+    "daylight_duration_hrs": 14.17
+  },
+  {
+    "date": "Jul 21",
+    "sunset": 19.67,
+    "sunrise": 5.52,
+    "sunshine_duration_hrs": 12.19,
+    "daylight_duration_hrs": 14.15
+  },
+  {
+    "date": "Jul 22",
+    "sunset": 19.65,
+    "sunrise": 5.52,
+    "sunshine_duration_hrs": 12,
+    "daylight_duration_hrs": 14.13
+  },
+  {
+    "date": "Jul 23",
+    "sunset": 19.65,
+    "sunrise": 5.53,
+    "sunshine_duration_hrs": 13,
+    "daylight_duration_hrs": 14.11
+  },
+  {
+    "date": "Jul 24",
+    "sunset": 19.63,
+    "sunrise": 5.55,
+    "sunshine_duration_hrs": 13,
+    "daylight_duration_hrs": 14.09
+  },
+  {
+    "date": "Jul 25",
+    "sunset": 19.62,
+    "sunrise": 5.57,
+    "sunshine_duration_hrs": 12.99,
+    "daylight_duration_hrs": 14.06
+  },
+  {
+    "date": "Jul 26",
+    "sunset": 19.62,
+    "sunrise": 5.57,
+    "sunshine_duration_hrs": 12.98,
+    "daylight_duration_hrs": 14.04
+  },
+  {
+    "date": "Jul 27",
+    "sunset": 19.6,
+    "sunrise": 5.58,
+    "sunshine_duration_hrs": 12.97,
+    "daylight_duration_hrs": 14.01
+  },
+  {
+    "date": "Jul 28",
+    "sunset": 19.58,
+    "sunrise": 5.6,
+    "sunshine_duration_hrs": 12.96,
+    "daylight_duration_hrs": 13.99
+  },
+  {
+    "date": "Jul 29",
+    "sunset": 19.57,
+    "sunrise": 5.62,
+    "sunshine_duration_hrs": 12.24,
+    "daylight_duration_hrs": 13.96
+  },
+  {
+    "date": "Jul 30",
+    "sunset": 19.55,
+    "sunrise": 5.62,
+    "sunshine_duration_hrs": 10.94,
+    "daylight_duration_hrs": 13.94
+  },
+  {
+    "date": "Jul 31",
+    "sunset": 19.55,
+    "sunrise": 5.63,
+    "sunshine_duration_hrs": 12.92,
+    "daylight_duration_hrs": 13.91
+  },
+  {
+    "date": "Aug 01",
+    "sunset": 19.53,
+    "sunrise": 5.65,
+    "sunshine_duration_hrs": 12.91,
+    "daylight_duration_hrs": 13.88
+  },
+  {
+    "date": "Aug 02",
+    "sunset": 19.52,
+    "sunrise": 5.67,
+    "sunshine_duration_hrs": 12.14,
+    "daylight_duration_hrs": 13.86
+  },
+  {
+    "date": "Aug 03",
+    "sunset": 19.5,
+    "sunrise": 5.67,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 13.83
+  },
+  {
+    "date": "Aug 04",
+    "sunset": 19.48,
+    "sunrise": 5.68,
+    "sunshine_duration_hrs": 10.99,
+    "daylight_duration_hrs": 13.8
+  },
+  {
+    "date": "Aug 05",
+    "sunset": 19.47,
+    "sunrise": 5.7,
+    "sunshine_duration_hrs": 12.87,
+    "daylight_duration_hrs": 13.77
+  },
+  {
+    "date": "Aug 06",
+    "sunset": 19.45,
+    "sunrise": 5.72,
+    "sunshine_duration_hrs": 10.81,
+    "daylight_duration_hrs": 13.74
+  },
+  {
+    "date": "Aug 07",
+    "sunset": 19.43,
+    "sunrise": 5.72,
+    "sunshine_duration_hrs": 8.95,
+    "daylight_duration_hrs": 13.72
+  },
+  {
+    "date": "Aug 08",
+    "sunset": 19.42,
+    "sunrise": 5.73,
+    "sunshine_duration_hrs": 11.77,
+    "daylight_duration_hrs": 13.69
+  },
+  {
+    "date": "Aug 09",
+    "sunset": 19.4,
+    "sunrise": 5.75,
+    "sunshine_duration_hrs": 11.99,
+    "daylight_duration_hrs": 13.66
+  },
+  {
+    "date": "Aug 10",
+    "sunset": 19.38,
+    "sunrise": 5.77,
+    "sunshine_duration_hrs": 7.5,
+    "daylight_duration_hrs": 13.63
+  },
+  {
+    "date": "Aug 11",
+    "sunset": 19.37,
+    "sunrise": 5.77,
+    "sunshine_duration_hrs": 5.38,
+    "daylight_duration_hrs": 13.6
+  },
+  {
+    "date": "Aug 12",
+    "sunset": 19.35,
+    "sunrise": 5.78,
+    "sunshine_duration_hrs": 12.56,
+    "daylight_duration_hrs": 13.57
+  },
+  {
+    "date": "Aug 13",
+    "sunset": 19.33,
+    "sunrise": 5.8,
+    "sunshine_duration_hrs": 12.68,
+    "daylight_duration_hrs": 13.53
+  },
+  {
+    "date": "Aug 14",
+    "sunset": 19.32,
+    "sunrise": 5.82,
+    "sunshine_duration_hrs": 12.65,
+    "daylight_duration_hrs": 13.5
+  },
+  {
+    "date": "Aug 15",
+    "sunset": 19.3,
+    "sunrise": 5.82,
+    "sunshine_duration_hrs": 11.38,
+    "daylight_duration_hrs": 13.47
+  },
+  {
+    "date": "Aug 16",
+    "sunset": 19.27,
+    "sunrise": 5.83,
+    "sunshine_duration_hrs": 12.59,
+    "daylight_duration_hrs": 13.44
+  },
+  {
+    "date": "Aug 17",
+    "sunset": 19.25,
+    "sunrise": 5.85,
+    "sunshine_duration_hrs": 12.56,
+    "daylight_duration_hrs": 13.41
+  },
+  {
+    "date": "Aug 18",
+    "sunset": 19.23,
+    "sunrise": 5.87,
+    "sunshine_duration_hrs": 12.53,
+    "daylight_duration_hrs": 13.37
+  },
+  {
+    "date": "Aug 19",
+    "sunset": 19.22,
+    "sunrise": 5.87,
+    "sunshine_duration_hrs": 12.5,
+    "daylight_duration_hrs": 13.34
+  },
+  {
+    "date": "Aug 20",
+    "sunset": 19.2,
+    "sunrise": 5.88,
+    "sunshine_duration_hrs": 12.47,
+    "daylight_duration_hrs": 13.31
+  },
+  {
+    "date": "Aug 21",
+    "sunset": 19.17,
+    "sunrise": 5.9,
+    "sunshine_duration_hrs": 11.68,
+    "daylight_duration_hrs": 13.28
+  },
+  {
+    "date": "Aug 22",
+    "sunset": 19.15,
+    "sunrise": 5.92,
+    "sunshine_duration_hrs": 12.4,
+    "daylight_duration_hrs": 13.24
+  },
+  {
+    "date": "Aug 23",
+    "sunset": 19.13,
+    "sunrise": 5.92,
+    "sunshine_duration_hrs": 12.37,
+    "daylight_duration_hrs": 13.21
+  },
+  {
+    "date": "Aug 24",
+    "sunset": 19.12,
+    "sunrise": 5.93,
+    "sunshine_duration_hrs": 12.34,
+    "daylight_duration_hrs": 13.18
+  },
+  {
+    "date": "Aug 25",
+    "sunset": 19.08,
+    "sunrise": 5.95,
+    "sunshine_duration_hrs": 12.31,
+    "daylight_duration_hrs": 13.14
+  },
+  {
+    "date": "Aug 26",
+    "sunset": 19.07,
+    "sunrise": 5.95,
+    "sunshine_duration_hrs": 12.14,
+    "daylight_duration_hrs": 13.11
+  },
+  {
+    "date": "Aug 27",
+    "sunset": 19.05,
+    "sunrise": 5.97,
+    "sunshine_duration_hrs": 11.91,
+    "daylight_duration_hrs": 13.08
+  },
+  {
+    "date": "Aug 28",
+    "sunset": 19.02,
+    "sunrise": 5.98,
+    "sunshine_duration_hrs": 8.6,
+    "daylight_duration_hrs": 13.04
+  },
+  {
+    "date": "Aug 29",
+    "sunset": 19,
+    "sunrise": 6,
+    "sunshine_duration_hrs": 5.29,
+    "daylight_duration_hrs": 13.01
+  },
+  {
+    "date": "Aug 30",
+    "sunset": 18.98,
+    "sunrise": 6,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 12.97
+  },
+  {
+    "date": "Aug 31",
+    "sunset": 18.95,
+    "sunrise": 6.02,
+    "sunshine_duration_hrs": 12.11,
+    "daylight_duration_hrs": 12.94
+  },
+  {
+    "date": "Sep 01",
+    "sunset": 18.93,
+    "sunrise": 6.03,
+    "sunshine_duration_hrs": 11.8,
+    "daylight_duration_hrs": 12.9
+  },
+  {
+    "date": "Sep 02",
+    "sunset": 18.92,
+    "sunrise": 6.05,
+    "sunshine_duration_hrs": 11.58,
+    "daylight_duration_hrs": 12.87
+  },
+  {
+    "date": "Sep 03",
+    "sunset": 18.88,
+    "sunrise": 6.05,
+    "sunshine_duration_hrs": 12,
+    "daylight_duration_hrs": 12.83
+  },
+  {
+    "date": "Sep 04",
+    "sunset": 18.87,
+    "sunrise": 6.07,
+    "sunshine_duration_hrs": 11.92,
+    "daylight_duration_hrs": 12.8
+  },
+  {
+    "date": "Sep 05",
+    "sunset": 18.85,
+    "sunrise": 6.08,
+    "sunshine_duration_hrs": 10.98,
+    "daylight_duration_hrs": 12.76
+  },
+  {
+    "date": "Sep 06",
+    "sunset": 18.82,
+    "sunrise": 6.08,
+    "sunshine_duration_hrs": 11.6,
+    "daylight_duration_hrs": 12.73
+  },
+  {
+    "date": "Sep 07",
+    "sunset": 18.8,
+    "sunrise": 6.1,
+    "sunshine_duration_hrs": 11.44,
+    "daylight_duration_hrs": 12.69
+  },
+  {
+    "date": "Sep 08",
+    "sunset": 18.77,
+    "sunrise": 6.12,
+    "sunshine_duration_hrs": 11.12,
+    "daylight_duration_hrs": 12.66
+  },
+  {
+    "date": "Sep 09",
+    "sunset": 18.75,
+    "sunrise": 6.13,
+    "sunshine_duration_hrs": 10.71,
+    "daylight_duration_hrs": 12.62
+  },
+  {
+    "date": "Sep 10",
+    "sunset": 18.72,
+    "sunrise": 6.13,
+    "sunshine_duration_hrs": 7.62,
+    "daylight_duration_hrs": 12.59
+  },
+  {
+    "date": "Sep 11",
+    "sunset": 18.7,
+    "sunrise": 6.15,
+    "sunshine_duration_hrs": 11.06,
+    "daylight_duration_hrs": 12.55
+  },
+  {
+    "date": "Sep 12",
+    "sunset": 18.68,
+    "sunrise": 6.17,
+    "sunshine_duration_hrs": 10.32,
+    "daylight_duration_hrs": 12.51
+  },
+  {
+    "date": "Sep 13",
+    "sunset": 18.65,
+    "sunrise": 6.17,
+    "sunshine_duration_hrs": 9.46,
+    "daylight_duration_hrs": 12.48
+  },
+  {
+    "date": "Sep 14",
+    "sunset": 18.63,
+    "sunrise": 6.18,
+    "sunshine_duration_hrs": 11.06,
+    "daylight_duration_hrs": 12.44
+  },
+  {
+    "date": "Sep 15",
+    "sunset": 18.6,
+    "sunrise": 6.2,
+    "sunshine_duration_hrs": 10.02,
+    "daylight_duration_hrs": 12.41
+  },
+  {
+    "date": "Sep 16",
+    "sunset": 18.58,
+    "sunrise": 6.22,
+    "sunshine_duration_hrs": 9.43,
+    "daylight_duration_hrs": 12.37
+  },
+  {
+    "date": "Sep 17",
+    "sunset": 18.57,
+    "sunrise": 6.22,
+    "sunshine_duration_hrs": 7.33,
+    "daylight_duration_hrs": 12.34
+  },
+  {
+    "date": "Sep 18",
+    "sunset": 18.53,
+    "sunrise": 6.23,
+    "sunshine_duration_hrs": 11.22,
+    "daylight_duration_hrs": 12.3
+  },
+  {
+    "date": "Sep 19",
+    "sunset": 18.52,
+    "sunrise": 6.25,
+    "sunshine_duration_hrs": 11.22,
+    "daylight_duration_hrs": 12.27
+  },
+  {
+    "date": "Sep 20",
+    "sunset": 18.48,
+    "sunrise": 6.27,
+    "sunshine_duration_hrs": 11.11,
+    "daylight_duration_hrs": 12.23
+  },
+  {
+    "date": "Sep 21",
+    "sunset": 18.47,
+    "sunrise": 6.27,
+    "sunshine_duration_hrs": 8.82,
+    "daylight_duration_hrs": 12.19
+  },
+  {
+    "date": "Sep 22",
+    "sunset": 18.43,
+    "sunrise": 6.28,
+    "sunshine_duration_hrs": 11.14,
+    "daylight_duration_hrs": 12.16
+  },
+  {
+    "date": "Sep 23",
+    "sunset": 18.42,
+    "sunrise": 6.3,
+    "sunshine_duration_hrs": 11.14,
+    "daylight_duration_hrs": 12.12
+  },
+  {
+    "date": "Sep 24",
+    "sunset": 18.38,
+    "sunrise": 6.3,
+    "sunshine_duration_hrs": 11.12,
+    "daylight_duration_hrs": 12.08
+  },
+  {
+    "date": "Sep 25",
+    "sunset": 18.37,
+    "sunrise": 6.32,
+    "sunshine_duration_hrs": 11.03,
+    "daylight_duration_hrs": 12.05
+  },
+  {
+    "date": "Sep 26",
+    "sunset": 18.35,
+    "sunrise": 6.33,
+    "sunshine_duration_hrs": 10,
+    "daylight_duration_hrs": 12.01
+  },
+  {
+    "date": "Sep 27",
+    "sunset": 18.32,
+    "sunrise": 6.35,
+    "sunshine_duration_hrs": 6.99,
+    "daylight_duration_hrs": 11.97
+  },
+  {
+    "date": "Sep 28",
+    "sunset": 18.3,
+    "sunrise": 6.35,
+    "sunshine_duration_hrs": 10.93,
+    "daylight_duration_hrs": 11.94
+  },
+  {
+    "date": "Sep 29",
+    "sunset": 18.27,
+    "sunrise": 6.37,
+    "sunshine_duration_hrs": 10.91,
+    "daylight_duration_hrs": 11.9
+  },
+  {
+    "date": "Sep 30",
+    "sunset": 18.25,
+    "sunrise": 6.38,
+    "sunshine_duration_hrs": 10.88,
+    "daylight_duration_hrs": 11.87
+  },
+  {
+    "date": "Oct 01",
+    "sunset": 18.22,
+    "sunrise": 6.4,
+    "sunshine_duration_hrs": 10.84,
+    "daylight_duration_hrs": 11.83
+  },
+  {
+    "date": "Oct 02",
+    "sunset": 18.2,
+    "sunrise": 6.4,
+    "sunshine_duration_hrs": 10.84,
+    "daylight_duration_hrs": 11.79
+  },
+  {
+    "date": "Oct 03",
+    "sunset": 18.18,
+    "sunrise": 6.42,
+    "sunshine_duration_hrs": 10.8,
+    "daylight_duration_hrs": 11.76
+  },
+  {
+    "date": "Oct 04",
+    "sunset": 18.15,
+    "sunrise": 6.43,
+    "sunshine_duration_hrs": 10.76,
+    "daylight_duration_hrs": 11.72
+  },
+  {
+    "date": "Oct 05",
+    "sunset": 18.13,
+    "sunrise": 6.45,
+    "sunshine_duration_hrs": 10.73,
+    "daylight_duration_hrs": 11.69
+  },
+  {
+    "date": "Oct 06",
+    "sunset": 18.12,
+    "sunrise": 6.47,
+    "sunshine_duration_hrs": 10.33,
+    "daylight_duration_hrs": 11.65
+  },
+  {
+    "date": "Oct 07",
+    "sunset": 18.08,
+    "sunrise": 6.47,
+    "sunshine_duration_hrs": 10.69,
+    "daylight_duration_hrs": 11.62
+  },
+  {
+    "date": "Oct 08",
+    "sunset": 18.07,
+    "sunrise": 6.48,
+    "sunshine_duration_hrs": 10.67,
+    "daylight_duration_hrs": 11.58
+  },
+  {
+    "date": "Oct 09",
+    "sunset": 18.05,
+    "sunrise": 6.5,
+    "sunshine_duration_hrs": 10.64,
+    "daylight_duration_hrs": 11.55
+  },
+  {
+    "date": "Oct 10",
+    "sunset": 18.02,
+    "sunrise": 6.52,
+    "sunshine_duration_hrs": 10.61,
+    "daylight_duration_hrs": 11.51
+  },
+  {
+    "date": "Oct 11",
+    "sunset": 18,
+    "sunrise": 6.53,
+    "sunshine_duration_hrs": 3.21,
+    "daylight_duration_hrs": 11.47
+  },
+  {
+    "date": "Oct 12",
+    "sunset": 17.98,
+    "sunrise": 6.53,
+    "sunshine_duration_hrs": 7.57,
+    "daylight_duration_hrs": 11.44
+  },
+  {
+    "date": "Oct 13",
+    "sunset": 17.95,
+    "sunrise": 6.55,
+    "sunshine_duration_hrs": 8,
+    "daylight_duration_hrs": 11.4
+  },
+  {
+    "date": "Oct 14",
+    "sunset": 17.93,
+    "sunrise": 6.57,
+    "sunshine_duration_hrs": 10.1,
+    "daylight_duration_hrs": 11.37
+  },
+  {
+    "date": "Oct 15",
+    "sunset": 17.92,
+    "sunrise": 6.58,
+    "sunshine_duration_hrs": 10.02,
+    "daylight_duration_hrs": 11.33
+  },
+  {
+    "date": "Oct 16",
+    "sunset": 17.88,
+    "sunrise": 6.6,
+    "sunshine_duration_hrs": 6.25,
+    "daylight_duration_hrs": 11.3
+  },
+  {
+    "date": "Oct 17",
+    "sunset": 17.87,
+    "sunrise": 6.6,
+    "sunshine_duration_hrs": 10.43,
+    "daylight_duration_hrs": 11.26
+  },
+  {
+    "date": "Oct 18",
+    "sunset": 17.85,
+    "sunrise": 6.62,
+    "sunshine_duration_hrs": 10.39,
+    "daylight_duration_hrs": 11.23
+  },
+  {
+    "date": "Oct 19",
+    "sunset": 17.83,
+    "sunrise": 6.63,
+    "sunshine_duration_hrs": 9.49,
+    "daylight_duration_hrs": 11.19
+  },
+  {
+    "date": "Oct 20",
+    "sunset": 17.8,
+    "sunrise": 6.65,
+    "sunshine_duration_hrs": 9.72,
+    "daylight_duration_hrs": 11.16
+  },
+  {
+    "date": "Oct 21",
+    "sunset": 17.78,
+    "sunrise": 6.67,
+    "sunshine_duration_hrs": 10.28,
+    "daylight_duration_hrs": 11.12
+  },
+  {
+    "date": "Oct 22",
+    "sunset": 17.77,
+    "sunrise": 6.68,
+    "sunshine_duration_hrs": 10.25,
+    "daylight_duration_hrs": 11.09
+  },
+  {
+    "date": "Oct 23",
+    "sunset": 17.75,
+    "sunrise": 6.7,
+    "sunshine_duration_hrs": 10.18,
+    "daylight_duration_hrs": 11.06
+  },
+  {
+    "date": "Oct 24",
+    "sunset": 17.73,
+    "sunrise": 6.7,
+    "sunshine_duration_hrs": 10.13,
+    "daylight_duration_hrs": 11.02
+  },
+  {
+    "date": "Oct 25",
+    "sunset": 17.72,
+    "sunrise": 6.72,
+    "sunshine_duration_hrs": 10.01,
+    "daylight_duration_hrs": 10.99
+  },
+  {
+    "date": "Oct 26",
+    "sunset": 17.7,
+    "sunrise": 6.73,
+    "sunshine_duration_hrs": 9.99,
+    "daylight_duration_hrs": 10.96
+  },
+  {
+    "date": "Oct 27",
+    "sunset": 17.68,
+    "sunrise": 6.75,
+    "sunshine_duration_hrs": 8.72,
+    "daylight_duration_hrs": 10.92
+  },
+  {
+    "date": "Oct 28",
+    "sunset": 17.65,
+    "sunrise": 6.77,
+    "sunshine_duration_hrs": 9.89,
+    "daylight_duration_hrs": 10.89
+  },
+  {
+    "date": "Oct 29",
+    "sunset": 17.63,
+    "sunrise": 6.78,
+    "sunshine_duration_hrs": 9.89,
+    "daylight_duration_hrs": 10.86
+  },
+  {
+    "date": "Oct 30",
+    "sunset": 17.62,
+    "sunrise": 6.8,
+    "sunshine_duration_hrs": 9.81,
+    "daylight_duration_hrs": 10.83
+  },
+  {
+    "date": "Oct 31",
+    "sunset": 17.6,
+    "sunrise": 6.82,
+    "sunshine_duration_hrs": 3.82,
+    "daylight_duration_hrs": 10.79
+  },
+  {
+    "date": "Nov 01",
+    "sunset": 17.58,
+    "sunrise": 6.83,
+    "sunshine_duration_hrs": 9.81,
+    "daylight_duration_hrs": 10.76
+  },
+  {
+    "date": "Nov 02",
+    "sunset": 17.57,
+    "sunrise": 6.85,
+    "sunshine_duration_hrs": 9.77,
+    "daylight_duration_hrs": 10.73
+  },
+  {
+    "date": "Nov 03",
+    "sunset": 17.55,
+    "sunrise": 6.87,
+    "sunshine_duration_hrs": 9.74,
+    "daylight_duration_hrs": 10.7
+  },
+  {
+    "date": "Nov 04",
+    "sunset": 17.53,
+    "sunrise": 6.88,
+    "sunshine_duration_hrs": 9.71,
+    "daylight_duration_hrs": 10.67
+  },
+  {
+    "date": "Nov 05",
+    "sunset": 17.53,
+    "sunrise": 6.9,
+    "sunshine_duration_hrs": 9.68,
+    "daylight_duration_hrs": 10.63
+  },
+  {
+    "date": "Nov 06",
+    "sunset": 17.52,
+    "sunrise": 6.92,
+    "sunshine_duration_hrs": 9.66,
+    "daylight_duration_hrs": 10.6
+  },
+  {
+    "date": "Nov 07",
+    "sunset": 17.5,
+    "sunrise": 6.92,
+    "sunshine_duration_hrs": 9.64,
+    "daylight_duration_hrs": 10.57
+  },
+  {
+    "date": "Nov 08",
+    "sunset": 17.48,
+    "sunrise": 6.93,
+    "sunshine_duration_hrs": 9.62,
+    "daylight_duration_hrs": 10.54
+  },
+  {
+    "date": "Nov 09",
+    "sunset": 17.47,
+    "sunrise": 6.95,
+    "sunshine_duration_hrs": 9,
+    "daylight_duration_hrs": 10.51
+  },
+  {
+    "date": "Nov 10",
+    "sunset": 17.45,
+    "sunrise": 6.97,
+    "sunshine_duration_hrs": 1,
+    "daylight_duration_hrs": 10.48
+  },
+  {
+    "date": "Nov 11",
+    "sunset": 17.45,
+    "sunrise": 6.98,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 10.46
+  },
+  {
+    "date": "Nov 12",
+    "sunset": 17.43,
+    "sunrise": 7,
+    "sunshine_duration_hrs": 7.94,
+    "daylight_duration_hrs": 10.43
+  },
+  {
+    "date": "Nov 13",
+    "sunset": 17.42,
+    "sunrise": 7.02,
+    "sunshine_duration_hrs": 9.52,
+    "daylight_duration_hrs": 10.4
+  },
+  {
+    "date": "Nov 14",
+    "sunset": 17.42,
+    "sunrise": 7.03,
+    "sunshine_duration_hrs": 9.17,
+    "daylight_duration_hrs": 10.37
+  },
+  {
+    "date": "Nov 15",
+    "sunset": 17.4,
+    "sunrise": 7.05,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 10.35
+  },
+  {
+    "date": "Nov 16",
+    "sunset": 17.38,
+    "sunrise": 7.07,
+    "sunshine_duration_hrs": 8.95,
+    "daylight_duration_hrs": 10.32
+  },
+  {
+    "date": "Nov 17",
+    "sunset": 17.38,
+    "sunrise": 7.08,
+    "sunshine_duration_hrs": 6.11,
+    "daylight_duration_hrs": 10.3
+  },
+  {
+    "date": "Nov 18",
+    "sunset": 17.37,
+    "sunrise": 7.1,
+    "sunshine_duration_hrs": 9.38,
+    "daylight_duration_hrs": 10.27
+  },
+  {
+    "date": "Nov 19",
+    "sunset": 17.37,
+    "sunrise": 7.12,
+    "sunshine_duration_hrs": 9.35,
+    "daylight_duration_hrs": 10.25
+  },
+  {
+    "date": "Nov 20",
+    "sunset": 17.35,
+    "sunrise": 7.13,
+    "sunshine_duration_hrs": 6.45,
+    "daylight_duration_hrs": 10.22
+  },
+  {
+    "date": "Nov 21",
+    "sunset": 17.35,
+    "sunrise": 7.15,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 10.2
+  },
+  {
+    "date": "Nov 22",
+    "sunset": 17.33,
+    "sunrise": 7.17,
+    "sunshine_duration_hrs": 6.18,
+    "daylight_duration_hrs": 10.17
+  },
+  {
+    "date": "Nov 23",
+    "sunset": 17.33,
+    "sunrise": 7.18,
+    "sunshine_duration_hrs": 9.25,
+    "daylight_duration_hrs": 10.15
+  },
+  {
+    "date": "Nov 24",
+    "sunset": 17.33,
+    "sunrise": 7.2,
+    "sunshine_duration_hrs": 6.48,
+    "daylight_duration_hrs": 10.13
+  },
+  {
+    "date": "Nov 25",
+    "sunset": 17.32,
+    "sunrise": 7.22,
+    "sunshine_duration_hrs": 9.07,
+    "daylight_duration_hrs": 10.11
+  },
+  {
+    "date": "Nov 26",
+    "sunset": 17.32,
+    "sunrise": 7.23,
+    "sunshine_duration_hrs": 1.07,
+    "daylight_duration_hrs": 10.09
+  },
+  {
+    "date": "Nov 27",
+    "sunset": 17.32,
+    "sunrise": 7.25,
+    "sunshine_duration_hrs": 9.08,
+    "daylight_duration_hrs": 10.07
+  },
+  {
+    "date": "Nov 28",
+    "sunset": 17.3,
+    "sunrise": 7.27,
+    "sunshine_duration_hrs": 8.88,
+    "daylight_duration_hrs": 10.05
+  },
+  {
+    "date": "Nov 29",
+    "sunset": 17.3,
+    "sunrise": 7.27,
+    "sunshine_duration_hrs": 9.08,
+    "daylight_duration_hrs": 10.03
+  },
+  {
+    "date": "Nov 30",
+    "sunset": 17.3,
+    "sunrise": 7.28,
+    "sunshine_duration_hrs": 9.02,
+    "daylight_duration_hrs": 10.01
+  },
+  {
+    "date": "Dec 01",
+    "sunset": 17.3,
+    "sunrise": 7.3,
+    "sunshine_duration_hrs": 0.35,
+    "daylight_duration_hrs": 9.99
+  },
+  {
+    "date": "Dec 02",
+    "sunset": 17.3,
+    "sunrise": 7.32,
+    "sunshine_duration_hrs": 0.02,
+    "daylight_duration_hrs": 9.98
+  },
+  {
+    "date": "Dec 03",
+    "sunset": 17.28,
+    "sunrise": 7.33,
+    "sunshine_duration_hrs": 3.8,
+    "daylight_duration_hrs": 9.96
+  },
+  {
+    "date": "Dec 04",
+    "sunset": 17.28,
+    "sunrise": 7.35,
+    "sunshine_duration_hrs": 8.83,
+    "daylight_duration_hrs": 9.95
+  },
+  {
+    "date": "Dec 05",
+    "sunset": 17.28,
+    "sunrise": 7.37,
+    "sunshine_duration_hrs": 8.91,
+    "daylight_duration_hrs": 9.93
+  },
+  {
+    "date": "Dec 06",
+    "sunset": 17.28,
+    "sunrise": 7.37,
+    "sunshine_duration_hrs": 8.89,
+    "daylight_duration_hrs": 9.92
+  },
+  {
+    "date": "Dec 07",
+    "sunset": 17.28,
+    "sunrise": 7.38,
+    "sunshine_duration_hrs": 8.89,
+    "daylight_duration_hrs": 9.91
+  },
+  {
+    "date": "Dec 08",
+    "sunset": 17.3,
+    "sunrise": 7.4,
+    "sunshine_duration_hrs": 7.98,
+    "daylight_duration_hrs": 9.89
+  },
+  {
+    "date": "Dec 09",
+    "sunset": 17.3,
+    "sunrise": 7.42,
+    "sunshine_duration_hrs": 3.34,
+    "daylight_duration_hrs": 9.88
+  },
+  {
+    "date": "Dec 10",
+    "sunset": 17.3,
+    "sunrise": 7.42,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 9.87
+  },
+  {
+    "date": "Dec 11",
+    "sunset": 17.3,
+    "sunrise": 7.43,
+    "sunshine_duration_hrs": 8.86,
+    "daylight_duration_hrs": 9.86
+  },
+  {
+    "date": "Dec 12",
+    "sunset": 17.3,
+    "sunrise": 7.45,
+    "sunshine_duration_hrs": 8.85,
+    "daylight_duration_hrs": 9.85
+  },
+  {
+    "date": "Dec 13",
+    "sunset": 17.3,
+    "sunrise": 7.47,
+    "sunshine_duration_hrs": 8.85,
+    "daylight_duration_hrs": 9.85
+  },
+  {
+    "date": "Dec 14",
+    "sunset": 17.32,
+    "sunrise": 7.47,
+    "sunshine_duration_hrs": 8.86,
+    "daylight_duration_hrs": 9.84
+  },
+  {
+    "date": "Dec 15",
+    "sunset": 17.32,
+    "sunrise": 7.48,
+    "sunshine_duration_hrs": 8.86,
+    "daylight_duration_hrs": 9.83
+  },
+  {
+    "date": "Dec 16",
+    "sunset": 17.32,
+    "sunrise": 7.5,
+    "sunshine_duration_hrs": 2.67,
+    "daylight_duration_hrs": 9.83
+  },
+  {
+    "date": "Dec 17",
+    "sunset": 17.33,
+    "sunrise": 7.5,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 9.82
+  },
+  {
+    "date": "Dec 18",
+    "sunset": 17.33,
+    "sunrise": 7.52,
+    "sunshine_duration_hrs": 8.87,
+    "daylight_duration_hrs": 9.82
+  },
+  {
+    "date": "Dec 19",
+    "sunset": 17.35,
+    "sunrise": 7.53,
+    "sunshine_duration_hrs": 8.88,
+    "daylight_duration_hrs": 9.82
+  },
+  {
+    "date": "Dec 20",
+    "sunset": 17.35,
+    "sunrise": 7.53,
+    "sunshine_duration_hrs": 8.88,
+    "daylight_duration_hrs": 9.81
+  },
+  {
+    "date": "Dec 21",
+    "sunset": 17.35,
+    "sunrise": 7.55,
+    "sunshine_duration_hrs": 8.87,
+    "daylight_duration_hrs": 9.81
+  },
+  {
+    "date": "Dec 22",
+    "sunset": 17.37,
+    "sunrise": 7.55,
+    "sunshine_duration_hrs": 8.01,
+    "daylight_duration_hrs": 9.81
+  },
+  {
+    "date": "Dec 23",
+    "sunset": 17.37,
+    "sunrise": 7.57,
+    "sunshine_duration_hrs": 8.88,
+    "daylight_duration_hrs": 9.81
+  },
+  {
+    "date": "Dec 24",
+    "sunset": 17.38,
+    "sunrise": 7.57,
+    "sunshine_duration_hrs": 8.88,
+    "daylight_duration_hrs": 9.82
+  },
+  {
+    "date": "Dec 25",
+    "sunset": 17.38,
+    "sunrise": 7.57,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 9.82
+  },
+  {
+    "date": "Dec 26",
+    "sunset": 17.4,
+    "sunrise": 7.58,
+    "sunshine_duration_hrs": 0,
+    "daylight_duration_hrs": 9.82
+  },
+  {
+    "date": "Dec 27",
+    "sunset": 17.42,
+    "sunrise": 7.58,
+    "sunshine_duration_hrs": 7.35,
+    "daylight_duration_hrs": 9.83
+  },
+  {
+    "date": "Dec 28",
+    "sunset": 17.42,
+    "sunrise": 7.58,
+    "sunshine_duration_hrs": 8.9,
+    "daylight_duration_hrs": 9.83
+  },
+  {
+    "date": "Dec 29",
+    "sunset": 17.43,
+    "sunrise": 7.6,
+    "sunshine_duration_hrs": 5.81,
+    "daylight_duration_hrs": 9.84
+  },
+  {
+    "date": "Dec 30",
+    "sunset": 17.45,
+    "sunrise": 7.6,
+    "sunshine_duration_hrs": 6.3,
+    "daylight_duration_hrs": 9.85
+  },
+  {
+    "date": "Dec 31",
+    "sunset": 17.45,
+    "sunrise": 7.6,
+    "sunshine_duration_hrs": 8.92,
+    "daylight_duration_hrs": 9.85
+  }
+]
