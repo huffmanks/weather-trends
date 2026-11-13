@@ -1,9 +1,27 @@
-import { Area, AreaChart, CartesianGrid, Label, ReferenceDot, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Label,
+  ReferenceDot,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { SunlightData } from "@/types";
 
-export function DaylightExpansionChart({ data, isAllData = false }: { data: SunlightData[]; isAllData?: boolean }) {
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+export function DaylightExpansionChart({
+  data,
+  isAllData = false,
+}: {
+  data: SunlightData[];
+  isAllData?: boolean;
+}) {
   const processedData = data.map((d, index) => ({
     ...d,
     gap: d.sunset - d.sunrise,
@@ -20,15 +38,19 @@ export function DaylightExpansionChart({ data, isAllData = false }: { data: Sunl
   };
 
   return (
-    <Card className="w-full border-border bg-card text-card-foreground">
+    <Card className="border-border bg-card text-card-foreground w-full">
       <CardHeader>
         <CardTitle>Sunrise & Sunset Trends</CardTitle>
-        <CardDescription className="text-muted-foreground">Amber = Sunrise | Red = Sunset</CardDescription>
+        <CardDescription className="text-muted-foreground">
+          Amber = Sunrise | Red = Sunset
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-100 w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data as SunlightData[]} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+            <AreaChart
+              data={data as SunlightData[]}
+              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="daylightFill" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="var(--chart-3)" stopOpacity={0.4} />
@@ -40,8 +62,22 @@ export function DaylightExpansionChart({ data, isAllData = false }: { data: Sunl
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-              <XAxis dataKey="date" fontSize={12} tickLine={false} axisLine={false} stroke="var(--muted-foreground)" />
-              <YAxis domain={[0, 24]} tickCount={13} fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}h`} stroke="var(--muted-foreground)" />
+              <XAxis
+                dataKey="date"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                stroke="var(--muted-foreground)"
+              />
+              <YAxis
+                domain={[0, 24]}
+                tickCount={13}
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(val) => `${val}h`}
+                stroke="var(--muted-foreground)"
+              />
               <Tooltip
                 contentStyle={{
                   backgroundColor: "var(--card)",
@@ -58,10 +94,22 @@ export function DaylightExpansionChart({ data, isAllData = false }: { data: Sunl
               />
 
               {/* SUNRISE */}
-              <Area type="monotone" dataKey="sunrise" baseValue="dataMin" stroke="var(--chart-3)" fill="url(#daylightFill)" />
+              <Area
+                type="monotone"
+                dataKey="sunrise"
+                baseValue="dataMin"
+                stroke="var(--chart-3)"
+                fill="url(#daylightFill)"
+              />
 
               {/* SUNSET */}
-              <Area type="monotone" dataKey="sunset" baseValue="dataMin" stroke="var(--chart-5)" fill="url(#sunshineFill)" />
+              <Area
+                type="monotone"
+                dataKey="sunset"
+                baseValue="dataMin"
+                stroke="var(--chart-5)"
+                fill="url(#sunshineFill)"
+              />
               {!isAllData && [
                 <ReferenceLine
                   key="max-line"
@@ -73,9 +121,22 @@ export function DaylightExpansionChart({ data, isAllData = false }: { data: Sunl
                   stroke="var(--foreground)"
                   strokeWidth={2}
                   strokeDasharray="4 4">
-                  <Label value={`Max: ${formatGap(maxDay.gap)}`} position="top" fill="var(--foreground)" fontSize={12} offset={10} />
+                  <Label
+                    value={`Max: ${formatGap(maxDay.gap)}`}
+                    position="top"
+                    fill="var(--foreground)"
+                    fontSize={12}
+                    offset={10}
+                  />
                 </ReferenceLine>,
-                <ReferenceDot key="max-dot" x={maxDay.date} y={maxDay.sunset} r={5} fill="var(--chart-1)" stroke="var(--foreground)" strokeWidth={2}></ReferenceDot>,
+                <ReferenceDot
+                  key="max-dot"
+                  x={maxDay.date}
+                  y={maxDay.sunset}
+                  r={5}
+                  fill="var(--chart-1)"
+                  stroke="var(--foreground)"
+                  strokeWidth={2}></ReferenceDot>,
                 <ReferenceLine
                   key="min-line"
                   ifOverflow="extendDomain"
@@ -86,9 +147,22 @@ export function DaylightExpansionChart({ data, isAllData = false }: { data: Sunl
                   stroke="var(--foreground)"
                   strokeWidth={2}
                   strokeDasharray="4 4">
-                  <Label value={`Min: ${formatGap(minDay.gap)}`} position="top" fill="var(--foreground)" fontSize={12} offset={10} />
+                  <Label
+                    value={`Min: ${formatGap(minDay.gap)}`}
+                    position="top"
+                    fill="var(--foreground)"
+                    fontSize={12}
+                    offset={10}
+                  />
                 </ReferenceLine>,
-                <ReferenceDot key="min-dot" x={minDay.date} y={minDay.sunset} r={5} fill="var(--chart-1)" stroke="var(--foreground)" strokeWidth={2}></ReferenceDot>,
+                <ReferenceDot
+                  key="min-dot"
+                  x={minDay.date}
+                  y={minDay.sunset}
+                  r={5}
+                  fill="var(--chart-1)"
+                  stroke="var(--foreground)"
+                  strokeWidth={2}></ReferenceDot>,
               ]}
             </AreaChart>
           </ResponsiveContainer>
