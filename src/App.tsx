@@ -23,7 +23,7 @@ export default function App() {
           <TabsTrigger value="2021">2021</TabsTrigger>
         </TabsList>
         <TabsContent value="all">
-          <DaylightExpansionChart isAllData data={allData} />
+          <DaylightExpansionChart data={allData} />
         </TabsContent>
         <TabsContent value="2025">
           <DaylightExpansionChart data={data2025} />
