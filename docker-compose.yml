@@ -1,0 +1,12 @@
+services:
+  weather-trends:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: huffmanks/weather-trends:${RELEASE_VERSION:-latest}
+    container_name: weather-trends
+    ports:
+      - "${APP_PORT:-3003}:3000"
+    environment:
+      APP_PORT: ${APP_PORT}
+    restart: unless-stopped

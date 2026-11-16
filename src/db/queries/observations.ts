@@ -1,0 +1,93 @@
+import { and, asc, desc, eq, gte, inArray, lte, sql } from "drizzle-orm";
+
+import { db } from "@/db";
+import type { NewDailyObservation } from "@/db/schema";
+import { dailyObservations } from "@/db/schema";
+
+export async function getObservations(input: {
+  locationId: string;
+  startDate: string;
+  endDate: string;
+}) {
+  return db
+    .select()
+    .from(dailyObservations)
+    .where(
+      and(
+        eq(dailyObservations.locationId, input.locationId),
+        gte(dailyObservations.observationDate, input.startDate),
+        lte(dailyObservations.observationDate, input.endDate)
+      )
+    )
+    .orderBy(asc(dailyObservations.observationDate));
+}
+
+export async function getLatestObservation(locationId: string) {
+  const [result] = await db
+    .select()
+    .from(dailyObservations)
+    .where(eq(dailyObservations.locationId, locationId))
+    .orderBy(desc(dailyObservations.observationDate))
+    .limit(1);
+
+  return result;
+}
+
+export async function upsertObservations(observations: NewDailyObservation[]) {
+  if (observations.length === 0) {
+    return { received: 0, inserted: 0, updated: 0 };
+  }
+
+  const locationId = observations[0].locationId;
+  const dates = observations.map((item) => item.observationDate);
+
+  const existing = await db
+    .select({ observationDate: dailyObservations.observationDate })
+    .from(dailyObservations)
+    .where(
+      and(
+        eq(dailyObservations.locationId, locationId),
+        inArray(dailyObservations.observationDate, dates)
+      )
+    );
+
+  const existingDates = new Set(existing.map((item) => item.observationDate));
+
+  await db
+    .insert(dailyObservations)
+    .values(observations)
+    .onConflictDoUpdate({
+      target: [dailyObservations.locationId, dailyObservations.observationDate],
+      set: {
+        temperatureMin: sql`excluded.temperature_min`,
+        temperatureMax: sql`excluded.temperature_max`,
+        temperatureAvg: sql`excluded.temperature_avg`,
+        precipitationTotal: sql`excluded.precipitation_total`,
+        rainTotal: sql`excluded.rain_total`,
+        snowfallTotal: sql`excluded.snowfall_total`,
+        snowDepth: sql`excluded.snow_depth`,
+        windSpeedAvg: sql`excluded.wind_speed_avg`,
+        windSpeedMax: sql`excluded.wind_speed_max`,
+        windGustMax: sql`excluded.wind_gust_max`,
+        windDirection: sql`excluded.wind_direction`,
+        humidityMin: sql`excluded.humidity_min`,
+        humidityAvg: sql`excluded.humidity_avg`,
+        humidityMax: sql`excluded.humidity_max`,
+        dewPointMin: sql`excluded.dew_point_min`,
+        dewPointAvg: sql`excluded.dew_point_avg`,
+        dewPointMax: sql`excluded.dew_point_max`,
+        dataStatus: sql`excluded.data_status`,
+        qualityFlags: sql`excluded.quality_flags`,
+        fetchedAt: sql`excluded.fetched_at`,
+        updatedAt: sql`excluded.updated_at`,
+      },
+    });
+
+  const updated = observations.filter((item) => existingDates.has(item.observationDate)).length;
+
+  return {
+    received: observations.length,
+    inserted: observations.length - updated,
+    updated,
+  };
+}

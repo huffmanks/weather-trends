@@ -1,29 +1,26 @@
-import js from "@eslint/js";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import { defineConfig, globalIgnores } from "eslint/config";
-import globals from "globals";
+//  @ts-check
+import { tanstackConfig } from "@tanstack/eslint-config";
+import pluginQuery from "@tanstack/eslint-plugin-query";
 import tseslint from "typescript-eslint";
 
-export default defineConfig([
-  globalIgnores(["dist"]),
+export default [
+  ...tanstackConfig,
+  ...pluginQuery.configs["flat/recommended"],
+  ...tseslint.configs.recommended,
   {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-    ],
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
     rules: {
+      "import/no-cycle": "off",
+      "import/order": "off",
+      "import/consistent-type-specifier-style": "off",
+      "sort-imports": "off",
+      "pnpm/json-enforce-catalog": "off",
+    },
+  },
+  {
+    files: ["**/*.{ts,tsx,mts,cts}"],
+    rules: {
+      "@typescript-eslint/array-type": "off",
+      "@typescript-eslint/require-await": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
@@ -40,4 +37,7 @@ export default defineConfig([
       ],
     },
   },
-]);
+  {
+    ignores: ["eslint.config.mjs", ".prettierrc"],
+  },
+];
