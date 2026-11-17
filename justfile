@@ -20,12 +20,12 @@ up profile="staging":
         exit 1; \
     fi
     @echo "Starting {{profile}} environment..."
-    @just -E .env.{{profile}} {{BASE_COMPOSE}} up
+    set -a && . .env.{{profile}} && set +a && {{BASE_COMPOSE}} up -d
 
 # Stop environment (default: staging)
 down profile="staging":
     @echo "Stopping {{profile}} environment..."
-    @just -E .env.{{profile}} {{BASE_COMPOSE}} down
+    set -a && . .env.{{profile}} && set +a && {{BASE_COMPOSE}} down
 
 # Setup pre-reqs
 init:
