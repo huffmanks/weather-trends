@@ -116,9 +116,21 @@ function getFill(payload: unknown): string | undefined {
   return typeof payload.fill === "string" ? payload.fill : undefined;
 }
 
+type ChartTooltipContentProps = React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
+  React.ComponentProps<"div"> & {
+    hideLabel?: boolean;
+    hideIndicator?: boolean;
+    indicator?: "line" | "dot" | "dashed";
+    nameKey?: string;
+    labelKey?: string;
+  } & Omit<
+    RechartsPrimitive.DefaultTooltipContentProps<TooltipValueType, TooltipNameType>,
+    "accessibilityLayer"
+  >;
+
 function ChartTooltipContent({
   active,
-  payload,
+  payload = [],
   className,
   indicator = "dot",
   hideLabel = false,
@@ -130,21 +142,11 @@ function ChartTooltipContent({
   color,
   nameKey,
   labelKey,
-}: RechartsPrimitive.TooltipContentProps<TooltipValueType, TooltipNameType> &
-  React.ComponentProps<"div"> & {
-    hideLabel?: boolean;
-    hideIndicator?: boolean;
-    indicator?: "line" | "dot" | "dashed";
-    nameKey?: string;
-    labelKey?: string;
-  } & Omit<
-    RechartsPrimitive.DefaultTooltipContentProps<TooltipValueType, TooltipNameType>,
-    "accessibilityLayer"
-  >) {
+}: ChartTooltipContentProps) {
   const { config } = useChart();
 
   const tooltipLabel = React.useMemo(() => {
-    if (hideLabel || !payload.length) {
+    if (hideLabel || !payload?.length) {
       return null;
     }
 
@@ -152,7 +154,7 @@ function ChartTooltipContent({
     const key = getTooltipKey(labelKey ?? item.dataKey ?? item.name);
     const itemConfig = getPayloadConfigFromPayload(config, item, key);
     const value =
-      !labelKey && typeof label === "string" ? (config[label].label ?? label) : itemConfig?.label;
+      !labelKey && typeof label === "string" ? (config[label]?.label ?? label) : itemConfig?.label;
 
     if (labelFormatter) {
       return (
@@ -167,7 +169,7 @@ function ChartTooltipContent({
     return <div className={cn("font-medium", labelClassName)}>{value}</div>;
   }, [label, labelFormatter, payload, hideLabel, labelClassName, config, labelKey]);
 
-  if (!active || !payload.length) {
+  if (!active || !payload?.length) {
     return null;
   }
 

@@ -1,5 +1,13 @@
 import { Link, Outlet, createFileRoute, useLocation } from "@tanstack/react-router";
-import { Activity, BarChart3, CloudSun, FileBarChart, MapPin, Settings } from "lucide-react";
+import {
+  ActivityIcon,
+  BarChart3Icon,
+  CloudSunIcon,
+  CompassIcon,
+  FileBarChartIcon,
+  MapPinIcon,
+  SettingsIcon,
+} from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
 import {
@@ -26,14 +34,15 @@ const navigation = [
   {
     title: "Overview",
     items: [
-      { title: "Dashboard", url: "/dashboard", icon: BarChart3 },
-      { title: "Locations", url: "/locations", icon: MapPin },
-      { title: "Reports", url: "/reports", icon: FileBarChart },
+      { title: "Dashboard", url: "/dashboard", icon: BarChart3Icon },
+      { title: "Explore", url: "/explore", icon: CompassIcon },
+      { title: "Locations", url: "/locations", icon: MapPinIcon },
+      { title: "Reports", url: "/reports", icon: FileBarChartIcon },
     ],
   },
   {
     title: "Preferences",
-    items: [{ title: "Settings", url: "/settings", icon: Settings }],
+    items: [{ title: "Settings", url: "/settings", icon: SettingsIcon }],
   },
 ];
 
@@ -46,7 +55,7 @@ function AppLayout() {
         <SidebarHeader className="p-4">
           <Link to="/dashboard" className="flex items-center gap-3">
             <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <CloudSun className="size-5" />
+              <CloudSunIcon className="size-5" />
             </div>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="font-semibold">Weather Trends</span>
@@ -85,7 +94,7 @@ function AppLayout() {
 
         <SidebarFooter className="p-4">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Activity className="size-4" />
+            <ActivityIcon className="size-4" />
             powered by Open-Meteo
           </div>
         </SidebarFooter>

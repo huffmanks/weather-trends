@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, FileBarChart, Plus, Save } from "lucide-react";
+import { ArrowRightIcon, FileBarChartIcon, PlusIcon, SaveIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ function ReportsPage() {
         </div>
 
         <Button disabled>
-          <Plus className="mr-2 size-4" />
+          <PlusIcon className="mr-2 size-4" />
           New report
         </Button>
       </div>
@@ -28,7 +28,7 @@ function ReportsPage() {
         <Card>
           <CardHeader>
             <div className="mb-2 flex size-10 items-center justify-center rounded-lg bg-primary/10">
-              <FileBarChart className="size-5 text-primary" />
+              <FileBarChartIcon className="size-5 text-primary" />
             </div>
             <CardTitle>Saved reports</CardTitle>
             <CardDescription>Your saved weather reports and visualizations.</CardDescription>
@@ -41,7 +41,7 @@ function ReportsPage() {
         <Card>
           <CardHeader>
             <div className="mb-2 flex size-10 items-center justify-center rounded-lg bg-primary/10">
-              <Save className="size-5 text-primary" />
+              <SaveIcon className="size-5 text-primary" />
             </div>
             <CardTitle>Saved comparisons</CardTitle>
             <CardDescription>
@@ -57,7 +57,7 @@ function ReportsPage() {
       <Card>
         <CardContent className="flex flex-col items-center gap-4 py-20 text-center">
           <div className="flex size-14 items-center justify-center rounded-full bg-muted">
-            <FileBarChart className="size-7 text-muted-foreground" />
+            <FileBarChartIcon className="size-7 text-muted-foreground" />
           </div>
 
           <div className="space-y-2">
@@ -73,7 +73,7 @@ function ReportsPage() {
             render={
               <Link to="/dashboard">
                 Explore dashboard
-                <ArrowRight className="ml-2 size-4" />
+                <ArrowRightIcon className="ml-2 size-4" />
               </Link>
             }></Button>
         </CardContent>

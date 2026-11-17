@@ -6,6 +6,7 @@ import type {
   UpdateLocationInput,
   WeatherSyncInput,
 } from "@/lib/weather/types";
+import { getSavedComparisonsFn } from "@/server/functions/comparisons";
 import {
   createLocationFn,
   deleteLocationFn,
@@ -70,6 +71,17 @@ export const syncLocationMutationOptions = () =>
   mutationOptions({
     mutationFn: (input: WeatherSyncInput) => syncLocationFn({ data: input }),
   });
+
+export const comparisonQueryKeys = {
+  all: ["comparisons"] as const,
+};
+
+export function savedComparisonsQueryOptions() {
+  return queryOptions({
+    queryKey: comparisonQueryKeys.all,
+    queryFn: () => getSavedComparisonsFn(),
+  });
+}
 
 export async function invalidateLocationQueries(queryClient: QueryClient, locationId?: string) {
   await Promise.all([

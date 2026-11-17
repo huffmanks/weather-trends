@@ -9,6 +9,8 @@ import {
   uniqueIndex,
 } from "drizzle-orm/sqlite-core";
 
+export type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
+
 export const locations = sqliteTable(
   "locations",
   {
@@ -118,7 +120,7 @@ export const savedComparisons = sqliteTable("saved_comparisons", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description"),
-  configuration: text("configuration", { mode: "json" }).$type<Record<string, unknown>>().notNull(),
+  configuration: text("configuration", { mode: "json" }).$type<Record<string, Json>>().notNull(),
   createdAt: integer("created_at").notNull(),
   updatedAt: integer("updated_at").notNull(),
 });
@@ -127,14 +129,14 @@ export const savedReports = sqliteTable("saved_reports", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description"),
-  configuration: text("configuration", { mode: "json" }).$type<Record<string, unknown>>().notNull(),
+  configuration: text("configuration", { mode: "json" }).$type<Record<string, Json>>().notNull(),
   createdAt: integer("created_at").notNull(),
   updatedAt: integer("updated_at").notNull(),
 });
 
 export const appSettings = sqliteTable("app_settings", {
   key: text("key").primaryKey(),
-  value: text("value", { mode: "json" }).$type<unknown>().notNull(),
+  value: text("value", { mode: "json" }).$type<Json>().notNull(),
   updatedAt: integer("updated_at").notNull(),
 });
 

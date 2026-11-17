@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { Activity, CalendarDays, CloudRain, MapPin, Wind } from "lucide-react";
+import { ActivityIcon, CalendarDaysIcon, CloudRainIcon, MapPinIcon, WindIcon } from "lucide-react";
 
 import { locationsQueryOptions, observationsQueryOptions } from "@/lib/queries/weather";
 import { today } from "@/lib/weather/dates";
@@ -80,7 +80,7 @@ function DashboardPage() {
         </div>
 
         <Badge variant="outline" className="w-fit gap-2 py-1.5">
-          <Activity className="size-3.5" />
+          <ActivityIcon className="size-3.5" />
           Weather analytics
         </Badge>
       </div>
@@ -131,7 +131,7 @@ function DashboardPage() {
       {!locations.length && !locationsQuery.isLoading && (
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-            <MapPin className="size-10 text-muted-foreground" />
+            <MapPinIcon className="size-10 text-muted-foreground" />
             <h2 className="text-lg font-semibold">No locations yet</h2>
             <p className="max-w-md text-sm text-muted-foreground">
               Add a location and synchronize its historical weather data to start exploring trends.
@@ -157,13 +157,13 @@ function DashboardPage() {
                   : `${averageTemperature.toFixed(1)}°C`
               }
               description="Daily average across selected period"
-              icon={Activity}
+              icon={ActivityIcon}
             />
             <MetricCard
               title="Total precipitation"
               value={`${totalPrecipitation.toFixed(1)} mm`}
               description="Accumulated precipitation"
-              icon={CloudRain}
+              icon={CloudRainIcon}
             />
             <MetricCard
               title="Average wind speed"
@@ -173,13 +173,13 @@ function DashboardPage() {
                   : `${averageWind.toFixed(1)} m/s`
               }
               description="Daily average wind speed"
-              icon={Wind}
+              icon={WindIcon}
             />
             <MetricCard
               title="Observations"
               value={observations.length.toLocaleString()}
               description="Recorded daily observations"
-              icon={CalendarDays}
+              icon={CalendarDaysIcon}
             />
           </div>
 

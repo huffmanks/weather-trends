@@ -29,6 +29,7 @@ export default [
     rules: {
       "@typescript-eslint/array-type": "off",
       "@typescript-eslint/require-await": "off",
+      "@typescript-eslint/no-unnecessary-condition": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
@@ -63,6 +64,6 @@ export default [
     },
   },
   {
-    ignores: ["eslint.config.mjs", ".prettierrc"],
+    ignores: ["eslint.config.mjs", ".prettierrc", ".output"],
   },
 ];

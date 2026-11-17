@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Database, Gauge, Globe, Thermometer } from "lucide-react";
+import { CheckIcon, DatabaseIcon, GaugeIcon, GlobeIcon, ThermometerIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -63,7 +63,7 @@ function SettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Thermometer className="size-5 text-muted-foreground" />
+            <ThermometerIcon className="size-5 text-muted-foreground" />
             <CardTitle>Measurement units</CardTitle>
           </div>
           <CardDescription>Choose how weather measurements are displayed.</CardDescription>
@@ -130,7 +130,7 @@ function SettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Globe className="size-5 text-muted-foreground" />
+            <GlobeIcon className="size-5 text-muted-foreground" />
             <CardTitle>Regional preferences</CardTitle>
           </div>
           <CardDescription>Configure date formatting for the application.</CardDescription>
@@ -158,7 +158,7 @@ function SettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Database className="size-5 text-muted-foreground" />
+            <DatabaseIcon className="size-5 text-muted-foreground" />
             <CardTitle>Data provider</CardTitle>
           </div>
           <CardDescription>Historical weather data source and synchronization.</CardDescription>
@@ -188,7 +188,7 @@ function SettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Gauge className="size-5 text-muted-foreground" />
+            <GaugeIcon className="size-5 text-muted-foreground" />
             <CardTitle>Application</CardTitle>
           </div>
           <CardDescription>Application information and configuration status.</CardDescription>
@@ -213,7 +213,7 @@ function SettingsPage() {
       <div className="flex items-center justify-end gap-3">
         {saved && (
           <span className="flex items-center gap-1 text-sm text-muted-foreground">
-            <Check className="size-4" />
+            <CheckIcon className="size-4" />
             Saved locally for this session
           </span>
         )}

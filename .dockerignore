@@ -21,6 +21,7 @@ bun.lockb
 
 # General/Shared Build Artifacts
 out/
+.output/
 dist/
 build/
 data/

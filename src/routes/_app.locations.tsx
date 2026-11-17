@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { MapPin, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
+import { MapPinIcon, PencilIcon, PlusIcon, RefreshCwIcon, Trash2Icon } from "lucide-react";
 
 import type { Location } from "@/db/schema";
 import {
@@ -167,7 +167,7 @@ function LocationsPage() {
           <DialogTrigger
             render={
               <Button onClick={openCreateDialog}>
-                <Plus className="mr-2 size-4" />
+                <PlusIcon className="mr-2 size-4" />
                 Add location
               </Button>
             }></DialogTrigger>
@@ -261,13 +261,13 @@ function LocationsPage() {
       ) : locations.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-            <MapPin className="size-10 text-muted-foreground" />
+            <MapPinIcon className="size-10 text-muted-foreground" />
             <h2 className="text-lg font-semibold">No locations configured</h2>
             <p className="max-w-md text-sm text-muted-foreground">
               Add your first location to begin collecting historical weather data.
             </p>
             <Button onClick={openCreateDialog}>
-              <Plus className="mr-2 size-4" />
+              <PlusIcon className="mr-2 size-4" />
               Add location
             </Button>
           </CardContent>
@@ -328,7 +328,7 @@ function LocationCard({
       <CardHeader className="flex flex-row items-start justify-between space-y-0">
         <div className="space-y-1">
           <CardTitle className="flex items-center gap-2">
-            <MapPin className="size-4 text-muted-foreground" />
+            <MapPinIcon className="size-4 text-muted-foreground" />
             {location.name}
           </CardTitle>
           <CardDescription>
@@ -368,10 +368,10 @@ function LocationCard({
 
           <div className="flex gap-2">
             <Button variant="outline" size="icon" onClick={onEdit}>
-              <Pencil className="size-4" />
+              <PencilIcon className="size-4" />
             </Button>
             <Button variant="outline" size="icon" onClick={onDelete}>
-              <Trash2 className="size-4" />
+              <Trash2Icon className="size-4" />
             </Button>
           </div>
         </div>
@@ -382,11 +382,11 @@ function LocationCard({
             className="flex-1"
             disabled={syncing}
             onClick={() => onSync("initial")}>
-            <RefreshCw className="mr-2 size-4" />
+            <RefreshCwIcon className="mr-2 size-4" />
             Initial import
           </Button>
           <Button className="flex-1" disabled={syncing} onClick={() => onSync("manual")}>
-            <RefreshCw className={`mr-2 size-4 ${syncing ? "animate-spin" : ""}`} />
+            <RefreshCwIcon className={`mr-2 size-4 ${syncing ? "animate-spin" : ""}`} />
             {syncing ? "Syncing..." : "Refresh data"}
           </Button>
         </div>
