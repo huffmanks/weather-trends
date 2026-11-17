@@ -4,7 +4,6 @@ import { cn } from "cn";
 import type { TooltipValueType } from "recharts";
 import * as RechartsPrimitive from "recharts";
 
-// Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const;
 
 const INITIAL_DIMENSION = { width: 320, height: 200 } as const;
@@ -105,6 +104,18 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
 
+function getTooltipKey(value: unknown): string {
+  return typeof value === "string" || typeof value === "number" ? String(value) : "value";
+}
+
+function getFill(payload: unknown): string | undefined {
+  if (typeof payload !== "object" || payload === null || !("fill" in payload)) {
+    return undefined;
+  }
+
+  return typeof payload.fill === "string" ? payload.fill : undefined;
+}
+
 function ChartTooltipContent({
   active,
   payload,
@@ -119,7 +130,7 @@ function ChartTooltipContent({
   color,
   nameKey,
   labelKey,
-}: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
+}: RechartsPrimitive.TooltipContentProps<TooltipValueType, TooltipNameType> &
   React.ComponentProps<"div"> & {
     hideLabel?: boolean;
     hideIndicator?: boolean;
@@ -133,12 +144,12 @@ function ChartTooltipContent({
   const { config } = useChart();
 
   const tooltipLabel = React.useMemo(() => {
-    if (hideLabel || !payload?.length) {
+    if (hideLabel || !payload.length) {
       return null;
     }
 
     const [item] = payload;
-    const key = `${labelKey ?? item.dataKey ?? item.name ?? "value"}`;
+    const key = getTooltipKey(labelKey ?? item.dataKey ?? item.name);
     const itemConfig = getPayloadConfigFromPayload(config, item, key);
     const value =
       !labelKey && typeof label === "string" ? (config[label].label ?? label) : itemConfig?.label;
@@ -156,7 +167,7 @@ function ChartTooltipContent({
     return <div className={cn("font-medium", labelClassName)}>{value}</div>;
   }, [label, labelFormatter, payload, hideLabel, labelClassName, config, labelKey]);
 
-  if (!active || !payload?.length) {
+  if (!active || !payload.length) {
     return null;
   }
 
@@ -173,9 +184,9 @@ function ChartTooltipContent({
         {payload
           .filter((item) => item.type !== "none")
           .map((item, index) => {
-            const key = `${nameKey ?? item.name ?? item.dataKey ?? "value"}`;
+            const key = getTooltipKey(nameKey ?? item.name ?? item.dataKey);
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
-            const indicatorColor = color ?? item.payload?.fill ?? item.color;
+            const indicatorColor = color ?? getFill(item.payload) ?? item.color;
 
             return (
               <div
@@ -185,7 +196,7 @@ function ChartTooltipContent({
                   indicator === "dot" && "items-center"
                 )}>
                 {formatter && item.value !== undefined && item.name ? (
-                  formatter(item.value, item.name, item, index, item.payload)
+                  formatter(item.value, item.name, item, index, payload)
                 ) : (
                   <>
                     {itemConfig?.icon ? (
@@ -269,7 +280,7 @@ function ChartLegendContent({
       {payload
         .filter((item) => item.type !== "none")
         .map((item, index) => {
-          const key = `${nameKey ?? item.dataKey ?? "value"}`;
+          const key = getTooltipKey(nameKey ?? item.dataKey);
           const itemConfig = getPayloadConfigFromPayload(config, item, key);
 
           return (

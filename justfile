@@ -20,7 +20,7 @@ up profile="staging":
         exit 1; \
     fi
     @echo "Starting {{profile}} environment..."
-    set -a && . .env.{{profile}} && set +a && {{BASE_COMPOSE}} up -d
+    set -a && . .env.{{profile}} && set +a && {{BASE_COMPOSE}} up -d --force-recreate
 
 # Stop environment (default: staging)
 down profile="staging":
@@ -45,11 +45,11 @@ build push="false":
     docker buildx inspect --bootstrap
     docker buildx use {{BUILDER}}
     {{ if push == "true" { \
-        "docker buildx build --platform linux/amd64,linux/arm64 " + \
+        "docker buildx build --no-cache --platform linux/amd64,linux/arm64 " + \
         "-t " + IMAGE_NAME + ":" + VERSION + " " + \
         "-t " + IMAGE_NAME + ":latest --push ." \
     } else { \
-        "docker buildx build -t " + IMAGE_NAME + ":local" + " --load ." \
+        "docker buildx build --no-cache -t " + IMAGE_NAME + ":local" + " --load ." \
     } }}
     @docker buildx rm {{BUILDER}} || true
     @echo "Build complete."

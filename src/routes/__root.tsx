@@ -1,9 +1,14 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
+import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
-import appCss from "../styles.css?url";
+import { ThemeProvider } from "@/providers/theme";
+
+import DefaultNotFoundComponent from "@/components/shared/default-not-found";
+import { TooltipProvider } from "@/components/ui/tooltip";
+
+import "../styles.css";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -18,35 +23,37 @@ export const Route = createRootRouteWithContext<{
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
-      },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
+        title: "Weather Trends",
       },
     ],
   }),
-  notFoundComponent: () => (
-    <main className="container mx-auto p-4 pt-16">
-      <h1>404</h1>
-      <p>The requested page could not be found.</p>
-    </main>
-  ),
+  component: RootComponent,
+  notFoundComponent: () => <DefaultNotFoundComponent />,
   shellComponent: RootDocument,
 });
 
-const queryClient = new QueryClient();
+function RootComponent() {
+  const { queryClient } = Route.useRouteContext();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="system" storageKey="theme">
+        <TooltipProvider>
+          <Outlet />
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        {children}
         <TanStackDevtools
           config={{
             position: "bottom-right",

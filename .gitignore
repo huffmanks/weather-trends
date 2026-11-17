@@ -11,6 +11,7 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
+*output.xml
 
 # typescript
 *.tsbuildinfo
