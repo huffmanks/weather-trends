@@ -50,6 +50,8 @@ export const importsQueryOptions = (locationId: string) =>
     queryKey: weatherKeys.imports(locationId),
     queryFn: () => getImportsFn({ data: locationId }),
     enabled: Boolean(locationId),
+    refetchInterval: (query) =>
+      query.state.data?.some((item) => item.status === "running") ? 2000 : false,
   });
 
 export const createLocationMutationOptions = () =>

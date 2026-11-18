@@ -14,6 +14,8 @@ import {
   updateLocationMutationOptions,
   weatherKeys,
 } from "@/lib/queries/weather";
+import type { WeatherSyncInput } from "@/lib/weather/types";
+import { IMPORT_DECADES } from "@/lib/weather/types";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -138,16 +140,6 @@ function LocationsPage() {
     }
 
     createLocation.mutate(input);
-  }
-
-  function handleSync(locationId: string, importType: "initial" | "manual") {
-    setSyncingId(locationId);
-
-    syncLocation.mutate({
-      locationId,
-      importType,
-      ...(importType === "initial" ? { startDate: "1940-01-01" } : {}),
-    });
   }
 
   const isSaving = createLocation.isPending || updateLocation.isPending;
@@ -284,7 +276,10 @@ function LocationsPage() {
                   deleteLocation.mutate(location.id);
                 }
               }}
-              onSync={(type) => handleSync(location.id, type)}
+              onSync={(input) => {
+                setSyncingId(location.id);
+                syncLocation.mutate(input);
+              }}
               onToggle={(isActive) => updateLocation.mutate({ id: location.id, isActive })}
             />
           ))}
@@ -316,11 +311,20 @@ function LocationCard({
   syncing: boolean;
   onEdit: () => void;
   onDelete: () => void;
-  onSync: (type: "initial" | "manual") => void;
+  onSync: (input: WeatherSyncInput) => void;
   onToggle: (active: boolean) => void;
 }) {
+  const [selectedDecade, setSelectedDecade] = useState(IMPORT_DECADES[0]);
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
+
   const importsQuery = useQuery(importsQueryOptions(location.id));
   const latestImport = importsQuery.data?.[0];
+
+  const progress = latestImport?.totalDays
+    ? Math.round((latestImport.processedDays / latestImport.totalDays) * 100)
+    : 0;
+
+  const importRunning = latestImport?.status === "running";
 
   return (
     <Card>
@@ -375,20 +379,117 @@ function LocationCard({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <Button
-            variant="outline"
-            className="flex-1"
-            disabled={syncing}
-            onClick={() => onSync("initial")}>
-            <RefreshCwIcon className="mr-2 size-4" />
-            Initial import
-          </Button>
-          <Button className="flex-1" disabled={syncing} onClick={() => onSync("manual")}>
-            <RefreshCwIcon className={`mr-2 size-4 ${syncing ? "animate-spin" : ""}`} />
-            {syncing ? "Syncing..." : "Refresh data"}
-          </Button>
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              className="flex-1"
+              disabled={syncing || importRunning}
+              onClick={() => setImportDialogOpen(true)}>
+              <RefreshCwIcon className="mr-2 size-4" />
+              Initial import
+            </Button>
+            <Button
+              className="flex-1"
+              disabled={syncing || importRunning}
+              onClick={() =>
+                onSync({
+                  locationId: location.id,
+                  importType: "manual",
+                  startDate: "2020-01-01",
+                })
+              }>
+              <RefreshCwIcon className={`mr-2 size-4 ${syncing ? "animate-spin" : ""}`} />
+              {syncing ? "Syncing..." : "Refresh data"}
+            </Button>
+          </div>
+
+          <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Import historical weather</DialogTitle>
+                <DialogDescription>
+                  Import historical observations one decade at a time. Larger imports may take
+                  several minutes.
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid gap-2">
+                <Label htmlFor={`import-decade-${location.id}`}>Date range</Label>
+                <select
+                  id={`import-decade-${location.id}`}
+                  value={selectedDecade.startDate}
+                  onChange={(event) => {
+                    const decade = IMPORT_DECADES.find(
+                      (item) => item.startDate === event.target.value
+                    );
+                    if (decade) setSelectedDecade(decade);
+                  }}
+                  className="h-10 rounded-md border bg-background px-3 text-sm">
+                  {IMPORT_DECADES.map((decade) => (
+                    <option key={decade.startDate} value={decade.startDate}>
+                      {decade.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setImportDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    onSync({
+                      locationId: location.id,
+                      importType: "initial",
+                      startDate: selectedDecade.startDate,
+                      endDate: selectedDecade.endDate,
+                    });
+                    setImportDialogOpen(false);
+                  }}>
+                  Start import
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
+
+        {importRunning && (
+          <div className="space-y-2 rounded-lg border p-3">
+            <div className="flex items-center justify-between text-sm">
+              <span className="font-medium">Import in progress</span>
+              <span className="text-muted-foreground">{progress}%</span>
+            </div>
+
+            <div
+              className="h-2 overflow-hidden rounded-full bg-muted"
+              role="progressbar"
+              aria-valuenow={progress}
+              aria-valuemin={0}
+              aria-valuemax={100}>
+              <div
+                className="h-full rounded-full bg-primary transition-all"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              {latestImport.processedDays.toLocaleString()} of{" "}
+              {latestImport.totalDays.toLocaleString()} days processed
+            </p>
+
+            {latestImport.currentDate && (
+              <p className="text-xs text-muted-foreground">
+                Currently processing: {latestImport.currentDate}
+              </p>
+            )}
+          </div>
+        )}
+
+        {latestImport?.status === "failed" && (
+          <p className="text-sm text-destructive">Import failed: {latestImport.errorMessage}</p>
+        )}
       </CardContent>
     </Card>
   );

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "77436f40-d4ca-4fe2-94e2-34376eab0e72",
+  "id": "c2721bb4-e0b2-4ee7-abd2-c24f9db168e3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "app_settings": {
@@ -410,6 +410,29 @@
         },
         "error_message": {
           "name": "error_message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "total_days": {
+          "name": "total_days",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "processed_days": {
+          "name": "processed_days",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "current_date": {
+          "name": "current_date",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

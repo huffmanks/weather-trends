@@ -1,20 +1,44 @@
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { completeImport, createImport, failImport } from "@/db/queries/imports";
+import {
+  completeImport,
+  createImport,
+  failImport,
+  updateImportProgress,
+} from "@/db/queries/imports";
 import { getObservationDates, upsertObservations } from "@/db/queries/observations";
 import { locations } from "@/db/schema";
 import { fetchWeatherRange } from "@/lib/weather/client";
-import { addDays, chunkDateRange, getArchiveEndDate, isValidDate } from "@/lib/weather/dates";
+import { addDays, daysBetween, getArchiveEndDate, isValidDate } from "@/lib/weather/dates";
 import { transformWeatherPayload } from "@/lib/weather/transform";
 import type { ImportType } from "@/lib/weather/types";
 
-const DEFAULT_START_DATE = "1940-01-01";
+const DEFAULT_START_DATE = "2020-01-01";
 const CHUNK_SIZE = 14;
 const REQUEST_DELAY = 1_000;
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function buildChunks(dates: string[]) {
+  const chunks: { startDate: string; endDate: string }[] = [];
+  let chunkStart = dates[0];
+  let previousDate = chunkStart;
+
+  for (const date of dates.slice(1)) {
+    if (date !== addDays(previousDate, 1) || daysBetween(chunkStart, date) > CHUNK_SIZE) {
+      chunks.push({ startDate: chunkStart, endDate: previousDate });
+      chunkStart = date;
+    }
+
+    previousDate = date;
+  }
+
+  chunks.push({ startDate: chunkStart, endDate: previousDate });
+
+  return chunks;
 }
 
 export async function syncLocation(input: {
@@ -33,20 +57,26 @@ export async function syncLocation(input: {
     throw new Error("Location not found.");
   }
 
-  const endDate = getArchiveEndDate(location.timezone);
+  const archiveEndDate = getArchiveEndDate(location.timezone);
   const startDate = input.startDate ?? DEFAULT_START_DATE;
+  const requestedEndDate = input.endDate ?? archiveEndDate;
+  const endDate = requestedEndDate < archiveEndDate ? requestedEndDate : archiveEndDate;
 
-  if (!isValidDate(startDate) || startDate > endDate) {
-    throw new Error("Invalid synchronization date range.");
+  if (
+    !isValidDate(startDate) ||
+    !isValidDate(endDate) ||
+    startDate > endDate ||
+    Math.floor(Number(startDate.slice(0, 4)) / 10) !== Math.floor(Number(endDate.slice(0, 4)) / 10)
+  ) {
+    throw new Error("Import must contain a valid date range within a single decade.");
   }
 
   const existingDates = await getObservationDates(location.id, startDate, endDate);
-
   const existing = new Set(existingDates.map((item) => item.observationDate));
 
-  const missingDates = chunkDateRange(startDate, endDate, 1).filter(
-    ({ startDate: date }) => !existing.has(date)
-  );
+  const missingDates = Array.from({ length: daysBetween(startDate, endDate) }, (_, index) =>
+    addDays(startDate, index)
+  ).filter((date) => !existing.has(date));
 
   if (missingDates.length === 0) {
     return {
@@ -59,26 +89,7 @@ export async function syncLocation(input: {
     };
   }
 
-  const chunks: { startDate: string; endDate: string }[] = [];
-  let chunkStart = missingDates[0].startDate;
-  let previousDate = chunkStart;
-
-  for (const { startDate: date } of missingDates.slice(1)) {
-    if (date !== addDays(previousDate, 1) || (chunks.length === 0 && false)) {
-      chunks.push({ startDate: chunkStart, endDate: previousDate });
-      chunkStart = date;
-    } else if (
-      new Date(`${date}T00:00:00Z`).getTime() - new Date(`${chunkStart}T00:00:00Z`).getTime() >=
-      CHUNK_SIZE * 86_400_000
-    ) {
-      chunks.push({ startDate: chunkStart, endDate: previousDate });
-      chunkStart = date;
-    }
-
-    previousDate = date;
-  }
-
-  chunks.push({ startDate: chunkStart, endDate: previousDate });
+  const chunks = buildChunks(missingDates);
 
   const importRecord = await createImport({
     id: crypto.randomUUID(),
@@ -86,15 +97,24 @@ export async function syncLocation(input: {
     importType: input.importType,
     startDate,
     endDate,
+    totalDays: missingDates.length,
   });
 
   let received = 0;
   let inserted = 0;
   let updated = 0;
+  let processedDays = 0;
 
   try {
     for (const [index, chunk] of chunks.entries()) {
-      if (index > 0) await delay(REQUEST_DELAY);
+      if (index > 0) {
+        await delay(REQUEST_DELAY);
+      }
+
+      await updateImportProgress(importRecord.id, {
+        processedDays,
+        currentDate: chunk.startDate,
+      });
 
       const payload = await fetchWeatherRange(location, chunk.startDate, chunk.endDate);
 
@@ -107,6 +127,12 @@ export async function syncLocation(input: {
       received += counts.received;
       inserted += counts.inserted;
       updated += counts.updated;
+      processedDays += daysBetween(chunk.startDate, chunk.endDate);
+
+      await updateImportProgress(importRecord.id, {
+        processedDays,
+        currentDate: null,
+      });
     }
 
     await completeImport(importRecord.id, {

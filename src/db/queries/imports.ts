@@ -18,6 +18,7 @@ export async function createImport(input: {
   importType: "initial" | "manual" | "scheduled";
   startDate: string;
   endDate: string;
+  totalDays: number;
 }) {
   const now = Date.now();
 
@@ -34,6 +35,16 @@ export async function createImport(input: {
   return result;
 }
 
+export async function updateImportProgress(
+  id: string,
+  progress: {
+    processedDays: number;
+    currentDate: string | null;
+  }
+) {
+  await db.update(dataImports).set(progress).where(eq(dataImports.id, id));
+}
+
 export async function completeImport(
   id: string,
   counts: {
@@ -48,6 +59,7 @@ export async function completeImport(
       ...counts,
       status: "completed",
       completedAt: Date.now(),
+      currentDate: null,
     })
     .where(eq(dataImports.id, id));
 }
