@@ -12,7 +12,7 @@ dist-ssr
 __unconfig*
 todos.json
 *output.xml
-*.db
+**/*.db
 .fallow/
 
 # typescript

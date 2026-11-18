@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "c2721bb4-e0b2-4ee7-abd2-c24f9db168e3",
+  "id": "34d4ea94-4488-4fda-b3ab-c76c92d19df7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "app_settings": {
@@ -350,13 +350,6 @@
         },
         "location_id": {
           "name": "location_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "import_type": {
-          "name": "import_type",
           "type": "text",
           "primaryKey": false,
           "notNull": true,

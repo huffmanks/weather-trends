@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 
 import { getImports } from "@/db/queries/imports";
-import { getObservations } from "@/db/queries/observations";
+import { getObservationDecades, getObservations } from "@/db/queries/observations";
 import { isValidDate } from "@/lib/weather/dates";
 import type { ObservationRange } from "@/lib/weather/types";
 
@@ -28,3 +28,7 @@ export const getObservationsFn = createServerFn({ method: "GET" })
 export const getImportsFn = createServerFn({ method: "GET" })
   .validator((locationId: string) => locationId)
   .handler(async ({ data }) => getImports(data));
+
+export const getObservationDecadesFn = createServerFn({ method: "GET" })
+  .validator((locationId: string) => locationId)
+  .handler(async ({ data }) => getObservationDecades(data));

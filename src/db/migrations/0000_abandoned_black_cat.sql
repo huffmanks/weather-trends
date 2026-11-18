@@ -55,7 +55,6 @@ CREATE INDEX `daily_observations_location_date_idx` ON `daily_observations` (`lo
 CREATE TABLE `data_imports` (
 	`id` text PRIMARY KEY NOT NULL,
 	`location_id` text NOT NULL,
-	`import_type` text NOT NULL,
 	`start_date` text NOT NULL,
 	`end_date` text NOT NULL,
 	`status` text DEFAULT 'pending' NOT NULL,

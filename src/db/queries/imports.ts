@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, gte, lte } from "drizzle-orm";
 
 import { db } from "@/db";
 import { dataImports } from "@/db/schema";
@@ -12,10 +12,31 @@ export async function getImports(locationId: string, limit = 20) {
     .limit(limit);
 }
 
+export async function getLatestCompletedImport(
+  locationId: string,
+  startDate: string,
+  endDate: string
+) {
+  const [result] = await db
+    .select()
+    .from(dataImports)
+    .where(
+      and(
+        eq(dataImports.locationId, locationId),
+        eq(dataImports.status, "completed"),
+        lte(dataImports.startDate, endDate),
+        gte(dataImports.endDate, startDate)
+      )
+    )
+    .orderBy(desc(dataImports.completedAt))
+    .limit(1);
+
+  return result;
+}
+
 export async function createImport(input: {
   id: string;
   locationId: string;
-  importType: "initial" | "manual" | "scheduled";
   startDate: string;
   endDate: string;
   totalDays: number;

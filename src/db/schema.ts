@@ -104,9 +104,6 @@ export const dataImports = sqliteTable(
     locationId: text("location_id")
       .notNull()
       .references(() => locations.id, { onDelete: "cascade" }),
-    importType: text("import_type", {
-      enum: ["initial", "manual", "scheduled"],
-    }).notNull(),
     startDate: text("start_date").notNull(),
     endDate: text("end_date").notNull(),
     status: text("status", {

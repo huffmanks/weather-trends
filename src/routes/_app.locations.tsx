@@ -7,6 +7,7 @@ import { MapPinIcon, PencilIcon, PlusIcon, RefreshCwIcon, Trash2Icon } from "luc
 import type { Location } from "@/db/schema";
 import {
   createLocationMutationOptions,
+  decadesQueryOptions,
   deleteLocationMutationOptions,
   importsQueryOptions,
   locationsQueryOptions,
@@ -14,6 +15,7 @@ import {
   updateLocationMutationOptions,
   weatherKeys,
 } from "@/lib/queries/weather";
+import { daysBetween, getArchiveEndDate } from "@/lib/weather/dates";
 import type { WeatherSyncInput } from "@/lib/weather/types";
 import { IMPORT_DECADES } from "@/lib/weather/types";
 
@@ -31,6 +33,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 
 export const Route = createFileRoute("/_app/locations")({
@@ -95,10 +104,12 @@ function LocationsPage() {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: [...weatherKeys.all, "observations"] }),
         queryClient.invalidateQueries({ queryKey: weatherKeys.imports(input.locationId) }),
+        queryClient.invalidateQueries({
+          queryKey: weatherKeys.decades(input.locationId),
+        }),
       ]);
-      setSyncingId("");
     },
-    onError: () => setSyncingId(""),
+    onSettled: () => setSyncingId(""),
   });
 
   function closeDialog() {
@@ -178,7 +189,7 @@ function LocationsPage() {
                   id="location-name"
                   value={form.name}
                   onChange={(event) => setForm({ ...form, name: event.target.value })}
-                  placeholder="Spartanburg"
+                  placeholder="New York"
                   required
                 />
               </div>
@@ -269,7 +280,8 @@ function LocationsPage() {
             <LocationCard
               key={location.id}
               location={location}
-              syncing={syncingId === location.id && syncLocation.isPending}
+              syncing={syncLocation.isPending}
+              preparing={syncingId === location.id}
               onEdit={() => openEditDialog(location)}
               onDelete={() => {
                 if (window.confirm(`Delete ${location.name} and its associated weather data?`)) {
@@ -302,6 +314,7 @@ function LocationsPage() {
 function LocationCard({
   location,
   syncing,
+  preparing,
   onEdit,
   onDelete,
   onSync,
@@ -309,22 +322,61 @@ function LocationCard({
 }: {
   location: Location;
   syncing: boolean;
+  preparing: boolean;
   onEdit: () => void;
   onDelete: () => void;
   onSync: (input: WeatherSyncInput) => void;
   onToggle: (active: boolean) => void;
 }) {
   const [selectedDecade, setSelectedDecade] = useState(IMPORT_DECADES[0]);
-  const [importDialogOpen, setImportDialogOpen] = useState(false);
 
-  const importsQuery = useQuery(importsQueryOptions(location.id));
-  const latestImport = importsQuery.data?.[0];
+  const importsQuery = useQuery({
+    ...importsQueryOptions(location.id),
+    refetchInterval: (query) =>
+      syncing || query.state.data?.some((item) => item.status === "running") ? 1000 : false,
+  });
 
-  const progress = latestImport?.totalDays
-    ? Math.round((latestImport.processedDays / latestImport.totalDays) * 100)
+  const activeImport = importsQuery.data?.find((item) => item.status === "running");
+  const latestImport = importsQuery.data?.find((item) => item.status === "completed");
+  const latestAttempt = importsQuery.data?.[0];
+
+  const decadesQuery = useQuery(decadesQueryOptions(location.id));
+  const decades = decadesQuery.data ?? [];
+
+  const archiveEndDate = getArchiveEndDate(location.timezone);
+
+  const decadeStatuses = IMPORT_DECADES.map((decade) => {
+    const expectedEndDate = decade.endDate < archiveEndDate ? decade.endDate : archiveEndDate;
+    const expectedDays =
+      expectedEndDate < decade.startDate ? 0 : daysBetween(decade.startDate, expectedEndDate);
+
+    const storedDays =
+      decades.find((item) => item.decade === Number(decade.startDate.slice(0, 3)) * 10)
+        ?.storedDays ?? 0;
+
+    const status =
+      expectedDays === 0 || storedDays === 0
+        ? null
+        : storedDays >= expectedDays
+          ? "Imported"
+          : "Partial";
+
+    return {
+      label: decade.label,
+      value: decade.startDate,
+      status,
+    };
+  });
+
+  const selectedStatus = decadeStatuses.find(
+    (item) => item.value === selectedDecade.startDate
+  )?.status;
+
+  const progress = activeImport?.totalDays
+    ? Math.round((activeImport.processedDays / activeImport.totalDays) * 100)
     : 0;
 
-  const importRunning = latestImport?.status === "running";
+  const importRunning = Boolean(activeImport);
 
   return (
     <Card>
@@ -359,103 +411,94 @@ function LocationCard({
           </div>
         </div>
 
+        <div className="space-y-2">
+          <p className="text-sm text-muted-foreground">Stored decades</p>
+          {decades.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {decades.map(({ decade }) => (
+                <Badge key={decade} variant="secondary">
+                  {decade}s
+                </Badge>
+              ))}
+            </div>
+          ) : (
+            <Badge variant="outline">No historical data</Badge>
+          )}
+        </div>
+
         <div className="flex items-center justify-between border-t pt-4">
           <div className="flex items-center gap-2">
             <Switch
               checked={location.isActive}
               onCheckedChange={onToggle}
               aria-label={`Toggle ${location.name} active status`}
+              disabled={syncing || importRunning}
             />
             <Label>Active</Label>
           </div>
 
           <div className="flex gap-2">
-            <Button variant="outline" size="icon" onClick={onEdit}>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={onEdit}
+              disabled={syncing || importRunning}>
               <PencilIcon className="size-4" />
             </Button>
-            <Button variant="outline" size="icon" onClick={onDelete}>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={onDelete}
+              disabled={syncing || importRunning}>
               <Trash2Icon className="size-4" />
             </Button>
           </div>
         </div>
-
         <div className="space-y-3">
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant="outline"
-              className="flex-1"
-              disabled={syncing || importRunning}
-              onClick={() => setImportDialogOpen(true)}>
-              <RefreshCwIcon className="mr-2 size-4" />
-              Initial import
-            </Button>
+          <div className="flex gap-2">
+            <Select
+              items={decadeStatuses}
+              value={selectedDecade.startDate}
+              onValueChange={(value) => {
+                const decade = IMPORT_DECADES.find((item) => item.startDate === value);
+                if (decade) setSelectedDecade(decade);
+              }}>
+              <SelectTrigger className="min-w-0 flex-1">
+                <SelectValue placeholder="Select decade" />
+              </SelectTrigger>
+              <SelectContent>
+                {decadeStatuses.map((decade) => (
+                  <SelectItem key={decade.value} value={decade.value}>
+                    {decade.label}
+                  </SelectItem>
+                ))}
+                {selectedStatus && <Badge variant="secondary">{selectedStatus}</Badge>}
+              </SelectContent>
+            </Select>
+
             <Button
               className="flex-1"
               disabled={syncing || importRunning}
               onClick={() =>
                 onSync({
                   locationId: location.id,
-                  importType: "manual",
-                  startDate: "2020-01-01",
+                  startDate: selectedDecade.startDate,
+                  endDate: selectedDecade.endDate,
                 })
               }>
               <RefreshCwIcon className={`mr-2 size-4 ${syncing ? "animate-spin" : ""}`} />
-              {syncing ? "Syncing..." : "Refresh data"}
+              {syncing ? "Importing..." : "Import data"}
             </Button>
           </div>
-
-          <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Import historical weather</DialogTitle>
-                <DialogDescription>
-                  Import historical observations one decade at a time. Larger imports may take
-                  several minutes.
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="grid gap-2">
-                <Label htmlFor={`import-decade-${location.id}`}>Date range</Label>
-                <select
-                  id={`import-decade-${location.id}`}
-                  value={selectedDecade.startDate}
-                  onChange={(event) => {
-                    const decade = IMPORT_DECADES.find(
-                      (item) => item.startDate === event.target.value
-                    );
-                    if (decade) setSelectedDecade(decade);
-                  }}
-                  className="h-10 rounded-md border bg-background px-3 text-sm">
-                  {IMPORT_DECADES.map((decade) => (
-                    <option key={decade.startDate} value={decade.startDate}>
-                      {decade.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setImportDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                    onSync({
-                      locationId: location.id,
-                      importType: "initial",
-                      startDate: selectedDecade.startDate,
-                      endDate: selectedDecade.endDate,
-                    });
-                    setImportDialogOpen(false);
-                  }}>
-                  Start import
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
         </div>
 
-        {importRunning && (
+        {preparing && !importRunning && (
+          <div className="rounded-lg border p-3 text-sm text-muted-foreground">
+            Preparing import...
+          </div>
+        )}
+
+        {importRunning && activeImport && (
           <div className="space-y-2 rounded-lg border p-3">
             <div className="flex items-center justify-between text-sm">
               <span className="font-medium">Import in progress</span>
@@ -475,20 +518,20 @@ function LocationCard({
             </div>
 
             <p className="text-xs text-muted-foreground">
-              {latestImport.processedDays.toLocaleString()} of{" "}
-              {latestImport.totalDays.toLocaleString()} days processed
+              {activeImport.processedDays.toLocaleString()} of{" "}
+              {activeImport.totalDays.toLocaleString()} days processed
             </p>
 
-            {latestImport.currentDate && (
+            {activeImport.currentDate && (
               <p className="text-xs text-muted-foreground">
-                Currently processing: {latestImport.currentDate}
+                Currently processing: {activeImport.currentDate}
               </p>
             )}
           </div>
         )}
 
-        {latestImport?.status === "failed" && (
-          <p className="text-sm text-destructive">Import failed: {latestImport.errorMessage}</p>
+        {latestAttempt?.status === "failed" && (
+          <p className="text-sm text-destructive">Import failed: {latestAttempt.errorMessage}</p>
         )}
       </CardContent>
     </Card>

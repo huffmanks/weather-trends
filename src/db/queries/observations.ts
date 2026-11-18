@@ -33,6 +33,18 @@ export async function getLatestObservation(locationId: string) {
   return result;
 }
 
+export async function getObservationDecades(locationId: string) {
+  return db
+    .select({
+      decade: sql<number>`CAST(substr(${dailyObservations.observationDate}, 1, 3) AS INTEGER) * 10`,
+      storedDays: sql<number>`count(*)`,
+    })
+    .from(dailyObservations)
+    .where(eq(dailyObservations.locationId, locationId))
+    .groupBy(sql`substr(${dailyObservations.observationDate}, 1, 3)`)
+    .orderBy(sql`substr(${dailyObservations.observationDate}, 1, 3)`);
+}
+
 export async function getObservationDates(locationId: string, startDate: string, endDate: string) {
   return db
     .select({ observationDate: dailyObservations.observationDate })
