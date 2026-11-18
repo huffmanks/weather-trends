@@ -20,6 +20,38 @@ export const Route = createFileRoute("/_app/settings")({
   component: SettingsPage,
 });
 
+type SettingsSelectProps<T extends string> = {
+  label: string;
+  options: readonly { value: T; label: string }[];
+  value: T | null;
+  onValueChange: (value: T | null) => void;
+};
+
+function SettingsSelect<T extends string>({
+  label,
+  options,
+  value,
+  onValueChange,
+}: SettingsSelectProps<T>) {
+  return (
+    <div className="grid gap-2">
+      <Label>{label}</Label>
+      <Select items={options} value={value} onValueChange={onValueChange}>
+        <SelectTrigger>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+}
+
 function SettingsPage() {
   const [temperature, setTemperature] = useState<string | null>("celsius");
   const [precipitation, setPrecipitation] = useState<string | null>("mm");
@@ -70,60 +102,30 @@ function SettingsPage() {
         </CardHeader>
 
         <CardContent className="space-y-5">
-          <div className="grid gap-2">
-            <Label>Temperature</Label>
-            <Select items={temperatureOptions} value={temperature} onValueChange={setTemperature}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {temperatureOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <SettingsSelect
+            label="Temperature"
+            options={temperatureOptions}
+            value={temperature}
+            onValueChange={setTemperature}
+          />
 
           <Separator />
 
-          <div className="grid gap-2">
-            <Label>Precipitation</Label>
-            <Select
-              items={precipitationOptions}
-              value={precipitation}
-              onValueChange={setPrecipitation}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {precipitationOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <SettingsSelect
+            label="Precipitation"
+            options={precipitationOptions}
+            value={precipitation}
+            onValueChange={setPrecipitation}
+          />
 
           <Separator />
 
-          <div className="grid gap-2">
-            <Label>Wind speed</Label>
-            <Select items={windSpeedOptions} value={windSpeed} onValueChange={setWindSpeed}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {windSpeedOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <SettingsSelect
+            label="Wind speed"
+            options={windSpeedOptions}
+            value={windSpeed}
+            onValueChange={setWindSpeed}
+          />
         </CardContent>
       </Card>
 
@@ -137,21 +139,12 @@ function SettingsPage() {
         </CardHeader>
 
         <CardContent>
-          <div className="grid gap-2">
-            <Label>Date format</Label>
-            <Select items={dateFormatOptions} value={dateFormat} onValueChange={setDateFormat}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {dateFormatOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <SettingsSelect
+            label="Date format"
+            options={dateFormatOptions}
+            value={dateFormat}
+            onValueChange={setDateFormat}
+          />
         </CardContent>
       </Card>
 

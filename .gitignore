@@ -12,6 +12,8 @@ dist-ssr
 __unconfig*
 todos.json
 *output.xml
+*.db
+.fallow/
 
 # typescript
 *.tsbuildinfo

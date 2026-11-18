@@ -14,7 +14,6 @@ import {
   updateLocationMutationOptions,
   weatherKeys,
 } from "@/lib/queries/weather";
-import { today } from "@/lib/weather/dates";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -143,11 +142,11 @@ function LocationsPage() {
 
   function handleSync(locationId: string, importType: "initial" | "manual") {
     setSyncingId(locationId);
+
     syncLocation.mutate({
       locationId,
       importType,
       ...(importType === "initial" ? { startDate: "1940-01-01" } : {}),
-      endDate: today(),
     });
   }
 

@@ -33,6 +33,20 @@ export async function getLatestObservation(locationId: string) {
   return result;
 }
 
+export async function getObservationDates(locationId: string, startDate: string, endDate: string) {
+  return db
+    .select({ observationDate: dailyObservations.observationDate })
+    .from(dailyObservations)
+    .where(
+      and(
+        eq(dailyObservations.locationId, locationId),
+        gte(dailyObservations.observationDate, startDate),
+        lte(dailyObservations.observationDate, endDate)
+      )
+    )
+    .orderBy(asc(dailyObservations.observationDate));
+}
+
 export async function upsertObservations(observations: NewDailyObservation[]) {
   if (observations.length === 0) {
     return { received: 0, inserted: 0, updated: 0 };
@@ -59,15 +73,22 @@ export async function upsertObservations(observations: NewDailyObservation[]) {
     .onConflictDoUpdate({
       target: [dailyObservations.locationId, dailyObservations.observationDate],
       set: {
+        weatherCode: sql`excluded.weather_code`,
         temperatureMin: sql`excluded.temperature_min`,
         temperatureMax: sql`excluded.temperature_max`,
         temperatureAvg: sql`excluded.temperature_avg`,
+        apparentTemperatureMin: sql`excluded.apparent_temperature_min`,
+        apparentTemperatureMax: sql`excluded.apparent_temperature_max`,
+        apparentTemperatureAvg: sql`excluded.apparent_temperature_avg`,
         precipitationTotal: sql`excluded.precipitation_total`,
         rainTotal: sql`excluded.rain_total`,
         snowfallTotal: sql`excluded.snowfall_total`,
-        snowDepth: sql`excluded.snow_depth`,
+        precipitationHours: sql`excluded.precipitation_hours`,
+        windSpeedMin: sql`excluded.wind_speed_min`,
         windSpeedAvg: sql`excluded.wind_speed_avg`,
         windSpeedMax: sql`excluded.wind_speed_max`,
+        windGustMin: sql`excluded.wind_gust_min`,
+        windGustAvg: sql`excluded.wind_gust_avg`,
         windGustMax: sql`excluded.wind_gust_max`,
         windDirection: sql`excluded.wind_direction`,
         humidityMin: sql`excluded.humidity_min`,
@@ -76,6 +97,10 @@ export async function upsertObservations(observations: NewDailyObservation[]) {
         dewPointMin: sql`excluded.dew_point_min`,
         dewPointAvg: sql`excluded.dew_point_avg`,
         dewPointMax: sql`excluded.dew_point_max`,
+        sunrise: sql`excluded.sunrise`,
+        sunset: sql`excluded.sunset`,
+        daylightDuration: sql`excluded.daylight_duration`,
+        sunshineDuration: sql`excluded.sunshine_duration`,
         dataStatus: sql`excluded.data_status`,
         qualityFlags: sql`excluded.quality_flags`,
         fetchedAt: sql`excluded.fetched_at`,

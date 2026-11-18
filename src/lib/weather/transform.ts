@@ -1,36 +1,6 @@
 import type { NewDailyObservation } from "@/db/schema";
-
-type WeatherPayload = {
-  daily?: Record<string, unknown>;
-  hourly?: Record<string, unknown>;
-};
-
-type DailyRow = {
-  id: string;
-  locationId: string;
-  observationDate: string;
-  temperatureMin: number | null;
-  temperatureMax: number | null;
-  temperatureAvg: number | null;
-  precipitationTotal: number | null;
-  rainTotal: number | null;
-  snowfallTotal: number | null;
-  snowDepth: number | null;
-  windSpeedAvg: number | null;
-  windSpeedMax: number | null;
-  windGustMax: number | null;
-  windDirection: number | null;
-  humidityMin: number | null;
-  humidityAvg: number | null;
-  humidityMax: number | null;
-  dewPointMin: number | null;
-  dewPointAvg: number | null;
-  dewPointMax: number | null;
-  dataStatus: "complete" | "partial";
-  qualityFlags: string[];
-  fetchedAt: number;
-  updatedAt: number;
-};
+import { DAILY_VARIABLES } from "@/lib/weather/client";
+import type { WeatherPayload } from "@/lib/weather/types";
 
 function numberArray(value: unknown): (number | null)[] {
   if (!Array.isArray(value)) return [];
@@ -44,119 +14,72 @@ function stringArray(value: unknown): string[] {
   return value.filter((item): item is string => typeof item === "string");
 }
 
-function mean(values: (number | null)[]): number | null {
-  const valid = values.filter((value): value is number => value !== null);
-
-  if (valid.length === 0) return null;
-
-  return valid.reduce((sum, value) => sum + value, 0) / valid.length;
-}
-
-function minimum(values: (number | null)[]): number | null {
-  const valid = values.filter((value): value is number => value !== null);
-  return valid.length ? Math.min(...valid) : null;
-}
-
-function maximum(values: (number | null)[]): number | null {
-  const valid = values.filter((value): value is number => value !== null);
-  return valid.length ? Math.max(...valid) : null;
-}
-
-function dailyValues(daily: Record<string, unknown>, key: string): (number | null)[] {
-  return numberArray(daily[key]);
-}
-
-function hourlyValuesByDate(
-  hourly: Record<string, unknown>,
-  key: string
-): Map<string, (number | null)[]> {
-  const times = stringArray(hourly.time);
-  const values = numberArray(hourly[key]);
-  const result = new Map<string, (number | null)[]>();
-
-  times.forEach((time, index) => {
-    const date = time.slice(0, 10);
-    const dayValues = result.get(date) ?? [];
-    dayValues.push(values[index] ?? null);
-    result.set(date, dayValues);
-  });
-
-  return result;
-}
-
 export function transformWeatherPayload(
   payload: WeatherPayload,
   locationId: string
 ): NewDailyObservation[] {
-  if (!payload.daily || !payload.hourly) {
-    throw new Error("Weather response is missing daily or hourly data.");
+  const daily = payload.daily;
+
+  if (!daily) {
+    throw new Error("Weather response is missing daily data.");
   }
 
-  const daily = payload.daily;
-  const hourly = payload.hourly;
   const dates = stringArray(daily.time);
 
-  const dailyKeys = [
-    "temperature_2m_min",
-    "temperature_2m_max",
-    "precipitation_sum",
-    "rain_sum",
-    "snowfall_sum",
-    "wind_speed_10m_max",
-    "wind_gusts_10m_max",
-    "wind_direction_10m_dominant",
-  ];
-
-  for (const key of dailyKeys) {
+  for (const key of DAILY_VARIABLES) {
     if (numberArray(daily[key]).length !== dates.length) {
       throw new Error(`Invalid daily response array: ${key}`);
     }
   }
 
-  const hourlyByDate = {
-    temperature: hourlyValuesByDate(hourly, "temperature_2m"),
-    wind: hourlyValuesByDate(hourly, "wind_speed_10m"),
-    humidity: hourlyValuesByDate(hourly, "relative_humidity_2m"),
-    dewPoint: hourlyValuesByDate(hourly, "dew_point_2m"),
-  };
+  const values = Object.fromEntries(DAILY_VARIABLES.map((key) => [key, numberArray(daily[key])]));
 
-  const values = Object.fromEntries(dailyKeys.map((key) => [key, dailyValues(daily, key)]));
+  const times = {
+    sunrise: stringArray(daily.sunrise),
+    sunset: stringArray(daily.sunset),
+  };
 
   const fetchedAt = Date.now();
 
   return dates.map((date, index) => {
-    const temperature = hourlyByDate.temperature.get(date) ?? [];
-    const wind = hourlyByDate.wind.get(date) ?? [];
-    const humidity = hourlyByDate.humidity.get(date) ?? [];
-    const dewPoint = hourlyByDate.dewPoint.get(date) ?? [];
+    const get = (key: (typeof DAILY_VARIABLES)[number]) => values[key][index] ?? null;
 
-    const row: DailyRow = {
+    return {
       id: crypto.randomUUID(),
       locationId,
       observationDate: date,
-      temperatureMin: values.temperature_2m_min[index] ?? null,
-      temperatureMax: values.temperature_2m_max[index] ?? null,
-      temperatureAvg: mean(temperature),
-      precipitationTotal: values.precipitation_sum[index] ?? null,
-      rainTotal: values.rain_sum[index] ?? null,
-      snowfallTotal: values.snowfall_sum[index] ?? null,
-      snowDepth: null,
-      windSpeedAvg: mean(wind),
-      windSpeedMax: values.wind_speed_10m_max[index] ?? null,
-      windGustMax: values.wind_gusts_10m_max[index] ?? null,
-      windDirection: values.wind_direction_10m_dominant[index] ?? null,
-      humidityMin: minimum(humidity),
-      humidityAvg: mean(humidity),
-      humidityMax: maximum(humidity),
-      dewPointMin: minimum(dewPoint),
-      dewPointAvg: mean(dewPoint),
-      dewPointMax: maximum(dewPoint),
-      dataStatus: temperature.length && humidity.length && dewPoint.length ? "complete" : "partial",
+      weatherCode: get("weather_code"),
+      temperatureMin: get("temperature_2m_min"),
+      temperatureMax: get("temperature_2m_max"),
+      temperatureAvg: get("temperature_2m_mean"),
+      apparentTemperatureMin: get("apparent_temperature_min"),
+      apparentTemperatureMax: get("apparent_temperature_max"),
+      apparentTemperatureAvg: get("apparent_temperature_mean"),
+      precipitationTotal: get("precipitation_sum"),
+      rainTotal: get("rain_sum"),
+      snowfallTotal: get("snowfall_sum"),
+      precipitationHours: get("precipitation_hours"),
+      windSpeedMin: get("wind_speed_10m_min"),
+      windSpeedAvg: get("wind_speed_10m_mean"),
+      windSpeedMax: get("wind_speed_10m_max"),
+      windGustMin: get("wind_gusts_10m_min"),
+      windGustAvg: get("wind_gusts_10m_mean"),
+      windGustMax: get("wind_gusts_10m_max"),
+      windDirection: get("wind_direction_10m_dominant"),
+      humidityMin: get("relative_humidity_2m_min"),
+      humidityAvg: get("relative_humidity_2m_mean"),
+      humidityMax: get("relative_humidity_2m_max"),
+      dewPointMin: get("dew_point_2m_min"),
+      dewPointAvg: get("dew_point_2m_mean"),
+      dewPointMax: get("dew_point_2m_max"),
+      sunrise: times.sunrise[index] ?? null,
+      sunset: times.sunset[index] ?? null,
+      daylightDuration: get("daylight_duration"),
+      sunshineDuration: get("sunshine_duration"),
+      dataStatus: "complete",
       qualityFlags: [],
       fetchedAt,
       updatedAt: fetchedAt,
     };
-
-    return row;
   });
 }

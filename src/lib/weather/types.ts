@@ -1,5 +1,9 @@
 export type ImportType = "initial" | "manual" | "scheduled";
 
+export type WeatherPayload = {
+  daily?: Record<string, unknown>;
+};
+
 export type WeatherSyncInput = {
   locationId: string;
   startDate?: string;

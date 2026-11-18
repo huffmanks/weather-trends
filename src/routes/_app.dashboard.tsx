@@ -5,7 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ActivityIcon, CalendarDaysIcon, CloudRainIcon, MapPinIcon, WindIcon } from "lucide-react";
 
 import { locationsQueryOptions, observationsQueryOptions } from "@/lib/queries/weather";
-import { today } from "@/lib/weather/dates";
+import { getLocalDate } from "@/lib/weather/dates";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/_app/dashboard")({
 function DashboardPage() {
   const [locationId, setLocationId] = useState<string | null>(null);
   const [startDate, setStartDate] = useState("2026-01-01");
-  const [endDate, setEndDate] = useState(today());
+  const [endDate, setEndDate] = useState(getLocalDate());
 
   const locationsQuery = useQuery(locationsQueryOptions());
   const locations = locationsQuery.data ?? [];
@@ -121,7 +121,7 @@ function DashboardPage() {
             type="date"
             value={endDate}
             min={startDate}
-            max={today()}
+            max={getLocalDate()}
             onChange={(event) => setEndDate(event.target.value)}
             className="h-9 rounded-md border bg-background px-3 text-sm"
           />

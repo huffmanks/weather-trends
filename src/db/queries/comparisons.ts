@@ -1,7 +1,7 @@
 import { desc, eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { savedComparisons } from "@/db/schema";
+import { type Json, savedComparisons } from "@/db/schema";
 
 export async function getSavedComparisons() {
   return db.select().from(savedComparisons).orderBy(desc(savedComparisons.updatedAt));
@@ -11,7 +11,7 @@ export async function createSavedComparison(input: {
   id: string;
   name: string;
   description: string | null;
-  configuration: Record<string, unknown>;
+  configuration: Record<string, Json>;
 }) {
   const now = Date.now();
 

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "ac955b2d-97ff-4eb8-a541-30bfdbd85039",
+  "id": "77436f40-d4ca-4fe2-94e2-34376eab0e72",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "app_settings": {
@@ -59,6 +59,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "weather_code": {
+          "name": "weather_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "temperature_min": {
           "name": "temperature_min",
           "type": "real",
@@ -75,6 +82,27 @@
         },
         "temperature_avg": {
           "name": "temperature_avg",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "apparent_temperature_min": {
+          "name": "apparent_temperature_min",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "apparent_temperature_max": {
+          "name": "apparent_temperature_max",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "apparent_temperature_avg": {
+          "name": "apparent_temperature_avg",
           "type": "real",
           "primaryKey": false,
           "notNull": false,
@@ -101,8 +129,15 @@
           "notNull": false,
           "autoincrement": false
         },
-        "snow_depth": {
-          "name": "snow_depth",
+        "precipitation_hours": {
+          "name": "precipitation_hours",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "wind_speed_min": {
+          "name": "wind_speed_min",
           "type": "real",
           "primaryKey": false,
           "notNull": false,
@@ -117,6 +152,20 @@
         },
         "wind_speed_max": {
           "name": "wind_speed_max",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "wind_gust_min": {
+          "name": "wind_gust_min",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "wind_gust_avg": {
+          "name": "wind_gust_avg",
           "type": "real",
           "primaryKey": false,
           "notNull": false,
@@ -173,6 +222,34 @@
         },
         "dew_point_max": {
           "name": "dew_point_max",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sunrise": {
+          "name": "sunrise",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sunset": {
+          "name": "sunset",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "daylight_duration": {
+          "name": "daylight_duration",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sunshine_duration": {
+          "name": "sunshine_duration",
           "type": "real",
           "primaryKey": false,
           "notNull": false,

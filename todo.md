@@ -1,0 +1,9 @@
+- [ ] Initial import locations, messaging about how long it takes and giving user feedback or status of it currently.
+- [ ] locations only allow 10 years at a time to avoid rate limiting. give user options 1940-1949,1950-1959, etc.
+- [ ] locations should show what data it does have.
+- [ ] locations ability to view imports/logs [src/db/queries/imports.ts](src/db/queries/imports.ts),
+- [ ] dashboard needs to show any and all data it has. without having to changes start/end dates.
+- [ ] dashboard/explore need to use shadcn calendar/date picker.
+- [ ] explore group select options with labels and alphabetize.
+- [ ] explore data loads slow when changing things.
+- [ ] explore chart type doesnt look much different.
