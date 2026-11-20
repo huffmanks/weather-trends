@@ -23,6 +23,14 @@ export async function getObservations(input: {
     .orderBy(asc(dailyObservations.observationDate));
 }
 
+export async function getAllObservations(locationId: string) {
+  return db
+    .select()
+    .from(dailyObservations)
+    .where(eq(dailyObservations.locationId, locationId))
+    .orderBy(asc(dailyObservations.observationDate));
+}
+
 export async function getLatestObservation(locationId: string) {
   const [result] = await db
     .select()

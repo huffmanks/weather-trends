@@ -15,6 +15,7 @@ import {
   updateLocationFn,
 } from "@/server/functions/locations";
 import {
+  getAllObservationsFn,
   getImportsFn,
   getObservationDecadesFn,
   getObservationsFn,
@@ -48,6 +49,13 @@ export const observationsQueryOptions = (input: ObservationRange) =>
     queryKey: weatherKeys.observations(input),
     queryFn: () => getObservationsFn({ data: input }),
     enabled: Boolean(input.locationId && input.startDate && input.endDate),
+  });
+
+export const allObservationsQueryOptions = (locationId: string) =>
+  queryOptions({
+    queryKey: [...weatherKeys.all, "observations", locationId] as const,
+    queryFn: () => getAllObservationsFn({ data: locationId }),
+    enabled: Boolean(locationId),
   });
 
 export const decadesQueryOptions = (locationId: string) =>

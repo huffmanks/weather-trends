@@ -28,6 +28,7 @@ import {
   observationsQueryOptions,
   savedComparisonsQueryOptions,
 } from "@/lib/queries/weather";
+import { toUtcNoon } from "@/lib/weather/dates";
 import { createSavedComparisonFn, deleteSavedComparisonFn } from "@/server/functions/comparisons";
 
 import { Button } from "@/components/ui/button";
@@ -107,8 +108,8 @@ function ExplorePage() {
     queries: selectedLocations.map((location) =>
       observationsQueryOptions({
         locationId: location.id,
-        startDate: configuration.startDate,
-        endDate: configuration.endDate,
+        startDate: toUtcNoon(configuration.startDate),
+        endDate: toUtcNoon(configuration.endDate),
       })
     ),
   });

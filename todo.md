@@ -1,5 +1,4 @@
-- [ ] dashboard needs to show any and all data it has. without having to changes start/end dates.
-- [ ] dashboard/explore need to use shadcn calendar/date picker.
+- [ ] explore use date-picker alongside presets e.g. year to date, last 30 days etc.
 - [ ] explore group select options with labels and alphabetize.
 - [ ] explore data loads slow when changing things.
 - [ ] explore chart type doesnt look much different.

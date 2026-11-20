@@ -1,8 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 
 import { getImports } from "@/db/queries/imports";
-import { getObservationDecades, getObservations } from "@/db/queries/observations";
-import { isValidDate } from "@/lib/weather/dates";
+import {
+  getAllObservations,
+  getObservationDecades,
+  getObservations,
+} from "@/db/queries/observations";
+import { formatDate, isValidDate } from "@/lib/weather/dates";
 import type { ObservationRange } from "@/lib/weather/types";
 
 function validateRange(input: ObservationRange) {
@@ -23,7 +27,23 @@ function validateRange(input: ObservationRange) {
 
 export const getObservationsFn = createServerFn({ method: "GET" })
   .validator(validateRange)
-  .handler(async ({ data }) => getObservations(data));
+  .handler(async ({ data }) =>
+    getObservations({
+      locationId: data.locationId,
+      startDate: formatDate(data.startDate),
+      endDate: formatDate(data.endDate),
+    })
+  );
+
+export const getAllObservationsFn = createServerFn({ method: "GET" })
+  .validator((locationId: string) => {
+    if (!locationId.trim()) {
+      throw new Error("Location ID is required.");
+    }
+
+    return locationId;
+  })
+  .handler(async ({ data }) => getAllObservations(data));
 
 export const getImportsFn = createServerFn({ method: "GET" })
   .validator((locationId: string) => locationId)

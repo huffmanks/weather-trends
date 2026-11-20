@@ -16,7 +16,7 @@ import {
   updateLocationMutationOptions,
   weatherKeys,
 } from "@/lib/queries/weather";
-import { daysBetween, getArchiveEndDate } from "@/lib/weather/dates";
+import { daysBetween, formatDate, getArchiveEndDate, toUtcNoon } from "@/lib/weather/dates";
 import type { WeatherSyncInput } from "@/lib/weather/types";
 import { IMPORT_DECADES } from "@/lib/weather/types";
 
@@ -367,7 +367,8 @@ function LocationCard({
   const archiveEndDate = getArchiveEndDate(location.timezone);
 
   const decadeStatuses = IMPORT_DECADES.map((decade) => {
-    const expectedEndDate = decade.endDate < archiveEndDate ? decade.endDate : archiveEndDate;
+    const expectedEndDate =
+      decade.endDate < formatDate(archiveEndDate) ? decade.endDate : formatDate(archiveEndDate);
     const expectedDays =
       expectedEndDate < decade.startDate ? 0 : daysBetween(decade.startDate, expectedEndDate);
 
@@ -501,8 +502,8 @@ function LocationCard({
               onClick={() =>
                 onSync({
                   locationId: location.id,
-                  startDate: selectedDecade.startDate,
-                  endDate: selectedDecade.endDate,
+                  startDate: toUtcNoon(selectedDecade.startDate),
+                  endDate: toUtcNoon(selectedDecade.endDate),
                 })
               }>
               <RefreshCwIcon className={`mr-2 size-4 ${syncing ? "animate-spin" : ""}`} />

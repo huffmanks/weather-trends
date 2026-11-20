@@ -4,12 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { ActivityIcon, CalendarDaysIcon, CloudRainIcon, MapPinIcon, WindIcon } from "lucide-react";
 
-import { locationsQueryOptions, observationsQueryOptions } from "@/lib/queries/weather";
-import { formatDate, getLocalDate, getStartOfYearDate } from "@/lib/weather/dates";
+import { allObservationsQueryOptions, locationsQueryOptions } from "@/lib/queries/weather";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -40,39 +38,55 @@ export const Route = createFileRoute("/_app/dashboard")({
 function DashboardPage() {
   const [locationId, setLocationId] = useState<string | null>(null);
 
-  const startDate = getStartOfYearDate();
-  const endDate = getLocalDate();
-
   const locationsQuery = useQuery(locationsQueryOptions());
   const locations = locationsQuery.data ?? [];
   const selectedLocationId = locationId || locations[0]?.id || "";
 
-  const observationsQuery = useQuery(
-    observationsQueryOptions({
-      locationId: selectedLocationId,
-      startDate,
-      endDate,
-    })
+  const observationsQuery = useQuery(allObservationsQueryOptions(selectedLocationId));
+  const observations = observationsQuery.data ?? [];
+
+  const recentObservations = observations.filter((item) =>
+    [
+      item.temperatureMin,
+      item.temperatureMax,
+      item.temperatureAvg,
+      item.precipitationTotal,
+      item.windSpeedAvg,
+      item.humidityAvg,
+    ].some((value) => value !== null)
   );
 
-  const observations = observationsQuery.data ?? [];
-  const latest = observations.at(-1);
+  const temperatures = recentObservations
+    .map((item) => item.temperatureAvg)
+    .filter((value): value is number => value !== null);
+
   const averageTemperature =
-    observations.length > 0
-      ? observations.reduce((total, item) => total + (item.temperatureAvg ?? 0), 0) /
-        observations.filter((item) => item.temperatureAvg !== null).length
+    temperatures.length > 0
+      ? temperatures.reduce((total, value) => total + value, 0) / temperatures.length
       : null;
 
-  const totalPrecipitation = observations.reduce(
+  const totalPrecipitation = recentObservations.reduce(
     (total, item) => total + (item.precipitationTotal ?? 0),
     0
   );
 
+  const windSpeeds = recentObservations
+    .map((item) => item.windSpeedAvg)
+    .filter((value): value is number => value !== null);
+
   const averageWind =
-    observations.length > 0
-      ? observations.reduce((total, item) => total + (item.windSpeedAvg ?? 0), 0) /
-        observations.filter((item) => item.windSpeedAvg !== null).length
+    windSpeeds.length > 0
+      ? windSpeeds.reduce((total, value) => total + value, 0) / windSpeeds.length
       : null;
+
+  const latest = recentObservations.at(-1);
+
+  const dataRange = recentObservations.length
+    ? {
+        start: recentObservations[0].observationDate,
+        end: latest!.observationDate,
+      }
+    : null;
 
   const locationOptions = locations.map((location) => ({
     value: location.id,
@@ -111,19 +125,14 @@ function DashboardPage() {
             </SelectContent>
           </Select>
         </div>
-
-        <DatePicker
-          id="start-date"
-          label="Start date"
-          initialDate={startDate}
-          disabled={{ after: endDate }}
-        />
-        <DatePicker
-          id="end-date"
-          label="End date"
-          initialDate={endDate}
-          disabled={{ before: startDate, after: endDate }}
-        />
+        {dataRange && (
+          <div className="text-sm text-muted-foreground">
+            Available data:{" "}
+            <span className="font-medium text-foreground">
+              {dataRange.start} - {dataRange.end}
+            </span>
+          </div>
+        )}
       </div>
 
       {!locations.length && !locationsQuery.isLoading && (
@@ -138,7 +147,13 @@ function DashboardPage() {
         </Card>
       )}
 
-      {locationsQuery.isLoading || observationsQuery.isLoading ? (
+      {observationsQuery.isError ? (
+        <Card>
+          <CardContent className="py-8 text-center text-sm text-destructive">
+            Failed to load observations: {observationsQuery.error.message}
+          </CardContent>
+        </Card>
+      ) : locationsQuery.isLoading || observationsQuery.isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }, (_, index) => (
             <Skeleton key={index} className="h-32" />
@@ -154,13 +169,13 @@ function DashboardPage() {
                   ? "—"
                   : `${averageTemperature.toFixed(1)}°C`
               }
-              description="Daily average across selected period"
+              description="Average across available observations"
               icon={ActivityIcon}
             />
             <MetricCard
               title="Total precipitation"
               value={`${totalPrecipitation.toFixed(1)} mm`}
-              description="Accumulated precipitation"
+              description="Total accumulated precipitation"
               icon={CloudRainIcon}
             />
             <MetricCard
@@ -170,7 +185,7 @@ function DashboardPage() {
                   ? "—"
                   : `${averageWind.toFixed(1)} m/s`
               }
-              description="Daily average wind speed"
+              description="Average across available observations"
               icon={WindIcon}
             />
             <MetricCard
@@ -204,7 +219,7 @@ function DashboardPage() {
                     />
                   </div>
                 ) : (
-                  <EmptyState message="No observations available for this date range." />
+                  <EmptyState message="No observations available for this location." />
                 )}
               </CardContent>
             </Card>
@@ -215,9 +230,11 @@ function DashboardPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Selected period</span>
+                  <span className="text-sm text-muted-foreground">Date range</span>
                   <span className="text-sm font-medium">
-                    {formatDate(startDate)} - {formatDate(endDate)}
+                    <span>{recentObservations[0]?.observationDate ?? "—"}</span>
+                    <span> - </span>
+                    <span>{latest?.observationDate ?? "—"}</span>
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
@@ -245,9 +262,7 @@ function DashboardPage() {
               <CardTitle>Recent observations</CardTitle>
             </CardHeader>
             <CardContent>
-              {observationsQuery.error ? (
-                <p className="text-sm text-destructive">{observationsQuery.error.message}</p>
-              ) : observations.length ? (
+              {observations.length ? (
                 <div className="overflow-x-auto">
                   <Table>
                     <TableHeader>
@@ -262,7 +277,7 @@ function DashboardPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {observations
+                      {recentObservations
                         .slice(-10)
                         .reverse()
                         .map((item) => (
