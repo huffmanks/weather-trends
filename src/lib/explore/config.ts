@@ -1,10 +1,16 @@
+import { type ExploreMetric, exploreMetrics } from "@/lib/explore/constants";
 import { getDateRange } from "@/lib/explore/dates";
 import type {
   ExploreChartType,
   ExploreConfiguration,
   ExploreDatePreset,
+  ExploreUnits,
 } from "@/lib/explore/types";
-import { exploreMetrics } from "@/lib/explore/types";
+import {
+  getPrecipitationSymbol,
+  getTemperatureSymbol,
+  getWindSpeedSymbol,
+} from "@/lib/settings/units";
 import { isDateString } from "@/lib/weather/dates";
 
 const chartTypes: ExploreChartType[] = ["line", "area", "bar"];
@@ -46,4 +52,24 @@ export function isExploreConfiguration(value: unknown): value is Omit<
     config.startDate <= config.endDate &&
     typeof config.compareYears === "boolean"
   );
+}
+
+export function getMetricUnit(metric: ExploreMetric, units: ExploreUnits): string {
+  if (
+    metric.startsWith("temperature") ||
+    metric.startsWith("apparentTemperature") ||
+    metric.startsWith("dewPoint")
+  ) {
+    return getTemperatureSymbol(units.temperatureUnit);
+  }
+
+  if (metric === "precipitationTotal" || metric === "rainTotal") {
+    return getPrecipitationSymbol(units.precipitationUnit);
+  }
+
+  if (metric.startsWith("windSpeed") || metric.startsWith("windGust")) {
+    return getWindSpeedSymbol(units.windSpeedUnit);
+  }
+
+  return exploreMetrics.find((item) => item.value === metric)!.unit;
 }

@@ -1,5 +1,7 @@
-import type { DailyObservation } from "@/db/schema";
-import type { ExploreChartRow, ExploreChartSeries, ExploreMetric } from "@/lib/explore/types";
+import type { AppSettingsUpdate, DailyObservation } from "@/db/schema";
+import type { ExploreMetric } from "@/lib/explore/constants";
+import type { ExploreChartRow, ExploreChartSeries } from "@/lib/explore/types";
+import { convertPrecipitation, convertTemperature, convertWindSpeed } from "@/lib/settings/units";
 
 type ExploreLocation = {
   id: string;
@@ -13,14 +15,63 @@ type BuildExploreChartDataOptions = {
   observations: ExploreObservation[][];
   metric: ExploreMetric;
   compareYears: boolean;
-};
+} & Pick<AppSettingsUpdate, "temperatureUnit" | "precipitationUnit" | "windSpeedUnit">;
+
+const TEMPERATURE_METRICS = new Set<ExploreMetric>([
+  "temperatureAvg",
+  "temperatureMin",
+  "temperatureMax",
+  "apparentTemperatureAvg",
+  "apparentTemperatureMin",
+  "apparentTemperatureMax",
+  "dewPointAvg",
+  "dewPointMin",
+  "dewPointMax",
+]);
+
+const PRECIPITATION_METRICS = new Set<ExploreMetric>(["precipitationTotal", "rainTotal"]);
+
+const WIND_METRICS = new Set<ExploreMetric>([
+  "windSpeedAvg",
+  "windSpeedMin",
+  "windSpeedMax",
+  "windGustAvg",
+  "windGustMin",
+  "windGustMax",
+]);
+
+function convertMetricValue(
+  value: number | null,
+  metric: ExploreMetric,
+  settings: Pick<AppSettingsUpdate, "temperatureUnit" | "precipitationUnit" | "windSpeedUnit">
+) {
+  if (value === null) return null;
+
+  if (TEMPERATURE_METRICS.has(metric)) {
+    return convertTemperature(value, settings.temperatureUnit);
+  }
+
+  if (PRECIPITATION_METRICS.has(metric)) {
+    return convertPrecipitation(value, settings.precipitationUnit);
+  }
+
+  if (WIND_METRICS.has(metric)) {
+    return convertWindSpeed(value, settings.windSpeedUnit);
+  }
+
+  return value;
+}
 
 export function buildExploreChartData({
   locations,
   observations,
   metric,
   compareYears,
+  temperatureUnit,
+  precipitationUnit,
+  windSpeedUnit,
 }: BuildExploreChartDataOptions) {
+  const settings = { temperatureUnit, precipitationUnit, windSpeedUnit };
   const rows = new Map<string, ExploreChartRow>();
   const series: ExploreChartSeries[] = [];
 
@@ -52,7 +103,7 @@ export function buildExploreChartData({
             const date = observation.observationDate.slice(5);
             const row = rows.get(date) ?? { date };
 
-            row[key] = observation[metric];
+            row[key] = convertMetricValue(observation[metric], metric, settings);
             rows.set(date, row);
           });
         });
@@ -71,7 +122,7 @@ export function buildExploreChartData({
       const date = observation.observationDate;
       const row = rows.get(date) ?? { date };
 
-      row[key] = observation[metric];
+      row[key] = convertMetricValue(observation[metric], metric, settings);
       rows.set(date, row);
     });
   });

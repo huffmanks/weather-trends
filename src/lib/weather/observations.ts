@@ -34,3 +34,16 @@ const OBSERVATION_FIELDS = [
 export function hasObservationData(observation: NewDailyObservation): boolean {
   return OBSERVATION_FIELDS.some((field) => observation[field] != null);
 }
+
+const DASHBOARD_FIELDS = [
+  "temperatureMin",
+  "temperatureMax",
+  "temperatureAvg",
+  "precipitationTotal",
+  "windSpeedAvg",
+  "humidityAvg",
+] as const satisfies readonly (keyof NewDailyObservation)[];
+
+export function hasDashboardData(observation: NewDailyObservation): boolean {
+  return DASHBOARD_FIELDS.some((field) => observation[field] != null);
+}

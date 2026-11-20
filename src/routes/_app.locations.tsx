@@ -5,6 +5,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MapPinIcon, PencilIcon, PlusIcon, RefreshCwIcon, Trash2Icon } from "lucide-react";
 
 import type { Location } from "@/db/schema";
+import { IMPORT_DECADES } from "@/lib/weather/constants";
+import { daysBetween, formatDate, getArchiveEndDate, toUtcNoon } from "@/lib/weather/dates";
 import {
   createLocationMutationOptions,
   decadesQueryOptions,
@@ -15,9 +17,7 @@ import {
   syncLocationMutationOptions,
   updateLocationMutationOptions,
   weatherKeys,
-} from "@/lib/queries/weather";
-import { IMPORT_DECADES } from "@/lib/weather/constants";
-import { daysBetween, formatDate, getArchiveEndDate, toUtcNoon } from "@/lib/weather/dates";
+} from "@/lib/weather/queries";
 import type { WeatherSyncInput } from "@/lib/weather/types";
 
 import { Badge } from "@/components/ui/badge";

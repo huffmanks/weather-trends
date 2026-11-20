@@ -151,11 +151,29 @@ export const savedReports = sqliteTable("saved_reports", {
   updatedAt: integer("updated_at").notNull(),
 });
 
-export const appSettings = sqliteTable("app_settings", {
-  key: text("key").primaryKey(),
-  value: text("value", { mode: "json" }).$type<Json>().notNull(),
-  updatedAt: integer("updated_at").notNull(),
-});
+export const appSettings = sqliteTable(
+  "app_settings",
+  {
+    id: integer("id").primaryKey().default(1),
+    temperatureUnit: text("temperature_unit", {
+      enum: ["celsius", "fahrenheit"],
+    })
+      .notNull()
+      .default("celsius"),
+    precipitationUnit: text("precipitation_unit", {
+      enum: ["mm", "in"],
+    })
+      .notNull()
+      .default("mm"),
+    windSpeedUnit: text("wind_speed_unit", {
+      enum: ["ms", "kmh", "mph"],
+    })
+      .notNull()
+      .default("ms"),
+    updatedAt: integer("updated_at").notNull(),
+  },
+  (table) => [check("app_settings_singleton_check", sql`${table.id} = 1`)]
+);
 
 export type Location = typeof locations.$inferSelect;
 export type NewLocation = typeof locations.$inferInsert;
@@ -168,3 +186,10 @@ export type NewDataImport = typeof dataImports.$inferInsert;
 
 export type SavedComparison = typeof savedComparisons.$inferSelect;
 export type SavedReport = typeof savedReports.$inferSelect;
+
+export type AppSettings = typeof appSettings.$inferSelect;
+export type NewAppSettings = typeof appSettings.$inferInsert;
+export type AppSettingsUpdate = Pick<
+  AppSettings,
+  "temperatureUnit" | "precipitationUnit" | "windSpeedUnit"
+>;

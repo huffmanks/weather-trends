@@ -15,20 +15,22 @@ import {
 } from "recharts";
 
 import { buildExploreChartData } from "@/lib/explore/chart";
-import { getInitialConfiguration, isExploreConfiguration } from "@/lib/explore/config";
-import { formatAxisDate, getDateRange } from "@/lib/explore/dates";
 import {
-  type ExploreConfiguration,
-  type ExploreDatePreset,
-  exploreMetrics,
-} from "@/lib/explore/types";
+  getInitialConfiguration,
+  getMetricUnit,
+  isExploreConfiguration,
+} from "@/lib/explore/config";
+import { exploreMetrics } from "@/lib/explore/constants";
+import { formatAxisDate, getDateRange } from "@/lib/explore/dates";
+import { type ExploreConfiguration, type ExploreDatePreset } from "@/lib/explore/types";
+import { appSettingsQueryOptions } from "@/lib/settings/queries";
+import { toUtcNoon } from "@/lib/weather/dates";
 import {
   comparisonQueryKeys,
   locationsQueryOptions,
   observationsQueryOptions,
   savedComparisonsQueryOptions,
-} from "@/lib/queries/weather";
-import { toUtcNoon } from "@/lib/weather/dates";
+} from "@/lib/weather/queries";
 import { createSavedComparisonFn, deleteSavedComparisonFn } from "@/server/functions/comparisons";
 
 import { Button } from "@/components/ui/button";
@@ -57,6 +59,7 @@ export const Route = createFileRoute("/_app/explore")({
     await Promise.all([
       queryClient.query({ ...locationsQueryOptions(), staleTime: "static" }),
       queryClient.query({ ...savedComparisonsQueryOptions(), staleTime: "static" }),
+      queryClient.query({ ...appSettingsQueryOptions(), staleTime: "static" }),
     ]);
   },
   component: ExplorePage,
@@ -89,6 +92,7 @@ function ExplorePage() {
 
   const { data: locations = [] } = useQuery(locationsQueryOptions());
   const { data: savedComparisons = [] } = useQuery(savedComparisonsQueryOptions());
+  const { data: settings } = useQuery(appSettingsQueryOptions());
 
   const [configuration, setConfiguration] = useState(getInitialConfiguration);
   const [comparisonName, setComparisonName] = useState("");
@@ -119,7 +123,18 @@ function ExplorePage() {
 
   const observationData = observationQueries.map((query) => query.data ?? []);
 
+  const temperatureUnit = settings?.temperatureUnit ?? "celsius";
+  const precipitationUnit = settings?.precipitationUnit ?? "mm";
+  const windSpeedUnit = settings?.windSpeedUnit ?? "ms";
+
+  const units = {
+    temperatureUnit,
+    precipitationUnit,
+    windSpeedUnit,
+  };
+
   const metric = exploreMetrics.find((item) => item.value === configuration.metric)!;
+  const metricUnit = getMetricUnit(configuration.metric, units);
 
   const { data: chartData, series } = useMemo(
     () =>
@@ -128,8 +143,19 @@ function ExplorePage() {
         observations: observationData,
         metric: configuration.metric,
         compareYears: configuration.compareYears,
+        temperatureUnit,
+        precipitationUnit,
+        windSpeedUnit,
       }),
-    [selectedLocations, observationData, configuration.metric, configuration.compareYears]
+    [
+      selectedLocations,
+      observationData,
+      configuration.metric,
+      configuration.compareYears,
+      temperatureUnit,
+      precipitationUnit,
+      windSpeedUnit,
+    ]
   );
 
   const chartConfig: ChartConfig = Object.fromEntries(
@@ -240,7 +266,7 @@ function ExplorePage() {
         tickLine={false}
         axisLine={false}
         width={56}
-        tickFormatter={(value: number) => `${value} ${metric.unit}`}
+        tickFormatter={(value: number) => `${value} ${metricUnit}`}
       />
       <ChartTooltip
         content={
@@ -549,8 +575,8 @@ function ExplorePage() {
               <CardTitle>{metric.label}</CardTitle>
               <CardDescription>
                 {configuration.compareYears
-                  ? "Dates are aligned by month and day across years."
-                  : `Daily observations · ${metric.unit}`}
+                  ? `Dates are aligned by month and day across years · ${metricUnit}`
+                  : `Daily observations · ${metricUnit}`}
               </CardDescription>
             </CardHeader>
             <CardContent>

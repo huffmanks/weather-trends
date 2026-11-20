@@ -1,7 +1,10 @@
 CREATE TABLE `app_settings` (
-	`key` text PRIMARY KEY NOT NULL,
-	`value` text NOT NULL,
-	`updated_at` integer NOT NULL
+	`id` integer PRIMARY KEY DEFAULT 1 NOT NULL,
+	`temperature_unit` text DEFAULT 'celsius' NOT NULL,
+	`precipitation_unit` text DEFAULT 'mm' NOT NULL,
+	`wind_speed_unit` text DEFAULT 'ms' NOT NULL,
+	`updated_at` integer NOT NULL,
+	CONSTRAINT "app_settings_singleton_check" CHECK("app_settings"."id" = 1)
 );
 --> statement-breakpoint
 CREATE TABLE `daily_observations` (

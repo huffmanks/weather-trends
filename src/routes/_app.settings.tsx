@@ -1,7 +1,15 @@
 import { useState } from "react";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { CheckIcon, DatabaseIcon, GaugeIcon, ThermometerIcon } from "lucide-react";
+
+import type { AppSettingsUpdate } from "@/db/schema";
+import {
+  appSettingsQueryOptions,
+  settingsKeys,
+  updateAppSettingsMutationOptions,
+} from "@/lib/settings/queries";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,6 +26,8 @@ import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/_app/settings")({
   component: SettingsPage,
+  loader: ({ context: { queryClient } }) =>
+    queryClient.query({ ...appSettingsQueryOptions(), staleTime: "static" }),
 });
 
 type SettingsSelectProps<T extends string> = {
@@ -52,31 +62,62 @@ function SettingsSelect<T extends string>({
   );
 }
 
-function SettingsPage() {
-  const [temperature, setTemperature] = useState<string | null>("celsius");
-  const [precipitation, setPrecipitation] = useState<string | null>("mm");
-  const [windSpeed, setWindSpeed] = useState<string | null>("ms");
-  const [saved, setSaved] = useState(false);
+const temperatureOptions = [
+  { value: "celsius", label: "Celsius (°C)" },
+  { value: "fahrenheit", label: "Fahrenheit (°F)" },
+] as const;
 
-  function handleSave() {
-    setSaved(true);
+const precipitationOptions = [
+  { value: "mm", label: "Millimeters (mm)" },
+  { value: "in", label: "Inches (in)" },
+] as const;
+
+const windSpeedOptions = [
+  { value: "ms", label: "Meters per second (m/s)" },
+  { value: "kmh", label: "Kilometers per hour (km/h)" },
+  { value: "mph", label: "Miles per hour (mph)" },
+] as const;
+
+function SettingsPage() {
+  const queryClient = useQueryClient();
+  const initialSettings = Route.useLoaderData();
+  const settingsQuery = useQuery(appSettingsQueryOptions());
+
+  const [settings, setSettings] = useState<AppSettingsUpdate>(() => ({
+    temperatureUnit: initialSettings.temperatureUnit,
+    precipitationUnit: initialSettings.precipitationUnit,
+    windSpeedUnit: initialSettings.windSpeedUnit,
+  }));
+
+  const updateSettingsMutation = useMutation({
+    ...updateAppSettingsMutationOptions(),
+    onSuccess: (updatedSettings) => {
+      queryClient.setQueryData(settingsKeys.all, updatedSettings);
+      setSettings({
+        temperatureUnit: updatedSettings.temperatureUnit,
+        precipitationUnit: updatedSettings.precipitationUnit,
+        windSpeedUnit: updatedSettings.windSpeedUnit,
+      });
+    },
+  });
+
+  const savedSettings = settingsQuery.data ?? initialSettings;
+
+  const isDirty =
+    settings.temperatureUnit !== savedSettings.temperatureUnit ||
+    settings.precipitationUnit !== savedSettings.precipitationUnit ||
+    settings.windSpeedUnit !== savedSettings.windSpeedUnit;
+
+  function updateSetting<TKey extends keyof AppSettingsUpdate>(
+    key: TKey,
+    value: AppSettingsUpdate[TKey]
+  ) {
+    setSettings((current) => ({ ...current, [key]: value }));
   }
 
-  const temperatureOptions = [
-    { value: "celsius", label: "Celsius (°C)" },
-    { value: "fahrenheit", label: "Fahrenheit (°F)" },
-  ] as const;
-
-  const precipitationOptions = [
-    { value: "mm", label: "Millimeters (mm)" },
-    { value: "in", label: "Inches (in)" },
-  ] as const;
-
-  const windSpeedOptions = [
-    { value: "ms", label: "Meters per second (m/s)" },
-    { value: "kmh", label: "Kilometers per hour (km/h)" },
-    { value: "mph", label: "Miles per hour (mph)" },
-  ] as const;
+  async function handleSave() {
+    await updateSettingsMutation.mutateAsync(settings);
+  }
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">
@@ -98,8 +139,8 @@ function SettingsPage() {
           <SettingsSelect
             label="Temperature"
             options={temperatureOptions}
-            value={temperature}
-            onValueChange={setTemperature}
+            value={settings.temperatureUnit}
+            onValueChange={(value) => value && updateSetting("temperatureUnit", value)}
           />
 
           <Separator />
@@ -107,8 +148,8 @@ function SettingsPage() {
           <SettingsSelect
             label="Precipitation"
             options={precipitationOptions}
-            value={precipitation}
-            onValueChange={setPrecipitation}
+            value={settings.precipitationUnit}
+            onValueChange={(value) => value && updateSetting("precipitationUnit", value)}
           />
 
           <Separator />
@@ -116,8 +157,8 @@ function SettingsPage() {
           <SettingsSelect
             label="Wind speed"
             options={windSpeedOptions}
-            value={windSpeed}
-            onValueChange={setWindSpeed}
+            value={settings.windSpeedUnit}
+            onValueChange={(value) => value && updateSetting("windSpeedUnit", value)}
           />
         </CardContent>
       </Card>
@@ -174,13 +215,17 @@ function SettingsPage() {
       </Card>
 
       <div className="flex items-center justify-end gap-3">
-        {saved && (
+        {updateSettingsMutation.isSuccess && (
           <span className="flex items-center gap-1 text-sm text-muted-foreground">
             <CheckIcon className="size-4" />
-            Saved locally for this session
+            Preferences saved
           </span>
         )}
-        <Button onClick={handleSave}>Save preferences</Button>
+        <Button
+          disabled={!isDirty || updateSettingsMutation.isPending}
+          onClick={() => void handleSave()}>
+          Save preferences
+        </Button>
       </div>
     </div>
   );

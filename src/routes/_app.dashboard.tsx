@@ -4,8 +4,17 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { ActivityIcon, CalendarDaysIcon, CloudRainIcon, MapPinIcon, WindIcon } from "lucide-react";
 
-import { allObservationsQueryOptions, locationsQueryOptions } from "@/lib/queries/weather";
-import { hasObservationData } from "@/lib/weather/observations";
+import { appSettingsQueryOptions } from "@/lib/settings/queries";
+import {
+  convertPrecipitation,
+  convertTemperature,
+  convertWindSpeed,
+  getPrecipitationSymbol,
+  getTemperatureSymbol,
+  getWindSpeedSymbol,
+} from "@/lib/settings/units";
+import { hasDashboardData } from "@/lib/weather/observations";
+import { allObservationsQueryOptions, locationsQueryOptions } from "@/lib/weather/queries";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,10 +39,16 @@ import {
 export const Route = createFileRoute("/_app/dashboard")({
   component: DashboardPage,
   loader: ({ context: { queryClient } }) =>
-    queryClient.query({
-      ...locationsQueryOptions(),
-      staleTime: "static",
-    }),
+    Promise.all([
+      queryClient.query({
+        ...locationsQueryOptions(),
+        staleTime: "static",
+      }),
+      queryClient.query({
+        ...appSettingsQueryOptions(),
+        staleTime: "static",
+      }),
+    ]),
 });
 
 function DashboardPage() {
@@ -46,7 +61,25 @@ function DashboardPage() {
   const observationsQuery = useQuery(allObservationsQueryOptions(selectedLocationId));
   const observations = observationsQuery.data ?? [];
 
-  const recentObservations = observations.filter(hasObservationData);
+  const settingsQuery = useQuery(appSettingsQueryOptions());
+  const settings = settingsQuery.data ?? {
+    temperatureUnit: "celsius",
+    precipitationUnit: "mm",
+    windSpeedUnit: "ms",
+  };
+
+  const temperatureSymbol = getTemperatureSymbol(settings.temperatureUnit);
+  const precipitationSymbol = getPrecipitationSymbol(settings.precipitationUnit);
+  const windSpeedSymbol = getWindSpeedSymbol(settings.windSpeedUnit);
+
+  const locationOptions = locations.map((location) => ({
+    value: location.id,
+    label: location.name,
+  }));
+
+  const recentObservations = observations.filter(hasDashboardData);
+  const first = recentObservations[0];
+  const latest = recentObservations.at(-1);
 
   const temperatures = recentObservations
     .map((item) => item.temperatureAvg)
@@ -71,21 +104,26 @@ function DashboardPage() {
       ? windSpeeds.reduce((total, value) => total + value, 0) / windSpeeds.length
       : null;
 
-  const first = recentObservations[0];
-  const latest = recentObservations.at(-1);
+  function formatTemperature(value: number | null) {
+    const converted = convertTemperature(value, settings.temperatureUnit);
+    return converted === null || !Number.isFinite(converted)
+      ? "—"
+      : `${converted.toFixed(1)} ${temperatureSymbol}`;
+  }
 
-  const dataRange =
-    first && latest
-      ? {
-          start: first.observationDate,
-          end: latest.observationDate,
-        }
-      : null;
+  function formatPrecipitation(value: number | null) {
+    const converted = convertPrecipitation(value, settings.precipitationUnit);
+    return converted === null || !Number.isFinite(converted)
+      ? "—"
+      : `${converted.toFixed(1)} ${precipitationSymbol}`;
+  }
 
-  const locationOptions = locations.map((location) => ({
-    value: location.id,
-    label: location.name,
-  }));
+  function formatWindSpeed(value: number | null) {
+    const converted = convertWindSpeed(value, settings.windSpeedUnit);
+    return converted === null || !Number.isFinite(converted)
+      ? "—"
+      : `${converted.toFixed(1)} ${windSpeedSymbol}`;
+  }
 
   return (
     <div className="mx-auto max-w-7xl space-y-8">
@@ -119,11 +157,11 @@ function DashboardPage() {
             </SelectContent>
           </Select>
         </div>
-        {dataRange && (
+        {first && latest && (
           <div className="text-sm text-muted-foreground">
             <span>Available data: </span>
             <span className="font-medium text-foreground">
-              {dataRange ? `${dataRange.start} - ${dataRange.end}` : "—"}
+              {first.observationDate} - {latest.observationDate}
             </span>
           </div>
         )}
@@ -158,27 +196,19 @@ function DashboardPage() {
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <MetricCard
               title="Average temperature"
-              value={
-                averageTemperature === null || !Number.isFinite(averageTemperature)
-                  ? "—"
-                  : `${averageTemperature.toFixed(1)}°C`
-              }
+              value={formatTemperature(averageTemperature)}
               description="Average across available observations"
               icon={ActivityIcon}
             />
             <MetricCard
               title="Total precipitation"
-              value={`${totalPrecipitation.toFixed(1)} mm`}
+              value={formatPrecipitation(totalPrecipitation)}
               description="Total accumulated precipitation"
               icon={CloudRainIcon}
             />
             <MetricCard
               title="Average wind speed"
-              value={
-                averageWind === null || !Number.isFinite(averageWind)
-                  ? "—"
-                  : `${averageWind.toFixed(1)} m/s`
-              }
+              value={formatWindSpeed(averageWind)}
               description="Average across available observations"
               icon={WindIcon}
             />
@@ -201,16 +231,13 @@ function DashboardPage() {
                     <ObservationValue label="Date" value={latest.observationDate} />
                     <ObservationValue
                       label="Temperature"
-                      value={`${latest.temperatureAvg?.toFixed(1) ?? "—"} °C`}
+                      value={formatTemperature(latest.temperatureAvg)}
                     />
                     <ObservationValue
                       label="Humidity"
                       value={`${latest.humidityAvg?.toFixed(0) ?? "—"}%`}
                     />
-                    <ObservationValue
-                      label="Wind"
-                      value={`${latest.windSpeedAvg?.toFixed(1) ?? "—"} m/s`}
-                    />
+                    <ObservationValue label="Wind" value={formatWindSpeed(latest.windSpeedAvg)} />
                   </div>
                 ) : (
                   <EmptyState message="No observations available for this location." />
@@ -262,11 +289,11 @@ function DashboardPage() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Date</TableHead>
-                        <TableHead>Min °C</TableHead>
-                        <TableHead>Max °C</TableHead>
-                        <TableHead>Avg °C</TableHead>
-                        <TableHead>Precip. mm</TableHead>
-                        <TableHead>Wind m/s</TableHead>
+                        <TableHead>Min {temperatureSymbol}</TableHead>
+                        <TableHead>Max {temperatureSymbol}</TableHead>
+                        <TableHead>Avg {temperatureSymbol}</TableHead>
+                        <TableHead>Precip. {precipitationSymbol}</TableHead>
+                        <TableHead>Wind {windSpeedSymbol}</TableHead>
                         <TableHead>Humidity</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -277,11 +304,11 @@ function DashboardPage() {
                         .map((item) => (
                           <TableRow key={item.id}>
                             <TableCell>{item.observationDate}</TableCell>
-                            <TableCell>{item.temperatureMin ?? "—"}</TableCell>
-                            <TableCell>{item.temperatureMax ?? "—"}</TableCell>
-                            <TableCell>{item.temperatureAvg?.toFixed(1) ?? "—"}</TableCell>
-                            <TableCell>{item.precipitationTotal ?? "—"}</TableCell>
-                            <TableCell>{item.windSpeedAvg?.toFixed(1) ?? "—"}</TableCell>
+                            <TableCell>{formatTemperature(item.temperatureMin)}</TableCell>
+                            <TableCell>{formatTemperature(item.temperatureMax)}</TableCell>
+                            <TableCell>{formatTemperature(item.temperatureAvg)}</TableCell>
+                            <TableCell>{formatPrecipitation(item.precipitationTotal)}</TableCell>
+                            <TableCell>{formatWindSpeed(item.windSpeedAvg)}</TableCell>
                             <TableCell>{item.humidityAvg?.toFixed(0) ?? "—"}%</TableCell>
                           </TableRow>
                         ))}
