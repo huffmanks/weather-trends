@@ -9,20 +9,33 @@ import {
 import { formatDate, isValidDate } from "@/lib/weather/dates";
 import type { ObservationRange } from "@/lib/weather/types";
 
-function validateRange(input: ObservationRange) {
-  if (!input.locationId.trim()) {
+function validateRange(input: unknown): ObservationRange {
+  if (typeof input !== "object" || input === null || Array.isArray(input)) {
+    throw new Error("Invalid observation date range.");
+  }
+
+  const { locationId, startDate, endDate } = input as Record<string, unknown>;
+
+  if (typeof locationId !== "string" || !locationId.trim()) {
     throw new Error("Location ID is required.");
   }
 
   if (
-    !isValidDate(input.startDate) ||
-    !isValidDate(input.endDate) ||
-    input.startDate > input.endDate
+    !(startDate instanceof Date) ||
+    !(endDate instanceof Date) ||
+    !isValidDate(startDate) ||
+    !isValidDate(endDate) ||
+    startDate > endDate
   ) {
     throw new Error("Invalid observation date range.");
   }
 
-  return input;
+  return { locationId, startDate, endDate };
+}
+
+function validateLocationId(locationId: string) {
+  if (!locationId.trim()) throw new Error("Location ID is required.");
+  return locationId;
 }
 
 export const getObservationsFn = createServerFn({ method: "GET" })
@@ -36,19 +49,13 @@ export const getObservationsFn = createServerFn({ method: "GET" })
   );
 
 export const getAllObservationsFn = createServerFn({ method: "GET" })
-  .validator((locationId: string) => {
-    if (!locationId.trim()) {
-      throw new Error("Location ID is required.");
-    }
-
-    return locationId;
-  })
+  .validator(validateLocationId)
   .handler(async ({ data }) => getAllObservations(data));
 
 export const getImportsFn = createServerFn({ method: "GET" })
-  .validator((locationId: string) => locationId)
+  .validator(validateLocationId)
   .handler(async ({ data }) => getImports(data));
 
 export const getObservationDecadesFn = createServerFn({ method: "GET" })
-  .validator((locationId: string) => locationId)
+  .validator(validateLocationId)
   .handler(async ({ data }) => getObservationDecades(data));

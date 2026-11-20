@@ -72,7 +72,9 @@ export async function fetchWeatherRange(
     payload === null ||
     !("daily" in payload) ||
     typeof payload.daily !== "object" ||
-    payload.daily === null
+    payload.daily === null ||
+    !("time" in payload.daily) ||
+    !Array.isArray(payload.daily.time)
   ) {
     throw new Error("Open-Meteo returned an invalid response.");
   }

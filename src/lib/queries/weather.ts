@@ -26,7 +26,9 @@ export const weatherKeys = {
   all: ["weather"] as const,
   locations: () => [...weatherKeys.all, "locations"] as const,
   location: (id: string) => [...weatherKeys.locations(), id] as const,
-  observations: (input: ObservationRange) => [...weatherKeys.all, "observations", input] as const,
+  observations: () => [...weatherKeys.all, "observations"] as const,
+  observationRange: (input: ObservationRange) => [...weatherKeys.observations(), input] as const,
+  allObservations: (locationId: string) => [...weatherKeys.observations(), locationId] as const,
   imports: (locationId: string) => [...weatherKeys.all, "imports", locationId] as const,
   decades: (locationId: string) => [...weatherKeys.all, "decades", locationId] as const,
 };
@@ -46,14 +48,14 @@ export const locationQueryOptions = (id: string) =>
 
 export const observationsQueryOptions = (input: ObservationRange) =>
   queryOptions({
-    queryKey: weatherKeys.observations(input),
+    queryKey: weatherKeys.observationRange(input),
     queryFn: () => getObservationsFn({ data: input }),
     enabled: Boolean(input.locationId && input.startDate && input.endDate),
   });
 
 export const allObservationsQueryOptions = (locationId: string) =>
   queryOptions({
-    queryKey: [...weatherKeys.all, "observations", locationId] as const,
+    queryKey: weatherKeys.allObservations(locationId),
     queryFn: () => getAllObservationsFn({ data: locationId }),
     enabled: Boolean(locationId),
   });
@@ -117,7 +119,7 @@ export async function invalidateLocationQueries(queryClient: QueryClient, locati
     ...(locationId
       ? [
           queryClient.invalidateQueries({ queryKey: weatherKeys.location(locationId) }),
-          queryClient.invalidateQueries({ queryKey: [...weatherKeys.all, "observations"] }),
+          queryClient.invalidateQueries({ queryKey: weatherKeys.observations() }),
           queryClient.invalidateQueries({ queryKey: weatherKeys.imports(locationId) }),
           queryClient.invalidateQueries({ queryKey: weatherKeys.decades(locationId) }),
         ]

@@ -51,7 +51,6 @@ CREATE TABLE `daily_observations` (
 --> statement-breakpoint
 CREATE UNIQUE INDEX `daily_observations_location_date_unique` ON `daily_observations` (`location_id`,`observation_date`);--> statement-breakpoint
 CREATE INDEX `daily_observations_date_idx` ON `daily_observations` (`observation_date`);--> statement-breakpoint
-CREATE INDEX `daily_observations_location_date_idx` ON `daily_observations` (`location_id`,`observation_date`);--> statement-breakpoint
 CREATE TABLE `data_imports` (
 	`id` text PRIMARY KEY NOT NULL,
 	`location_id` text NOT NULL,
@@ -59,6 +58,8 @@ CREATE TABLE `data_imports` (
 	`end_date` text NOT NULL,
 	`status` text DEFAULT 'pending' NOT NULL,
 	`dates_to_import` text DEFAULT '[]' NOT NULL,
+	`claim_token` text,
+	`claim_expires_at` integer,
 	`records_received` integer DEFAULT 0 NOT NULL,
 	`records_inserted` integer DEFAULT 0 NOT NULL,
 	`records_updated` integer DEFAULT 0 NOT NULL,

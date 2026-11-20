@@ -5,6 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ActivityIcon, CalendarDaysIcon, CloudRainIcon, MapPinIcon, WindIcon } from "lucide-react";
 
 import { allObservationsQueryOptions, locationsQueryOptions } from "@/lib/queries/weather";
+import { hasObservationData } from "@/lib/weather/observations";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,16 +46,7 @@ function DashboardPage() {
   const observationsQuery = useQuery(allObservationsQueryOptions(selectedLocationId));
   const observations = observationsQuery.data ?? [];
 
-  const recentObservations = observations.filter((item) =>
-    [
-      item.temperatureMin,
-      item.temperatureMax,
-      item.temperatureAvg,
-      item.precipitationTotal,
-      item.windSpeedAvg,
-      item.humidityAvg,
-    ].some((value) => value !== null)
-  );
+  const recentObservations = observations.filter(hasObservationData);
 
   const temperatures = recentObservations
     .map((item) => item.temperatureAvg)
@@ -79,14 +71,16 @@ function DashboardPage() {
       ? windSpeeds.reduce((total, value) => total + value, 0) / windSpeeds.length
       : null;
 
+  const first = recentObservations[0];
   const latest = recentObservations.at(-1);
 
-  const dataRange = recentObservations.length
-    ? {
-        start: recentObservations[0].observationDate,
-        end: latest!.observationDate,
-      }
-    : null;
+  const dataRange =
+    first && latest
+      ? {
+          start: first.observationDate,
+          end: latest.observationDate,
+        }
+      : null;
 
   const locationOptions = locations.map((location) => ({
     value: location.id,
@@ -127,9 +121,9 @@ function DashboardPage() {
         </div>
         {dataRange && (
           <div className="text-sm text-muted-foreground">
-            Available data:{" "}
+            <span>Available data: </span>
             <span className="font-medium text-foreground">
-              {dataRange.start} - {dataRange.end}
+              {dataRange ? `${dataRange.start} - ${dataRange.end}` : "—"}
             </span>
           </div>
         )}

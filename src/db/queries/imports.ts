@@ -1,4 +1,4 @@
-import { and, desc, eq, gte, lte } from "drizzle-orm";
+import { and, desc, eq, gte, isNull, lte, or } from "drizzle-orm";
 
 import { db } from "@/db";
 import { dataImports } from "@/db/schema";
@@ -15,6 +15,7 @@ export function getImports(locationId: string, limit = 20) {
 
 export async function getImport(id: string) {
   const [result] = await db.select().from(dataImports).where(eq(dataImports.id, id)).limit(1);
+
   return result;
 }
 
@@ -62,30 +63,58 @@ export async function createImport(input: {
   return result;
 }
 
-export async function updateImportProgress(
-  id: string,
-  progress: {
-    processedDays: number;
-    currentDate: string | null;
-    recordsReceived: number;
-    recordsInserted: number;
-    recordsUpdated: number;
-  }
-) {
-  await db.update(dataImports).set(progress).where(eq(dataImports.id, id));
+export async function claimImportChunk(input: {
+  id: string;
+  processedDays: number;
+  token: string;
+  currentDate: string;
+  now: number;
+  expiresAt: number;
+}) {
+  const [result] = await db
+    .update(dataImports)
+    .set({
+      claimToken: input.token,
+      claimExpiresAt: input.expiresAt,
+      currentDate: input.currentDate,
+    })
+    .where(
+      and(
+        eq(dataImports.id, input.id),
+        eq(dataImports.status, "running"),
+        eq(dataImports.processedDays, input.processedDays),
+        or(isNull(dataImports.claimToken), lte(dataImports.claimExpiresAt, input.now))
+      )
+    )
+    .returning();
+
+  return result;
 }
 
 export async function pauseImport(id: string) {
   await db
     .update(dataImports)
-    .set({ status: "paused", currentDate: null })
+    .set({
+      status: "paused",
+      currentDate: null,
+      claimToken: null,
+      claimExpiresAt: null,
+    })
     .where(and(eq(dataImports.id, id), eq(dataImports.status, "running")));
 }
 
 export async function resumeImport(id: string) {
   await db
     .update(dataImports)
-    .set({ status: "running", startedAt: Date.now(), completedAt: null, errorMessage: null })
+    .set({
+      status: "running",
+      startedAt: Date.now(),
+      completedAt: null,
+      errorMessage: null,
+      currentDate: null,
+      claimToken: null,
+      claimExpiresAt: null,
+    })
     .where(and(eq(dataImports.id, id), eq(dataImports.status, "paused")));
 }
 
@@ -96,11 +125,20 @@ export async function completeImport(id: string) {
       status: "completed",
       completedAt: Date.now(),
       currentDate: null,
+      claimToken: null,
+      claimExpiresAt: null,
     })
-    .where(eq(dataImports.id, id));
+    .where(
+      and(
+        eq(dataImports.id, id),
+        eq(dataImports.status, "running"),
+        isNull(dataImports.claimToken),
+        gte(dataImports.processedDays, dataImports.totalDays)
+      )
+    );
 }
 
-export async function failImport(id: string, error: unknown) {
+export async function failImport(id: string, token: string, error: unknown) {
   await db
     .update(dataImports)
     .set({
@@ -108,6 +146,14 @@ export async function failImport(id: string, error: unknown) {
       errorMessage: error instanceof Error ? error.message : "Unknown import error",
       completedAt: Date.now(),
       currentDate: null,
+      claimToken: null,
+      claimExpiresAt: null,
     })
-    .where(eq(dataImports.id, id));
+    .where(
+      and(
+        eq(dataImports.id, id),
+        eq(dataImports.status, "running"),
+        eq(dataImports.claimToken, token)
+      )
+    );
 }

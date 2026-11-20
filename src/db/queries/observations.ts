@@ -68,7 +68,12 @@ export async function getObservationDates(locationId: string, startDate: Date, e
     .orderBy(asc(dailyObservations.observationDate));
 }
 
-export async function upsertObservations(observations: NewDailyObservation[]) {
+type ObservationExecutor = Pick<typeof db, "select" | "insert">;
+
+export async function upsertObservations(
+  observations: NewDailyObservation[],
+  executor: ObservationExecutor = db
+) {
   if (observations.length === 0) {
     return { received: 0, inserted: 0, updated: 0 };
   }
@@ -76,7 +81,7 @@ export async function upsertObservations(observations: NewDailyObservation[]) {
   const locationId = observations[0].locationId;
   const dates = observations.map((item) => item.observationDate);
 
-  const existing = await db
+  const existing = await executor
     .select({ observationDate: dailyObservations.observationDate })
     .from(dailyObservations)
     .where(
@@ -88,7 +93,7 @@ export async function upsertObservations(observations: NewDailyObservation[]) {
 
   const existingDates = new Set(existing.map((item) => item.observationDate));
 
-  await db
+  await executor
     .insert(dailyObservations)
     .values(observations)
     .onConflictDoUpdate({
@@ -136,4 +141,21 @@ export async function upsertObservations(observations: NewDailyObservation[]) {
     inserted: observations.length - updated,
     updated,
   };
+}
+
+export async function deleteObservations(
+  locationId: string,
+  dates: string[],
+  executor: Pick<typeof db, "delete"> = db
+): Promise<void> {
+  if (dates.length === 0) return;
+
+  await executor
+    .delete(dailyObservations)
+    .where(
+      and(
+        eq(dailyObservations.locationId, locationId),
+        inArray(dailyObservations.observationDate, dates)
+      )
+    );
 }

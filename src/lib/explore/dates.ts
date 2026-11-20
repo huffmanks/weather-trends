@@ -12,18 +12,20 @@ export function getDateRange(preset: Exclude<ExploreDatePreset, "custom">) {
   const today = new Date();
   const endDate = formatLocalDate(today);
 
-  if (preset === "all") {
-    return { startDate: "1940-01-01", endDate };
-  }
-
-  if (preset === "ytd") {
-    return { startDate: `${today.getFullYear()}-01-01`, endDate };
-  }
+  if (preset === "all") return { startDate: "1940-01-01", endDate };
+  if (preset === "ytd") return { startDate: `${today.getFullYear()}-01-01`, endDate };
 
   const start = new Date(today);
 
   if (preset === "last12") {
-    start.setFullYear(start.getFullYear() - 1);
+    const targetYear = start.getFullYear() - 1;
+    const targetMonth = start.getMonth();
+    const targetDay = start.getDate();
+
+    start.setDate(1);
+    start.setFullYear(targetYear);
+    start.setMonth(targetMonth);
+    start.setDate(Math.min(targetDay, new Date(targetYear, targetMonth + 1, 0).getDate()));
   } else {
     start.setDate(start.getDate() - 29);
   }

@@ -1,6 +1,12 @@
 import type { NewDailyObservation } from "@/db/schema";
 import { DAILY_VARIABLES } from "@/lib/weather/client";
+import { isDateString } from "@/lib/weather/dates";
 import type { WeatherPayload } from "@/lib/weather/types";
+
+const STRING_VARIABLES = ["sunrise", "sunset"] as const;
+const NUMERIC_VARIABLES = DAILY_VARIABLES.filter(
+  (key) => !STRING_VARIABLES.includes(key as (typeof STRING_VARIABLES)[number])
+);
 
 function numberArray(value: unknown): (number | null)[] {
   if (!Array.isArray(value)) return [];
@@ -8,10 +14,10 @@ function numberArray(value: unknown): (number | null)[] {
   return value.map((item) => (typeof item === "number" && Number.isFinite(item) ? item : null));
 }
 
-function stringArray(value: unknown): string[] {
+function nullableStringArray(value: unknown): (string | null)[] {
   if (!Array.isArray(value)) return [];
 
-  return value.filter((item): item is string => typeof item === "string");
+  return value.map((item) => (typeof item === "string" ? item : null));
 }
 
 export function transformWeatherPayload(
@@ -20,29 +26,41 @@ export function transformWeatherPayload(
 ): NewDailyObservation[] {
   const daily = payload.daily;
 
-  if (!daily) {
-    throw new Error("Weather response is missing daily data.");
+  if (!daily) throw new Error("Weather response is missing daily data.");
+
+  const dates = daily.time;
+
+  if (!Array.isArray(dates) || !dates.every(isDateString) || new Set(dates).size !== dates.length) {
+    throw new Error("Weather response contains invalid observation dates.");
   }
 
-  const dates = stringArray(daily.time);
+  const values = Object.fromEntries(
+    NUMERIC_VARIABLES.map((key) => {
+      const array = numberArray(daily[key]);
 
-  for (const key of DAILY_VARIABLES) {
-    if (numberArray(daily[key]).length !== dates.length) {
+      if (array.length !== dates.length) {
+        throw new Error(`Invalid daily response array: ${key}`);
+      }
+
+      return [key, array];
+    })
+  ) as Record<(typeof NUMERIC_VARIABLES)[number], (number | null)[]>;
+
+  const times = {
+    sunrise: nullableStringArray(daily.sunrise),
+    sunset: nullableStringArray(daily.sunset),
+  };
+
+  for (const key of STRING_VARIABLES) {
+    if (times[key].length !== dates.length) {
       throw new Error(`Invalid daily response array: ${key}`);
     }
   }
 
-  const values = Object.fromEntries(DAILY_VARIABLES.map((key) => [key, numberArray(daily[key])]));
-
-  const times = {
-    sunrise: stringArray(daily.sunrise),
-    sunset: stringArray(daily.sunset),
-  };
-
   const fetchedAt = Date.now();
 
   return dates.map((date, index) => {
-    const get = (key: (typeof DAILY_VARIABLES)[number]) => values[key][index] ?? null;
+    const get = (key: (typeof NUMERIC_VARIABLES)[number]) => values[key][index] ?? null;
 
     return {
       id: crypto.randomUUID(),
@@ -76,7 +94,7 @@ export function transformWeatherPayload(
       sunset: times.sunset[index] ?? null,
       daylightDuration: get("daylight_duration"),
       sunshineDuration: get("sunshine_duration"),
-      dataStatus: "complete",
+      dataStatus: "complete" as const,
       qualityFlags: [],
       fetchedAt,
       updatedAt: fetchedAt,

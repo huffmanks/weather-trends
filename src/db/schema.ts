@@ -81,7 +81,6 @@ export const dailyObservations = sqliteTable(
       table.observationDate
     ),
     index("daily_observations_date_idx").on(table.observationDate),
-    index("daily_observations_location_date_idx").on(table.locationId, table.observationDate),
     check(
       "daily_observations_humidity_check",
       sql`(
@@ -115,6 +114,8 @@ export const dataImports = sqliteTable(
       .$type<string[]>()
       .notNull()
       .default([]),
+    claimToken: text("claim_token"),
+    claimExpiresAt: integer("claim_expires_at"),
     recordsReceived: integer("records_received").notNull().default(0),
     recordsInserted: integer("records_inserted").notNull().default(0),
     recordsUpdated: integer("records_updated").notNull().default(0),

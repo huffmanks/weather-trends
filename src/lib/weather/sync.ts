@@ -1,17 +1,21 @@
-import { eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 import { db } from "@/db";
 import {
+  claimImportChunk,
   completeImport,
   createImport,
   failImport,
   getImport,
   getLatestCompletedImport,
   resumeImport,
-  updateImportProgress,
 } from "@/db/queries/imports";
-import { getObservationDates, upsertObservations } from "@/db/queries/observations";
-import { locations } from "@/db/schema";
+import {
+  deleteObservations,
+  getObservationDates,
+  upsertObservations,
+} from "@/db/queries/observations";
+import { type NewDailyObservation, dataImports, locations } from "@/db/schema";
 import { fetchWeatherRange } from "@/lib/weather/client";
 import {
   addDays,
@@ -21,10 +25,12 @@ import {
   isValidDate,
   toUtcNoon,
 } from "@/lib/weather/dates";
+import { hasObservationData } from "@/lib/weather/observations";
 import { transformWeatherPayload } from "@/lib/weather/transform";
 import type { WeatherSyncInput } from "@/lib/weather/types";
 
 const CHUNK_SIZE = 14;
+const CLAIM_LEASE_MS = 10 * 60 * 1000;
 const SIMULATE_IMPORTS = process.env.WEATHER_SYNC_SIMULATE === "true";
 const SIMULATION_DELAY = 500;
 
@@ -32,7 +38,7 @@ type SyncResult = {
   importId: string;
   processedDays: number;
   totalDays: number;
-  status: "running" | "paused" | "completed";
+  status: "running" | "paused" | "completed" | "busy";
 };
 
 function delay(ms: number) {
@@ -46,13 +52,16 @@ function getNextChunk(dates: Date[], offset: number) {
   const chunk = [firstDate];
 
   for (const date of dates.slice(offset + 1, offset + CHUNK_SIZE)) {
-    if (date.getTime() !== addDays(chunk.at(-1)!, 1).getTime()) break;
+    const previousDate = chunk[chunk.length - 1];
+
+    if (date.getTime() !== addDays(previousDate, 1).getTime()) break;
+
     chunk.push(date);
   }
 
   return {
     startDate: chunk[0],
-    endDate: chunk.at(-1)!,
+    endDate: chunk[chunk.length - 1],
     dates: chunk,
   };
 }
@@ -66,11 +75,14 @@ async function createImportPlan(input: WeatherSyncInput) {
 
   if (!location) throw new Error("Location not found.");
 
-  const startDate = input.startDate;
-  const requestedEndDate = input.endDate;
+  const { startDate, endDate: requestedEndDate } = input;
 
-  if (!startDate || !requestedEndDate) {
-    throw new Error("A start date and end date are required.");
+  if (startDate === undefined || requestedEndDate === undefined) {
+    throw new Error("A valid start date and end date are required.");
+  }
+
+  if (!isValidDate(startDate) || !isValidDate(requestedEndDate) || startDate > requestedEndDate) {
+    throw new Error("A valid start date and end date are required.");
   }
 
   const archiveEndDate = getArchiveEndDate(location.timezone);
@@ -78,8 +90,6 @@ async function createImportPlan(input: WeatherSyncInput) {
     requestedEndDate.getTime() < archiveEndDate.getTime() ? requestedEndDate : archiveEndDate;
 
   if (
-    !isValidDate(startDate) ||
-    !isValidDate(endDate) ||
     startDate > endDate ||
     Math.floor(startDate.getUTCFullYear() / 10) !== Math.floor(endDate.getUTCFullYear() / 10)
   ) {
@@ -108,9 +118,7 @@ async function createImportPlan(input: WeatherSyncInput) {
     }
   }
 
-  if (datesToImport.length === 0) {
-    return null;
-  }
+  if (datesToImport.length === 0) return null;
 
   const importRecord = await createImport({
     id: crypto.randomUUID(),
@@ -122,6 +130,27 @@ async function createImportPlan(input: WeatherSyncInput) {
   });
 
   return importRecord.id;
+}
+
+async function getCurrentResult(
+  importId: string,
+  fallbackStatus: SyncResult["status"]
+): Promise<SyncResult> {
+  const importRecord = await getImport(importId);
+
+  if (!importRecord) throw new Error("Import not found.");
+
+  return {
+    importId,
+    processedDays: importRecord.processedDays,
+    totalDays: importRecord.totalDays,
+    status:
+      importRecord.status === "paused"
+        ? "paused"
+        : importRecord.status === "completed"
+          ? "completed"
+          : fallbackStatus,
+  };
 }
 
 export async function syncLocation(
@@ -138,48 +167,62 @@ export async function syncLocation(
     };
   }
 
-  const importRecord = await getImport(importId);
+  let importRecord = await getImport(importId);
 
   if (!importRecord) throw new Error("Import not found.");
 
+  if (importRecord.locationId !== input.locationId) {
+    throw new Error("Import does not belong to this location.");
+  }
+
   if (importRecord.status === "paused") {
     await resumeImport(importId);
-    importRecord.status = "running";
+    importRecord = await getImport(importId);
+
+    if (!importRecord) throw new Error("Import not found.");
   }
 
   if (importRecord.status === "completed") {
-    return {
-      importId,
-      processedDays: importRecord.processedDays,
-      totalDays: importRecord.totalDays,
-      status: "completed",
-    };
+    return getCurrentResult(importId, "completed");
   }
 
   if (importRecord.status !== "running") {
     throw new Error("This import cannot be resumed.");
   }
+
   const chunk = getNextChunk(importRecord.datesToImport.map(toUtcNoon), importRecord.processedDays);
 
   if (!chunk) {
     await completeImport(importId);
+    return getCurrentResult(importId, "completed");
+  }
 
-    return {
-      importId,
-      processedDays: importRecord.processedDays,
-      totalDays: importRecord.totalDays,
-      status: "completed",
-    };
+  const claimToken = crypto.randomUUID();
+  const now = Date.now();
+
+  const claim = await claimImportChunk({
+    id: importId,
+    processedDays: importRecord.processedDays,
+    token: claimToken,
+    currentDate: formatDate(chunk.startDate),
+    now,
+    expiresAt: now + CLAIM_LEASE_MS,
+  });
+
+  if (!claim) {
+    const current = await getImport(importId);
+
+    if (!current) throw new Error("Import not found.");
+
+    if (current.status === "paused") return getCurrentResult(importId, "paused");
+    if (current.status === "completed") return getCurrentResult(importId, "completed");
+
+    return getCurrentResult(importId, "busy");
   }
 
   try {
-    await updateImportProgress(importId, {
-      processedDays: importRecord.processedDays,
-      currentDate: formatDate(chunk.startDate),
-      recordsReceived: importRecord.recordsReceived,
-      recordsInserted: importRecord.recordsInserted,
-      recordsUpdated: importRecord.recordsUpdated,
-    });
+    let observations: NewDailyObservation[] = [];
+    let emptyObservationDates: string[] = [];
 
     if (SIMULATE_IMPORTS) {
       await delay(SIMULATION_DELAY);
@@ -197,47 +240,83 @@ export async function syncLocation(
         formatDate(chunk.startDate),
         formatDate(chunk.endDate)
       );
+
       const dates = new Set(chunk.dates.map(formatDate));
 
-      const observations = transformWeatherPayload(payload, location.id).filter((item) =>
-        dates.has(item.observationDate)
-      );
+      const chunkObservations: NewDailyObservation[] = transformWeatherPayload(
+        payload,
+        location.id
+      ).filter((item) => dates.has(item.observationDate));
 
-      const counts = await upsertObservations(observations);
+      observations = chunkObservations.filter(hasObservationData);
 
-      importRecord.recordsReceived += counts.received;
-      importRecord.recordsInserted += counts.inserted;
-      importRecord.recordsUpdated += counts.updated;
+      emptyObservationDates = chunkObservations
+        .filter((item) => !hasObservationData(item))
+        .map((item) => item.observationDate);
     }
 
-    const processedDays = importRecord.processedDays + chunk.dates.length;
-    const isComplete = processedDays >= importRecord.totalDays;
+    const updatedImport = await db.transaction(
+      async (tx) => {
+        const [current] = await tx
+          .select({ id: dataImports.id })
+          .from(dataImports)
+          .where(
+            and(
+              eq(dataImports.id, importId),
+              eq(dataImports.status, "running"),
+              eq(dataImports.claimToken, claimToken)
+            )
+          )
+          .limit(1);
 
-    await updateImportProgress(importId, {
-      processedDays,
-      currentDate: null,
-      recordsReceived: importRecord.recordsReceived,
-      recordsInserted: importRecord.recordsInserted,
-      recordsUpdated: importRecord.recordsUpdated,
-    });
+        if (!current) return null;
 
-    const updatedImport = await getImport(importId);
+        await deleteObservations(importRecord.locationId, emptyObservationDates, tx);
+        const counts = await upsertObservations(observations, tx);
 
-    if (!updatedImport) throw new Error("Import not found.");
+        const [updated] = await tx
+          .update(dataImports)
+          .set({
+            processedDays: sql`${dataImports.processedDays} + ${chunk.dates.length}`,
+            recordsReceived: sql`${dataImports.recordsReceived} + ${counts.received}`,
+            recordsInserted: sql`${dataImports.recordsInserted} + ${counts.inserted}`,
+            recordsUpdated: sql`${dataImports.recordsUpdated} + ${counts.updated}`,
+            currentDate: null,
+            claimToken: null,
+            claimExpiresAt: null,
+          })
+          .where(
+            and(
+              eq(dataImports.id, importId),
+              eq(dataImports.status, "running"),
+              eq(dataImports.claimToken, claimToken)
+            )
+          )
+          .returning();
 
-    if (isComplete && updatedImport.status === "running") {
+        return updated ?? null;
+      },
+      { behavior: "immediate" }
+    );
+
+    if (!updatedImport) {
+      const current = await getImport(importId);
+
+      if (!current) throw new Error("Import not found.");
+      if (current.status === "paused") return getCurrentResult(importId, "paused");
+      if (current.status === "completed") return getCurrentResult(importId, "completed");
+
+      return getCurrentResult(importId, "busy");
+    }
+
+    if (updatedImport.processedDays >= updatedImport.totalDays) {
       await completeImport(importId);
-      updatedImport.status = "completed";
+      return getCurrentResult(importId, "completed");
     }
 
-    return {
-      importId,
-      processedDays,
-      totalDays: importRecord.totalDays,
-      status: updatedImport.status === "paused" ? "paused" : isComplete ? "completed" : "running",
-    };
+    return getCurrentResult(importId, "running");
   } catch (error) {
-    await failImport(importId, error);
+    await failImport(importId, claimToken, error);
     throw error;
   }
 }

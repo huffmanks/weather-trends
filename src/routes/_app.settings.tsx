@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
-import { CheckIcon, DatabaseIcon, GaugeIcon, GlobeIcon, ThermometerIcon } from "lucide-react";
+import { CheckIcon, DatabaseIcon, GaugeIcon, ThermometerIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,6 @@ function SettingsPage() {
   const [temperature, setTemperature] = useState<string | null>("celsius");
   const [precipitation, setPrecipitation] = useState<string | null>("mm");
   const [windSpeed, setWindSpeed] = useState<string | null>("ms");
-  const [dateFormat, setDateFormat] = useState<string | null>("iso");
   const [saved, setSaved] = useState(false);
 
   function handleSave() {
@@ -77,12 +76,6 @@ function SettingsPage() {
     { value: "ms", label: "Meters per second (m/s)" },
     { value: "kmh", label: "Kilometers per hour (km/h)" },
     { value: "mph", label: "Miles per hour (mph)" },
-  ] as const;
-
-  const dateFormatOptions = [
-    { value: "iso", label: "YYYY-MM-DD" },
-    { value: "us", label: "MM/DD/YYYY" },
-    { value: "international", label: "DD/MM/YYYY" },
   ] as const;
 
   return (
@@ -125,25 +118,6 @@ function SettingsPage() {
             options={windSpeedOptions}
             value={windSpeed}
             onValueChange={setWindSpeed}
-          />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <GlobeIcon className="size-5 text-muted-foreground" />
-            <CardTitle>Regional preferences</CardTitle>
-          </div>
-          <CardDescription>Configure date formatting for the application.</CardDescription>
-        </CardHeader>
-
-        <CardContent>
-          <SettingsSelect
-            label="Date format"
-            options={dateFormatOptions}
-            value={dateFormat}
-            onValueChange={setDateFormat}
           />
         </CardContent>
       </Card>
@@ -194,11 +168,7 @@ function SettingsPage() {
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Database</span>
-            <Badge variant="secondary">SQLite / LibSQL</Badge>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Data storage</span>
-            <span className="font-medium">Local database</span>
+            <Badge variant="secondary">SQLite</Badge>
           </div>
         </CardContent>
       </Card>

@@ -16,9 +16,9 @@ import {
   updateLocationMutationOptions,
   weatherKeys,
 } from "@/lib/queries/weather";
+import { IMPORT_DECADES } from "@/lib/weather/constants";
 import { daysBetween, formatDate, getArchiveEndDate, toUtcNoon } from "@/lib/weather/dates";
 import type { WeatherSyncInput } from "@/lib/weather/types";
-import { IMPORT_DECADES } from "@/lib/weather/types";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -75,6 +75,7 @@ function LocationsPage() {
   const [editingLocation, setEditingLocation] = useState<Location | null>(null);
   const [form, setForm] = useState<LocationForm>(emptyForm);
   const [syncingId, setSyncingId] = useState("");
+  const [preparingImport, setPreparingImport] = useState(false);
 
   const createLocation = useMutation({
     ...createLocationMutationOptions(),
@@ -104,9 +105,11 @@ function LocationsPage() {
 
   async function runImport(input: WeatherSyncInput & { importId?: string }) {
     setSyncingId(input.locationId);
+    setPreparingImport(!input.importId);
 
     try {
       let result = await syncLocation.mutateAsync(input);
+      setPreparingImport(false);
 
       while (result.status === "running") {
         result = await syncLocation.mutateAsync({
@@ -122,6 +125,7 @@ function LocationsPage() {
       ]);
     } finally {
       setSyncingId("");
+      setPreparingImport(false);
     }
   }
 
@@ -299,6 +303,7 @@ function LocationsPage() {
               key={location.id}
               location={location}
               syncing={syncingId === location.id}
+              preparingImport={syncingId === location.id && preparingImport}
               onEdit={() => openEditDialog(location)}
               onDelete={() => {
                 if (window.confirm(`Delete ${location.name} and its associated weather data?`)) {
@@ -306,10 +311,10 @@ function LocationsPage() {
                 }
               }}
               onSync={(input) => {
-                void runImport(input);
+                void runImport(input).catch(() => undefined);
               }}
               onPause={(importId) => {
-                void handlePause(importId, location.id);
+                void handlePause(importId, location.id).catch(() => undefined);
               }}
               onToggle={(isActive) => updateLocation.mutate({ id: location.id, isActive })}
             />
@@ -323,6 +328,12 @@ function LocationsPage() {
         </p>
       )}
 
+      {pauseImport.error && (
+        <p className="text-sm text-destructive">
+          Unable to pause import: {pauseImport.error.message}
+        </p>
+      )}
+
       {deleteLocation.error && (
         <p className="text-sm text-destructive">Delete failed: {deleteLocation.error.message}</p>
       )}
@@ -333,6 +344,7 @@ function LocationsPage() {
 function LocationCard({
   location,
   syncing,
+  preparingImport,
   onEdit,
   onDelete,
   onSync,
@@ -341,6 +353,7 @@ function LocationCard({
 }: {
   location: Location;
   syncing: boolean;
+  preparingImport: boolean;
   onEdit: () => void;
   onDelete: () => void;
   onSync: (input: WeatherSyncInput) => void;
@@ -512,7 +525,7 @@ function LocationCard({
           </div>
         </div>
 
-        {syncing && !importRunning && (
+        {preparingImport && (
           <div className="rounded-lg border p-3 text-sm text-muted-foreground">
             Preparing import...
           </div>

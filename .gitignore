@@ -12,6 +12,7 @@ dist-ssr
 __unconfig*
 todos.json
 *output.xml
+*output.txt
 **/*.db
 .fallow/
 
