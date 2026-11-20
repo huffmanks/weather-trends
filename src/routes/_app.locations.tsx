@@ -11,6 +11,7 @@ import {
   deleteLocationMutationOptions,
   importsQueryOptions,
   locationsQueryOptions,
+  pauseImportMutationOptions,
   syncLocationMutationOptions,
   updateLocationMutationOptions,
   weatherKeys,
@@ -98,19 +99,36 @@ function LocationsPage() {
     },
   });
 
-  const syncLocation = useMutation({
-    ...syncLocationMutationOptions(),
-    onSuccess: async (_, input) => {
+  const syncLocation = useMutation(syncLocationMutationOptions());
+  const pauseImport = useMutation(pauseImportMutationOptions());
+
+  async function runImport(input: WeatherSyncInput & { importId?: string }) {
+    setSyncingId(input.locationId);
+
+    try {
+      let result = await syncLocation.mutateAsync(input);
+
+      while (result.status === "running") {
+        result = await syncLocation.mutateAsync({
+          locationId: input.locationId,
+          importId: result.importId,
+        });
+      }
+
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: [...weatherKeys.all, "observations"] }),
         queryClient.invalidateQueries({ queryKey: weatherKeys.imports(input.locationId) }),
-        queryClient.invalidateQueries({
-          queryKey: weatherKeys.decades(input.locationId),
-        }),
+        queryClient.invalidateQueries({ queryKey: weatherKeys.decades(input.locationId) }),
       ]);
-    },
-    onSettled: () => setSyncingId(""),
-  });
+    } finally {
+      setSyncingId("");
+    }
+  }
+
+  async function handlePause(importId: string, locationId: string) {
+    await pauseImport.mutateAsync(importId);
+    await queryClient.invalidateQueries({ queryKey: weatherKeys.imports(locationId) });
+  }
 
   function closeDialog() {
     setDialogOpen(false);
@@ -280,8 +298,7 @@ function LocationsPage() {
             <LocationCard
               key={location.id}
               location={location}
-              syncing={syncLocation.isPending}
-              preparing={syncingId === location.id}
+              syncing={syncingId === location.id}
               onEdit={() => openEditDialog(location)}
               onDelete={() => {
                 if (window.confirm(`Delete ${location.name} and its associated weather data?`)) {
@@ -289,8 +306,10 @@ function LocationsPage() {
                 }
               }}
               onSync={(input) => {
-                setSyncingId(location.id);
-                syncLocation.mutate(input);
+                void runImport(input);
+              }}
+              onPause={(importId) => {
+                void handlePause(importId, location.id);
               }}
               onToggle={(isActive) => updateLocation.mutate({ id: location.id, isActive })}
             />
@@ -314,18 +333,18 @@ function LocationsPage() {
 function LocationCard({
   location,
   syncing,
-  preparing,
   onEdit,
   onDelete,
   onSync,
+  onPause,
   onToggle,
 }: {
   location: Location;
   syncing: boolean;
-  preparing: boolean;
   onEdit: () => void;
   onDelete: () => void;
   onSync: (input: WeatherSyncInput) => void;
+  onPause: (importId: string) => void;
   onToggle: (active: boolean) => void;
 }) {
   const [selectedDecade, setSelectedDecade] = useState(IMPORT_DECADES[0]);
@@ -337,6 +356,8 @@ function LocationCard({
   });
 
   const activeImport = importsQuery.data?.find((item) => item.status === "running");
+  const pausedImport = importsQuery.data?.find((item) => item.status === "paused");
+  const resumableImport = activeImport ?? pausedImport;
   const latestImport = importsQuery.data?.find((item) => item.status === "completed");
   const latestAttempt = importsQuery.data?.[0];
 
@@ -368,12 +389,8 @@ function LocationCard({
     };
   });
 
-  const selectedStatus = decadeStatuses.find(
-    (item) => item.value === selectedDecade.startDate
-  )?.status;
-
-  const progress = activeImport?.totalDays
-    ? Math.round((activeImport.processedDays / activeImport.totalDays) * 100)
+  const progress = resumableImport?.totalDays
+    ? Math.round((resumableImport.processedDays / resumableImport.totalDays) * 100)
     : 0;
 
   const importRunning = Boolean(activeImport);
@@ -469,10 +486,12 @@ function LocationCard({
               <SelectContent>
                 {decadeStatuses.map((decade) => (
                   <SelectItem key={decade.value} value={decade.value}>
-                    {decade.label}
+                    <span className="inline-flex items-center gap-3">
+                      <span>{decade.label}</span>
+                      {decade.status && <Badge size="sm">{decade.status}</Badge>}
+                    </span>
                   </SelectItem>
                 ))}
-                {selectedStatus && <Badge variant="secondary">{selectedStatus}</Badge>}
               </SelectContent>
             </Select>
 
@@ -492,16 +511,18 @@ function LocationCard({
           </div>
         </div>
 
-        {preparing && !importRunning && (
+        {syncing && !importRunning && (
           <div className="rounded-lg border p-3 text-sm text-muted-foreground">
             Preparing import...
           </div>
         )}
 
-        {importRunning && activeImport && (
+        {resumableImport && (
           <div className="space-y-2 rounded-lg border p-3">
             <div className="flex items-center justify-between text-sm">
-              <span className="font-medium">Import in progress</span>
+              <span className="font-medium">
+                {resumableImport.status === "paused" ? "Import paused" : "Import in progress"}
+              </span>
               <span className="text-muted-foreground">{progress}%</span>
             </div>
 
@@ -518,15 +539,36 @@ function LocationCard({
             </div>
 
             <p className="text-xs text-muted-foreground">
-              {activeImport.processedDays.toLocaleString()} of{" "}
-              {activeImport.totalDays.toLocaleString()} days processed
+              {resumableImport.processedDays.toLocaleString()} of{" "}
+              {resumableImport.totalDays.toLocaleString()} days processed
             </p>
 
-            {activeImport.currentDate && (
-              <p className="text-xs text-muted-foreground">
-                Currently processing: {activeImport.currentDate}
-              </p>
-            )}
+            <p className="min-h-4 text-xs text-muted-foreground">
+              {resumableImport.currentDate
+                ? `Currently processing: ${resumableImport.currentDate}`
+                : "\u00A0"}
+            </p>
+
+            <div className="flex justify-end gap-2">
+              {syncing && activeImport && (
+                <Button size="sm" variant="outline" onClick={() => onPause(activeImport.id)}>
+                  Pause
+                </Button>
+              )}
+
+              {!syncing && resumableImport && (
+                <Button
+                  size="sm"
+                  onClick={() =>
+                    onSync({
+                      locationId: location.id,
+                      importId: resumableImport.id,
+                    })
+                  }>
+                  Resume
+                </Button>
+              )}
+            </div>
           </div>
         )}
 

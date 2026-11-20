@@ -19,7 +19,7 @@ import {
   getObservationDecadesFn,
   getObservationsFn,
 } from "@/server/functions/observations";
-import { syncLocationFn } from "@/server/functions/sync";
+import { pauseImportFn, syncLocationFn } from "@/server/functions/sync";
 
 export const weatherKeys = {
   all: ["weather"] as const,
@@ -63,7 +63,7 @@ export const importsQueryOptions = (locationId: string) =>
     queryFn: () => getImportsFn({ data: locationId }),
     enabled: Boolean(locationId),
     refetchInterval: (query) =>
-      query.state.data?.some((item) => item.status === "running") ? 2000 : false,
+      query.state.data?.some((item) => item.status === "running") ? 1000 : false,
   });
 
 export const createLocationMutationOptions = () =>
@@ -83,7 +83,13 @@ export const deleteLocationMutationOptions = () =>
 
 export const syncLocationMutationOptions = () =>
   mutationOptions({
-    mutationFn: (input: WeatherSyncInput) => syncLocationFn({ data: input }),
+    mutationFn: (input: WeatherSyncInput & { importId?: string }) =>
+      syncLocationFn({ data: input }),
+  });
+
+export const pauseImportMutationOptions = () =>
+  mutationOptions({
+    mutationFn: (importId: string) => pauseImportFn({ data: { importId } }),
   });
 
 export const comparisonQueryKeys = {
@@ -99,20 +105,13 @@ export function savedComparisonsQueryOptions() {
 
 export async function invalidateLocationQueries(queryClient: QueryClient, locationId?: string) {
   await Promise.all([
-    queryClient.invalidateQueries({
-      queryKey: weatherKeys.locations(),
-    }),
+    queryClient.invalidateQueries({ queryKey: weatherKeys.locations() }),
     ...(locationId
       ? [
-          queryClient.invalidateQueries({
-            queryKey: weatherKeys.location(locationId),
-          }),
-          queryClient.invalidateQueries({
-            queryKey: [...weatherKeys.all, "observations"],
-          }),
-          queryClient.invalidateQueries({
-            queryKey: weatherKeys.imports(locationId),
-          }),
+          queryClient.invalidateQueries({ queryKey: weatherKeys.location(locationId) }),
+          queryClient.invalidateQueries({ queryKey: [...weatherKeys.all, "observations"] }),
+          queryClient.invalidateQueries({ queryKey: weatherKeys.imports(locationId) }),
+          queryClient.invalidateQueries({ queryKey: weatherKeys.decades(locationId) }),
         ]
       : []),
   ]);

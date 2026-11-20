@@ -58,6 +58,7 @@ CREATE TABLE `data_imports` (
 	`start_date` text NOT NULL,
 	`end_date` text NOT NULL,
 	`status` text DEFAULT 'pending' NOT NULL,
+	`dates_to_import` text DEFAULT '[]' NOT NULL,
 	`records_received` integer DEFAULT 0 NOT NULL,
 	`records_inserted` integer DEFAULT 0 NOT NULL,
 	`records_updated` integer DEFAULT 0 NOT NULL,

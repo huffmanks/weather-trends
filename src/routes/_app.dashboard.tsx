@@ -5,10 +5,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ActivityIcon, CalendarDaysIcon, CloudRainIcon, MapPinIcon, WindIcon } from "lucide-react";
 
 import { locationsQueryOptions, observationsQueryOptions } from "@/lib/queries/weather";
-import { getLocalDate } from "@/lib/weather/dates";
+import { formatDate, getLocalDate, getStartOfYearDate } from "@/lib/weather/dates";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -18,6 +19,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export const Route = createFileRoute("/_app/dashboard")({
   component: DashboardPage,
@@ -30,8 +39,9 @@ export const Route = createFileRoute("/_app/dashboard")({
 
 function DashboardPage() {
   const [locationId, setLocationId] = useState<string | null>(null);
-  const [startDate, setStartDate] = useState("2026-01-01");
-  const [endDate, setEndDate] = useState(getLocalDate());
+
+  const startDate = getStartOfYearDate();
+  const endDate = getLocalDate();
 
   const locationsQuery = useQuery(locationsQueryOptions());
   const locations = locationsQuery.data ?? [];
@@ -102,30 +112,18 @@ function DashboardPage() {
           </Select>
         </div>
 
-        <div className="grid gap-2">
-          <Label htmlFor="start-date">Start date</Label>
-          <input
-            id="start-date"
-            type="date"
-            value={startDate}
-            max={endDate}
-            onChange={(event) => setStartDate(event.target.value)}
-            className="h-9 rounded-md border bg-background px-3 text-sm"
-          />
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor="end-date">End date</Label>
-          <input
-            id="end-date"
-            type="date"
-            value={endDate}
-            min={startDate}
-            max={getLocalDate()}
-            onChange={(event) => setEndDate(event.target.value)}
-            className="h-9 rounded-md border bg-background px-3 text-sm"
-          />
-        </div>
+        <DatePicker
+          id="start-date"
+          label="Start date"
+          initialDate={startDate}
+          disabled={{ after: endDate }}
+        />
+        <DatePicker
+          id="end-date"
+          label="End date"
+          initialDate={endDate}
+          disabled={{ before: startDate, after: endDate }}
+        />
       </div>
 
       {!locations.length && !locationsQuery.isLoading && (
@@ -219,7 +217,7 @@ function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Selected period</span>
                   <span className="text-sm font-medium">
-                    {startDate} – {endDate}
+                    {formatDate(startDate)} - {formatDate(endDate)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
@@ -251,35 +249,35 @@ function DashboardPage() {
                 <p className="text-sm text-destructive">{observationsQuery.error.message}</p>
               ) : observations.length ? (
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b text-left text-muted-foreground">
-                        <th className="p-3">Date</th>
-                        <th className="p-3">Min °C</th>
-                        <th className="p-3">Max °C</th>
-                        <th className="p-3">Avg °C</th>
-                        <th className="p-3">Precip. mm</th>
-                        <th className="p-3">Wind m/s</th>
-                        <th className="p-3">Humidity</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Min °C</TableHead>
+                        <TableHead>Max °C</TableHead>
+                        <TableHead>Avg °C</TableHead>
+                        <TableHead>Precip. mm</TableHead>
+                        <TableHead>Wind m/s</TableHead>
+                        <TableHead>Humidity</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
                       {observations
                         .slice(-10)
                         .reverse()
                         .map((item) => (
-                          <tr key={item.id} className="border-b last:border-0">
-                            <td className="p-3 font-medium">{item.observationDate}</td>
-                            <td className="p-3">{item.temperatureMin ?? "—"}</td>
-                            <td className="p-3">{item.temperatureMax ?? "—"}</td>
-                            <td className="p-3">{item.temperatureAvg?.toFixed(1) ?? "—"}</td>
-                            <td className="p-3">{item.precipitationTotal ?? "—"}</td>
-                            <td className="p-3">{item.windSpeedAvg?.toFixed(1) ?? "—"}</td>
-                            <td className="p-3">{item.humidityAvg?.toFixed(0) ?? "—"}%</td>
-                          </tr>
+                          <TableRow key={item.id}>
+                            <TableCell>{item.observationDate}</TableCell>
+                            <TableCell>{item.temperatureMin ?? "—"}</TableCell>
+                            <TableCell>{item.temperatureMax ?? "—"}</TableCell>
+                            <TableCell>{item.temperatureAvg?.toFixed(1) ?? "—"}</TableCell>
+                            <TableCell>{item.precipitationTotal ?? "—"}</TableCell>
+                            <TableCell>{item.windSpeedAvg?.toFixed(1) ?? "—"}</TableCell>
+                            <TableCell>{item.humidityAvg?.toFixed(0) ?? "—"}%</TableCell>
+                          </TableRow>
                         ))}
-                    </tbody>
-                  </table>
+                    </TableBody>
+                  </Table>
                 </div>
               ) : (
                 <EmptyState message="No observations found. Synchronize this location to get started." />

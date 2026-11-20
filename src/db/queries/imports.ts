@@ -2,8 +2,9 @@ import { and, desc, eq, gte, lte } from "drizzle-orm";
 
 import { db } from "@/db";
 import { dataImports } from "@/db/schema";
+import { formatDate } from "@/lib/weather/dates";
 
-export async function getImports(locationId: string, limit = 20) {
+export function getImports(locationId: string, limit = 20) {
   return db
     .select()
     .from(dataImports)
@@ -12,11 +13,12 @@ export async function getImports(locationId: string, limit = 20) {
     .limit(limit);
 }
 
-export async function getLatestCompletedImport(
-  locationId: string,
-  startDate: string,
-  endDate: string
-) {
+export async function getImport(id: string) {
+  const [result] = await db.select().from(dataImports).where(eq(dataImports.id, id)).limit(1);
+  return result;
+}
+
+export async function getLatestCompletedImport(locationId: string, startDate: Date, endDate: Date) {
   const [result] = await db
     .select()
     .from(dataImports)
@@ -24,8 +26,8 @@ export async function getLatestCompletedImport(
       and(
         eq(dataImports.locationId, locationId),
         eq(dataImports.status, "completed"),
-        lte(dataImports.startDate, endDate),
-        gte(dataImports.endDate, startDate)
+        lte(dataImports.startDate, formatDate(endDate)),
+        gte(dataImports.endDate, formatDate(startDate))
       )
     )
     .orderBy(desc(dataImports.completedAt))
@@ -37,9 +39,10 @@ export async function getLatestCompletedImport(
 export async function createImport(input: {
   id: string;
   locationId: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   totalDays: number;
+  datesToImport: Date[];
 }) {
   const now = Date.now();
 
@@ -50,6 +53,9 @@ export async function createImport(input: {
       status: "running",
       startedAt: now,
       createdAt: now,
+      startDate: formatDate(input.startDate),
+      endDate: formatDate(input.endDate),
+      datesToImport: input.datesToImport.map(formatDate),
     })
     .returning();
 
@@ -61,23 +67,32 @@ export async function updateImportProgress(
   progress: {
     processedDays: number;
     currentDate: string | null;
-  }
-) {
-  await db.update(dataImports).set(progress).where(eq(dataImports.id, id));
-}
-
-export async function completeImport(
-  id: string,
-  counts: {
     recordsReceived: number;
     recordsInserted: number;
     recordsUpdated: number;
   }
 ) {
+  await db.update(dataImports).set(progress).where(eq(dataImports.id, id));
+}
+
+export async function pauseImport(id: string) {
+  await db
+    .update(dataImports)
+    .set({ status: "paused", currentDate: null })
+    .where(and(eq(dataImports.id, id), eq(dataImports.status, "running")));
+}
+
+export async function resumeImport(id: string) {
+  await db
+    .update(dataImports)
+    .set({ status: "running", startedAt: Date.now(), completedAt: null, errorMessage: null })
+    .where(and(eq(dataImports.id, id), eq(dataImports.status, "paused")));
+}
+
+export async function completeImport(id: string) {
   await db
     .update(dataImports)
     .set({
-      ...counts,
       status: "completed",
       completedAt: Date.now(),
       currentDate: null,
@@ -92,6 +107,7 @@ export async function failImport(id: string, error: unknown) {
       status: "failed",
       errorMessage: error instanceof Error ? error.message : "Unknown import error",
       completedAt: Date.now(),
+      currentDate: null,
     })
     .where(eq(dataImports.id, id));
 }

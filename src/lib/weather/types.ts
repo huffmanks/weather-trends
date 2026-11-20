@@ -4,14 +4,15 @@ export type WeatherPayload = {
 
 export type WeatherSyncInput = {
   locationId: string;
-  startDate?: string;
-  endDate?: string;
+  startDate?: Date;
+  endDate?: Date;
+  importId?: string;
 };
 
 export type ObservationRange = {
   locationId: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
 };
 
 export type CreateLocationInput = {

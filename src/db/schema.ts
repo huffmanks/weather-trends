@@ -107,10 +107,14 @@ export const dataImports = sqliteTable(
     startDate: text("start_date").notNull(),
     endDate: text("end_date").notNull(),
     status: text("status", {
-      enum: ["pending", "running", "completed", "failed"],
+      enum: ["pending", "running", "paused", "completed", "failed"],
     })
       .notNull()
       .default("pending"),
+    datesToImport: text("dates_to_import", { mode: "json" })
+      .$type<string[]>()
+      .notNull()
+      .default([]),
     recordsReceived: integer("records_received").notNull().default(0),
     recordsInserted: integer("records_inserted").notNull().default(0),
     recordsUpdated: integer("records_updated").notNull().default(0),

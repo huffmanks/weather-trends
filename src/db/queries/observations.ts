@@ -3,6 +3,7 @@ import { and, asc, desc, eq, gte, inArray, lte, sql } from "drizzle-orm";
 import { db } from "@/db";
 import type { NewDailyObservation } from "@/db/schema";
 import { dailyObservations } from "@/db/schema";
+import { formatDate } from "@/lib/weather/dates";
 
 export async function getObservations(input: {
   locationId: string;
@@ -45,15 +46,15 @@ export async function getObservationDecades(locationId: string) {
     .orderBy(sql`substr(${dailyObservations.observationDate}, 1, 3)`);
 }
 
-export async function getObservationDates(locationId: string, startDate: string, endDate: string) {
+export async function getObservationDates(locationId: string, startDate: Date, endDate: Date) {
   return db
     .select({ observationDate: dailyObservations.observationDate })
     .from(dailyObservations)
     .where(
       and(
         eq(dailyObservations.locationId, locationId),
-        gte(dailyObservations.observationDate, startDate),
-        lte(dailyObservations.observationDate, endDate)
+        gte(dailyObservations.observationDate, formatDate(startDate)),
+        lte(dailyObservations.observationDate, formatDate(endDate))
       )
     )
     .orderBy(asc(dailyObservations.observationDate));

@@ -1,4 +1,3 @@
-- [ ] locations graceful exit, pause resume syncing. it will get stuck if exited.
 - [ ] dashboard needs to show any and all data it has. without having to changes start/end dates.
 - [ ] dashboard/explore need to use shadcn calendar/date picker.
 - [ ] explore group select options with labels and alphabetize.

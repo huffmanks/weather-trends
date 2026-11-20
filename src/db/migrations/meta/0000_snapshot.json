@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "34d4ea94-4488-4fda-b3ab-c76c92d19df7",
+  "id": "0b87c31e-0736-43f1-ada6-244168d69d80",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "app_settings": {
@@ -376,6 +376,14 @@
           "notNull": true,
           "autoincrement": false,
           "default": "'pending'"
+        },
+        "dates_to_import": {
+          "name": "dates_to_import",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'[]'"
         },
         "records_received": {
           "name": "records_received",
